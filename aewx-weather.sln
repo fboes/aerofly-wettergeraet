@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AeroWX2", "aewx-weather\aewx-weather.vcxproj", "{5B39FB7B-C367-49BB-933B-626FC3057A76}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A4DBB4F-6E86-4839-9F98-1571A48783EC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
+		docs\favicon.ico = docs\favicon.ico
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Debug|x64.ActiveCfg = Debug|x64
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Debug|x64.Build.0 = Debug|x64
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Debug|x86.ActiveCfg = Debug|Win32
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Debug|x86.Build.0 = Debug|Win32
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Release|x64.ActiveCfg = Release|x64
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Release|x64.Build.0 = Release|x64
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Release|x86.ActiveCfg = Release|Win32
+		{5B39FB7B-C367-49BB-933B-626FC3057A76}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5EB47674-689B-4103-A9D5-3A5834D24EDD}
+	EndGlobalSection
+EndGlobal
