@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// Show help output for CLI parameters
 static void showHelp(std::string cmd)
 {
 	std::cerr << "Usage: " << cmd << " [options...] [FILE]\n"
@@ -37,7 +38,7 @@ static void showHelp(std::string cmd)
 		<< std::endl;
 }
 
-/* Output AeroflyWeather to STDOUT */
+// Output AeroflyWeather to STDOUT
 void showAerofly(AeroflyWeather aerofly) {
 	std::cout << "\nTime" << endl;
 	printf(" Date  UTC   %d-%d-%d\n", aerofly.year, aerofly.month, aerofly.day);
@@ -57,6 +58,7 @@ void showAerofly(AeroflyWeather aerofly) {
 	}
 }
 
+// Show METAR data
 void showMetar(MetarParser metar) {
 	std::cout << "ICAO code    " << metar.icao << endl;
 	printf(
@@ -108,7 +110,7 @@ void showMetar(MetarParser metar) {
 
 // ----------------------------------------------------------------------------
 
-/* Main programme */
+// Main programme
 int main(int argc, char* argv[])
 {
 	string icaoCode = "";
@@ -122,15 +124,17 @@ int main(int argc, char* argv[])
 
 #ifdef _DEBUG
 	icaoCode = "KSFO";
-	// url = "https://3960.org/metar/XXXX.txt";
-	// response = FetchUrl::MODE_TEXT;
+	//url = "https://3960.org/metar/XXXX.txt";
+	//response = FetchUrl::MODE_RAW;
 	//metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
 	metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
 	isDryRun = true;
 	verbosity = 2;
 #endif
 
+	// Parsing CLI parameters
 	// @see http://www.cplusplus.com/articles/DEN36Up4/
+
 	string currentArg = "";
 	for (int i = 1; i < argc; ++i) {
 		currentArg = string(argv[i]);
@@ -168,6 +172,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	// Fetch remote data via HTTP(S)
+
 	if (metarString == "" && url != "") {
 		if (icaoCode == "") {
 			cout << "Please enter an ICAO code: ";
@@ -176,12 +182,18 @@ int main(int argc, char* argv[])
 
 		FetchUrl urlFetcher;
 		if (verbosity > 1) {
-			std::cout << "URL          " + url << endl;
+			std::cout << "URL          " << url << endl;
 		}
-		metarString = urlFetcher.fetch(url, icaoCode, response);
+		try {
+			metarString = urlFetcher.fetch(url, icaoCode, response);
+		}
+		catch (std::invalid_argument& e) {
+			std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
+			exit(EXIT_FAILURE);
+		}
 	}
 	if (verbosity > 0) {
-		std::cout << "METAR        " + metarString << endl;
+		std::cout << "METAR        " << metarString << endl;
 	}
 
 	if (metarString == "") {
@@ -189,10 +201,21 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	MetarParser metar(metarString);
+	// Parse METAR data
+
+	MetarParser metar;
+	try {
+		metar.convert(metarString);
+	}
+	catch (std::invalid_argument& e) {
+		std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
+		exit(EXIT_FAILURE);
+	}
 	if (verbosity > 1) {
 		showMetar(metar);
 	}
+
+	// Convert METAR data into Aerofly data
 
 	AeroflyWeather aerofly;
 	aerofly.setFromMetar(metar);
@@ -200,16 +223,15 @@ int main(int argc, char* argv[])
 		showAerofly(aerofly);
 	}
 
+	// Open Aerofly configuration file
+
 	AeroflyConfigFile mainConfig(filename);
 	mainConfig.load();
 	mainConfig.setFromAeroflyObject(aerofly);
-	if (verbosity > 1) {
-		std::cout << mainConfig.getFileBuffer() << endl;
-	}
 
 	if (!isDryRun) {
 		if (verbosity > 0) {
-			std::cout << "\nSaving file " + mainConfig.getFilename() << endl;
+			std::cout << "\nSaving file " << mainConfig.getFilename() << endl;
 		}
 		mainConfig.save();
 	}

@@ -37,6 +37,7 @@ FetchUrl::~FetchUrl()
 }
 
 // Make HTTP request
+// Throws std::invalid_argument
 std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::string apiKey)
 {
 	// https://curl.haxx.se/libcurl/c/htmltitle.html
@@ -64,17 +65,22 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->writeBuffer);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
 		// Do request
 		res = curl_easy_perform(curl);
 		curl_easy_cleanup(curl);
+
+		if (res == CURLE_HTTP_RETURNED_ERROR) {
+			throw std::invalid_argument("Invalid HTTP status code returned for " + url);
+		}
 
 		if (buffer != "") {
 			return (fetchMode == FetchUrl::MODE_JSON) ? this->parseJson(buffer) : buffer;
 		}
 	}
 
-	return "";
+	throw std::invalid_argument("Could no initiate CURL");
 }
 
 // Substitute XXXX with ICAO code

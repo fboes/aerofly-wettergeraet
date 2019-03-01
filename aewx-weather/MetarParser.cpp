@@ -16,7 +16,8 @@ MetarParser::~MetarParser()
 {
 }
 
-/* Populate class variables with data from metarString */
+// Populate class variables with data from metarString
+// Throws std::invalid_argument
 bool MetarParser::convert(std::string metarString)
 {
 	std::smatch match;
@@ -182,7 +183,11 @@ bool MetarParser::convert(std::string metarString)
 			}
 			break;
 		}
+	}
 
+	if (parsingMode < 2) {
+		throw std::invalid_argument("Invalid METAR received");
+		return false;
 	}
 
 	return true;

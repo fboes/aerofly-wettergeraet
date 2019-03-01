@@ -17,7 +17,7 @@ public:
 	AeroflyConfigFile(std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf");
 	~AeroflyConfigFile();
 
-	bool load();
+	bool load(bool onlyOnce = false);
 	bool save();
 
 	std::string getFilename();

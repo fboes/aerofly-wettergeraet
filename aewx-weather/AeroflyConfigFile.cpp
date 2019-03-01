@@ -61,8 +61,12 @@ AeroflyConfigFile::~AeroflyConfigFile()
 }
 
 // Load this->filename into this->fileBuffer
-bool AeroflyConfigFile::load()
+// If onlyOnce is set to `true`, only load file if it has not been loaded before
+bool AeroflyConfigFile::load(bool onlyOnce)
 {
+	if (onlyOnce && this->fileBuffer != "") {
+		return true;
+	}
 	std::ifstream cfgFile(this->filename, std::ios::in | std::ios::binary);
 	if (cfgFile)
 	{
