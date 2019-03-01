@@ -40,7 +40,7 @@ static void showHelp(std::string cmd)
 /* Output AeroflyWeather to STDOUT */
 void showAerofly(AeroflyWeather aerofly) {
 	std::cout << "\nTime" << endl;
-	printf(" %d-%d-%d\n", aerofly.year, aerofly.month, aerofly.day);
+	printf(" Date  UTC   %d-%d-%d\n", aerofly.year, aerofly.month, aerofly.day);
 	std::cout << BoShed::progress(aerofly.hours / 24.0, "Hours UTC", 24, "h") << endl;
 
 	std::cout << "\nWind" << endl;
@@ -116,7 +116,8 @@ int main(int argc, char* argv[])
 	string url = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
 	unsigned short response = FetchUrl::MODE_JSON;
 	string apikey = "";
-	string metarString = "";
+	// string metarString = "";
+	string metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
 	bool isDryRun = false;
 	unsigned short verbosity = 1;
 	string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
@@ -192,12 +193,18 @@ int main(int argc, char* argv[])
 	}
 
 	AeroflyConfigFile mainConfig(filename);
+	mainConfig.load();
+	mainConfig.setFromAeroflyObject(aerofly);
+	if (verbosity > 1) {
+		std::cout << mainConfig.getFileBuffer() << endl;
+	}
 
 	if (!isDryRun) {
 		// edit file
 		if (verbosity > 0) {
 			std::cout << "\nSaving file " + mainConfig.getFilename() << endl;
 		}
+		mainConfig.save();
 	}
 
 	return 0;

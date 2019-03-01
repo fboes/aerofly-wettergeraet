@@ -115,14 +115,21 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 }
 
 // Set cloud 0..2
-void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, double densityPercent)
+void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum)
 {
+	srand((int)time(NULL));
+	if (densityMinimum > 0) {
+		densityMinimum--;
+	}
+
 	this->cloudHeight[index] = baseFeetAgl / this->maxCloudsHeight;
-	this->cloudDensity[index] = densityPercent;
+	this->cloudDensity[index] = (densityMinimum + (
+		(rand() % 100 / 100.0) * (densityMaximum - densityMinimum)
+		)) / this->maxCloudsDensity;
 }
 
 // Populate all values from a MetarParser object
-void AeroflyWeather::setFromMetar(MetarParser metar)
+void AeroflyWeather::setFromMetar(const MetarParser& metar)
 {
 	this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
 	this->setTime(metar.observed.hours, metar.observed.minutes);
@@ -131,7 +138,7 @@ void AeroflyWeather::setFromMetar(MetarParser metar)
 	this->setThermalActivity(metar.temperature.degreesCelsius);
 	this->setVisibility((int)metar.visibility.meters);
 	for (int i = 0; i < 3; ++i) {
-		this->setCloud(i, metar.clouds[i].baseFeetAgl, metar.clouds[i].getRandomDensityPercent());
+		this->setCloud(i, metar.clouds[i].baseFeetAgl, metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum);
 	}
 }
 

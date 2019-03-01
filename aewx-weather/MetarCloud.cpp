@@ -42,32 +42,43 @@ void MetarCloud::setFeetAgl(unsigned long baseFeetAgl) {
 	this->baseMetersAgl = (int)Convert::feetToMeters(baseFeetAgl);
 }
 
-double MetarCloud::getAverageDensity(unsigned short extraMax) {
-	return (this->densityMinimum + this->densityMaximum + extraMax) / 2.0;
+// If extraRange is activated, the minimumDensity is reduced by 1 to have some more range
+double MetarCloud::getAverageDensity(bool extraRange) {
+	auto minimum = this->densityMinimum;
+	if (extraRange && minimum > 0) {
+		minimum--;
+	}
+	return ((double)minimum + (double)this->densityMaximum) / 2.0;
 }
 
-double MetarCloud::getRandomDensity(unsigned short extraMax) {
+// If extraRange is activated, the minimumDensity is reduced by 1 to have some more range
+double MetarCloud::getRandomDensity(bool extraRange) {
 	srand((int)time(NULL));
-	return this->densityMinimum + (
-		(rand() % 100 / 100.0) * (this->densityMaximum + extraMax - this->densityMinimum)
-		);
+	auto minimum = this->densityMinimum;
+	if (extraRange && minimum > 0) {
+		minimum--;
+	}
+
+	return minimum + (
+		(rand() % 100 / 100.0) * (this->densityMaximum - minimum)
+	);
 }
 
-/* Returns a value 0..1. For this method this->densityMaximum is incremented by 1. */
+/* Returns a value 0..1. */
 double MetarCloud::getAverageDensityPercent() {
-	return this->convertEighthToPercent(this->getAverageDensity(1), 1);
+	return this->convertEighthToPercent(this->getAverageDensity(true));
 }
 
-/* Returns a value 0..1. For this method this->densityMaximum is incremented by 1. */
+/* Returns a value 0..1. */
 double MetarCloud::getRandomDensityPercent() {
-	return this->convertEighthToPercent(this->getRandomDensity(1), 1);
+	return this->convertEighthToPercent(this->getRandomDensity(true));
 }
 
-/* Returns a value 0..1. For this method this->densityMaximum is incremented by 1. */
+/* Returns a value 0..1. */
 double MetarCloud::getMaximumDensityPercent() {
-	return this->convertEighthToPercent(this->densityMaximum + 1.0, 1);
+	return this->convertEighthToPercent(this->densityMaximum);
 }
 
-double MetarCloud::convertEighthToPercent(double eight, unsigned short extraMax) {
-	return eight / (8.0 + extraMax);
+double MetarCloud::convertEighthToPercent(double eight) {
+	return eight / (8.0);
 }

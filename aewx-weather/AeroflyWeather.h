@@ -7,13 +7,13 @@
 class AeroflyWeather
 {
 private:
-	unsigned short maxCloudsDensity = 9;
+	unsigned short maxCloudsDensity = 8;
 	unsigned long maxCloudsHeight = 40000; // ft
 	double maxWindSpeed = 40;   // kt
 	unsigned long maxVisibility = 20000; // m
 	double maxTurbulence = 20;  // kt
-	double minTemperature = 5;  // °C
-	double maxTemperature = 30; // °C
+	double minTemperature = 5;  // Â°C
+	double maxTemperature = 30; // Â°C
 	double hourOffset = 0.0;
 	bool noRandom = false;
 
@@ -41,8 +41,8 @@ public:
 	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, std::vector<std::string> conditions);
 	void setThermalActivity(double celsius);
 	void setVisibility(unsigned long meters);
-	void setCloud(unsigned short index, double baseFeetAgl, double densityPercent);
-	void setFromMetar(MetarParser metar);
+	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);
+	void setFromMetar(const MetarParser& metar);
 	void setFromMetarString(std::string metarString);
 	void setFromMetarUrl(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
 	void setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
