@@ -112,15 +112,23 @@ void showMetar(MetarParser metar) {
 int main(int argc, char* argv[])
 {
 	string icaoCode = "";
-	// string url = "https://3960.org/metar/XXXX.txt"
 	string url = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
 	unsigned short response = FetchUrl::MODE_JSON;
 	string apikey = "";
-	// string metarString = "";
-	string metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
+	string metarString = "";
 	bool isDryRun = false;
 	unsigned short verbosity = 1;
 	string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
+
+#ifdef _DEBUG
+	icaoCode = "KSFO";
+	// url = "https://3960.org/metar/XXXX.txt";
+	// response = FetchUrl::MODE_TEXT;
+	//metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
+	metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
+	isDryRun = true;
+	verbosity = 2;
+#endif
 
 	// @see http://www.cplusplus.com/articles/DEN36Up4/
 	string currentArg = "";
@@ -171,9 +179,9 @@ int main(int argc, char* argv[])
 			std::cout << "URL          " + url << endl;
 		}
 		metarString = urlFetcher.fetch(url, icaoCode, response);
-		if (verbosity > 0) {
-			std::cout << "METAR        " + metarString << endl;
-		}
+	}
+	if (verbosity > 0) {
+		std::cout << "METAR        " + metarString << endl;
 	}
 
 	if (metarString == "") {
@@ -200,7 +208,6 @@ int main(int argc, char* argv[])
 	}
 
 	if (!isDryRun) {
-		// edit file
 		if (verbosity > 0) {
 			std::cout << "\nSaving file " + mainConfig.getFilename() << endl;
 		}

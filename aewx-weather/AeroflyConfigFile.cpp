@@ -12,7 +12,7 @@ void AeroflyConfigFile::setValue(std::string &subject, std::string key, std::str
 {
 	std::string regSearch = "(";
 	if (keyGroup != "") {
-		regSearch += "            <\\[\\S+";
+		regSearch += keyGroup + "[\\S\\s]+?";
 	}
 	regSearch += "\\]\\[" + key + "\\])\\[[^\\]]*\\]";
 	subject = std::regex_replace(
@@ -26,6 +26,24 @@ void AeroflyConfigFile::setValue(std::string &subject, std::string key, std::str
 void AeroflyConfigFile::setValue(std::string &subject, std::string key, double value, std::string keyGroup)
 {
 	this->setValue(subject, key, std::to_string(value), keyGroup);
+}
+
+std::string AeroflyConfigFile::getValue(std::string &subject, std::string key, std::string keyGroup)
+{
+	//const match = subject.match(new RegExp(''));
+	//return match ? match[1] : undefined;
+	std::smatch match;
+
+	std::string regSearch = "(?:";
+	if (keyGroup != "") {
+		regSearch += keyGroup + "[\\S\\s]+?";
+	}
+	regSearch += "\\]\\[" + key + "\\]\\[)([^\\]]*)(?:\\])";
+
+	if (std::regex_search(subject, match, std::regex(regSearch))) {
+		return match[1].str();
+	}
+	return "";
 }
 
 AeroflyConfigFile::AeroflyConfigFile(std::string filename)
@@ -87,9 +105,24 @@ void AeroflyConfigFile::setDate(unsigned int year, unsigned int month, unsigned 
 	this->setValue(this->fileBuffer, "time_day", std::to_string(day), "tm_time_utc");
 }
 
+// Returns year, month, day
+std::tuple<unsigned int, unsigned int, unsigned int> AeroflyConfigFile::getDate()
+{
+	return {
+		(unsigned int)atof(this->getValue(this->fileBuffer, "time_year", "tm_time_utc").c_str()),
+		(unsigned int)atof(this->getValue(this->fileBuffer, "time_month", "tm_time_utc").c_str()),
+		(unsigned int)atof(this->getValue(this->fileBuffer, "time_day", "tm_time_utc").c_str())
+	};
+}
+
 void AeroflyConfigFile::setTime(double hours)
 {
 	this->setValue(this->fileBuffer, "time_hours", hours, "tm_time_utc");
+}
+
+double AeroflyConfigFile::getTime()
+{
+	return atof(this->getValue(this->fileBuffer, "time_hours", "tm_time_utc").c_str());
 }
 
 void AeroflyConfigFile::setWind(double percent, unsigned int degrees)
@@ -98,9 +131,23 @@ void AeroflyConfigFile::setWind(double percent, unsigned int degrees)
 	this->setValue(this->fileBuffer, "direction_in_degree", std::to_string(degrees), "tmsettings_wind");
 }
 
+// Returns strength, direction_in_degree
+std::tuple<double, unsigned int> AeroflyConfigFile::getWind()
+{
+	return {
+		(double)atof(this->getValue(this->fileBuffer, "strength", "tmsettings_wind").c_str()),
+		(unsigned int)atof(this->getValue(this->fileBuffer, "direction_in_degree", "tmsettings_wind").c_str()),
+	};
+}
+
 void AeroflyConfigFile::setTurbulence(double percent)
 {
 	this->setValue(this->fileBuffer, "turbulence", percent, "tmsettings_wind");
+}
+
+double AeroflyConfigFile::getTurbulence()
+{
+	return atof(this->getValue(this->fileBuffer, "turbulence", "tmsettings_wind").c_str());
 }
 
 void AeroflyConfigFile::setThermalActivity(double percent)
@@ -108,9 +155,19 @@ void AeroflyConfigFile::setThermalActivity(double percent)
 	this->setValue(this->fileBuffer, "thermal_activity", percent,"tmsettings_wind");
 }
 
+double AeroflyConfigFile::getThermalActivity()
+{
+	return atof(this->getValue(this->fileBuffer, "thermal_activity", "tmsettings_wind").c_str());
+}
+
 void AeroflyConfigFile::setVisibility(double percent)
 {
 	this->setValue(this->fileBuffer, "visibility", percent);
+}
+
+double AeroflyConfigFile::getVisibility()
+{
+	return atof(this->getValue(this->fileBuffer, "visibility").c_str());
 }
 
 void AeroflyConfigFile::setCloud(unsigned short index, double heightPercent, double densityPercent)
@@ -131,6 +188,36 @@ void AeroflyConfigFile::setCloud(unsigned short index, double heightPercent, dou
 	this->setValue(this->fileBuffer, cloudName + "_density", densityPercent, "tmsettings_clouds");
 }
 
+// Returns height, density
+std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
+{
+	std::string cloudName = "";
+	switch (index) {
+	case 1:
+		cloudName = "cumulus";
+		break;
+	case 2:
+		cloudName = "cumulus_mediocris";
+		break;
+	default:
+		cloudName = "cirrus";
+		break;
+	}
+	return {
+		(double)atof(this->getValue(this->fileBuffer, cloudName + "_height", "tmsettings_clouds").c_str()),
+		(double)atof(this->getValue(this->fileBuffer, cloudName + "_density", "tmsettings_clouds").c_str())
+	};
+}
+
+// Returns Origin, Destination
+std::tuple<std::string, std::string> AeroflyConfigFile::getFlightplan()
+{
+	return {
+		this->getValue(this->fileBuffer, "Identifier", "Origin").c_str(),
+		this->getValue(this->fileBuffer, "Identifier", "Destination").c_str()
+	};
+}
+
 void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
 {
 	this->setDate(aerofly.year, aerofly.month, aerofly.day);
@@ -142,5 +229,19 @@ void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
 
 	for (int i = 0; i < 3; ++i) {
 		this->setCloud(i, aerofly.cloudHeight[i], aerofly.cloudDensity[i]);
+	}
+}
+
+void AeroflyConfigFile::getToAeroflyObject(AeroflyWeather& aerofly)
+{
+	std::tie(aerofly.year, aerofly.month, aerofly.day) = this->getDate();
+	aerofly.hours           = this->getTime();
+	std::tie(aerofly.windStrength, aerofly.windDirection) = this->getWind();
+	aerofly.windTurbulence  = this->getTurbulence();
+	aerofly.thermalActivity = this->getThermalActivity();
+	aerofly.visibility      = this->getVisibility();
+
+	for (int i = 0; i < 3; ++i) {
+		std::tie(aerofly.cloudHeight[i], aerofly.cloudDensity[i]) = this->getCloud(i);
 	}
 }

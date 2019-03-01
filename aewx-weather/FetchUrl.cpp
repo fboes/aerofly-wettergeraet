@@ -6,17 +6,6 @@
 const unsigned short FetchUrl::MODE_RAW = 0;
 const unsigned short FetchUrl::MODE_JSON = 1;
 
-// with [1] being the protocol, [2] being the domain and [3] being the rest url
-std::smatch FetchUrl::getUrlParts(std::string url)
-{
-	std::smatch match;
-	if (!std::regex_search(url, match, std::regex("(https?)://([^/]+)(/.+)?"))) {
-		throw std::invalid_argument("Invalid URL");
-	}
-
-	return match;
-}
-
 // https://curl.haxx.se/libcurl/c/htmltitle.html
 int FetchUrl::writeBuffer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
@@ -59,17 +48,22 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 
 	curl = curl_easy_init();
 	if (curl) {
+		// @see https://curl.haxx.se/libcurl/c/CURLOPT_HTTPHEADER.html
+		struct curl_slist *list = NULL;
+		list = curl_slist_append(list, "User-Agent: AeroflyWX");
+		if (fetchMode == FetchUrl::MODE_JSON) {
+			list = curl_slist_append(list, "Accept: application/json");
+		}
+		if (apiKey != "") {
+			apiKey = "X-API-Key: " + apiKey;
+			list = curl_slist_append(list, apiKey.c_str());
+		}
+
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->writeBuffer);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-		if (apiKey != "") {
-			// @see https://curl.haxx.se/libcurl/c/CURLOPT_HTTPHEADER.html
-			struct curl_slist *list = NULL;
-			apiKey = "X-API-Key: " + apiKey;
-			list = curl_slist_append(list, apiKey.c_str());
-			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-		}
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 
 		// Do request
 		res = curl_easy_perform(curl);

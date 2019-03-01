@@ -21,7 +21,6 @@ bool MetarParser::convert(std::string metarString)
 {
 	std::smatch match;
 
-
 	if (std::regex_search(metarString, match, std::regex(" (\\d) (\\d)/(\\d)(SM)"))) {
 		// convert visbility range like `1 1/2 SM` to `3/2 SM`
 		std::string newFract = std::to_string(
@@ -97,7 +96,7 @@ bool MetarParser::convert(std::string metarString)
 		case 3:
 			// Visibility
 			if (std::regex_match(metarPart, match, std::regex("(\\d+)(?:/(\\d+))?(SM)?"))) {
-				int speed = std::stoi(match[1].str());
+				double speed = std::stoi(match[1].str());
 				if (match[2].str() != "") {
 					// Fraction
 					speed /= std::stoi(match[2].str());

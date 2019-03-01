@@ -5,7 +5,6 @@
 class FetchUrl
 {
 private:
-	std::smatch getUrlParts(std::string url);
 	static int writeBuffer(char * data, size_t size, size_t nmemb, std::string * writerData);
 	std::string parseJson(std::string rawJson);
 
