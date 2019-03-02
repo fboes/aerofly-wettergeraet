@@ -17,11 +17,18 @@ AeroflyWX is capable of setting weather values which you cannot access in Aerofl
 HTTP services
 -------------
 
-This tool is compatible with the following METAR API services:
+This tool is compatible with the following METAR services:
 
-* http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache (default service)
-* https://3960.org/metar/ (set `--response raw`)
-* https://api.checkwx.com/metar/XXXX/decoded (you will need an API key, set it via `--apikey <YOUAPIKEY>`)
+```batch
+: Supply METAR manually
+.\AeroflyWX.exe --metar ?
+
+: AVWX - this is the default HTTP service
+.\AeroflyWX.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
+
+: CheckWX - you will need to get an API key
+.\AeroflyWX.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
+```
 
 Legal stuff
 -----------
