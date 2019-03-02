@@ -42,7 +42,6 @@ void MetarCloud::setFeetAgl(unsigned long baseFeetAgl) {
 	this->baseMetersAgl = (int)Convert::feetToMeters(baseFeetAgl);
 }
 
-// If extraRange is activated, the minimumDensity is reduced by 1 to have some more range
 double MetarCloud::getAverageDensity(bool extraRange) {
 	auto minimum = this->densityMinimum;
 	if (extraRange && minimum > 0) {
@@ -51,7 +50,6 @@ double MetarCloud::getAverageDensity(bool extraRange) {
 	return ((double)minimum + (double)this->densityMaximum) / 2.0;
 }
 
-// If extraRange is activated, the minimumDensity is reduced by 1 to have some more range
 double MetarCloud::getRandomDensity(bool extraRange) {
 	srand((int)time(NULL));
 	auto minimum = this->densityMinimum;
@@ -64,17 +62,14 @@ double MetarCloud::getRandomDensity(bool extraRange) {
 	);
 }
 
-/* Returns a value 0..1. */
 double MetarCloud::getAverageDensityPercent() {
 	return this->convertEighthToPercent(this->getAverageDensity(true));
 }
 
-/* Returns a value 0..1. */
 double MetarCloud::getRandomDensityPercent() {
 	return this->convertEighthToPercent(this->getRandomDensity(true));
 }
 
-/* Returns a value 0..1. */
 double MetarCloud::getMaximumDensityPercent() {
 	return this->convertEighthToPercent(this->densityMaximum);
 }

@@ -30,8 +30,6 @@ void AeroflyConfigFile::setValue(std::string &subject, std::string key, double v
 
 std::string AeroflyConfigFile::getValue(std::string &subject, std::string key, std::string keyGroup)
 {
-	//const match = subject.match(new RegExp(''));
-	//return match ? match[1] : undefined;
 	std::smatch match;
 
 	std::string regSearch = "(?:";
@@ -60,8 +58,6 @@ AeroflyConfigFile::~AeroflyConfigFile()
 {
 }
 
-// Load this->filename into this->fileBuffer
-// If onlyOnce is set to `true`, only load file if it has not been loaded before
 bool AeroflyConfigFile::load(bool onlyOnce)
 {
 	if (onlyOnce && this->fileBuffer != "") {
@@ -79,7 +75,6 @@ bool AeroflyConfigFile::load(bool onlyOnce)
 	throw(errno);
 }
 
-// Save this->fileBuffer into this->filename
 bool AeroflyConfigFile::save()
 {
 	std::ofstream cfgFile(this->filename);
@@ -109,7 +104,6 @@ void AeroflyConfigFile::setDate(unsigned int year, unsigned int month, unsigned 
 	this->setValue(this->fileBuffer, "time_day", std::to_string(day), "tm_time_utc");
 }
 
-// Returns year, month, day
 std::tuple<unsigned int, unsigned int, unsigned int> AeroflyConfigFile::getDate()
 {
 	return {
@@ -135,7 +129,6 @@ void AeroflyConfigFile::setWind(double percent, unsigned int degrees)
 	this->setValue(this->fileBuffer, "direction_in_degree", std::to_string(degrees), "tmsettings_wind");
 }
 
-// Returns strength, direction_in_degree
 std::tuple<double, unsigned int> AeroflyConfigFile::getWind()
 {
 	return {
@@ -192,7 +185,6 @@ void AeroflyConfigFile::setCloud(unsigned short index, double heightPercent, dou
 	this->setValue(this->fileBuffer, cloudName + "_density", densityPercent, "tmsettings_clouds");
 }
 
-// Returns height, density
 std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
 {
 	std::string cloudName = "";
@@ -213,7 +205,6 @@ std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
 	};
 }
 
-// Returns Origin, Destination
 std::tuple<std::string, std::string> AeroflyConfigFile::getFlightplan()
 {
 	return {

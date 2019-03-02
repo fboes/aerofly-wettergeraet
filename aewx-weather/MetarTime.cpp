@@ -33,23 +33,18 @@ MetarTime::~MetarTime()
 }
 
 
-/* Change day */
 void MetarTime::setDay(unsigned int day) {
 	this->day = BoShed::rotatingValue(day, 31, 1);
 }
 
-/* Change hours */
 void MetarTime::setHours(unsigned int hours) {
 	this->hours = BoShed::rotatingValue(hours, 23);
 }
 
-/* Add hours (e.g. for timezone offset */
 void MetarTime::addHours(int hours) {
 	this->setHours(this->hours + hours);
 }
 
-/* Change minutes */
 void MetarTime::setMinutes(unsigned int minutes) {
 	this->minutes = BoShed::rotatingValue(minutes, 59);
 }
-

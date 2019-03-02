@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+ * Representation of pressure data. Will automatically do conversion into different units.
+ * As per convetion you should not change class variables, but use the corresponding
+ * setters.
+ */
 class MetarBarometer
 {
 public:

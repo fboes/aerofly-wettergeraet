@@ -1,7 +1,14 @@
 #pragma once
+
+/**
+ * Representation of temperature data. Will automatically do conversion into different units.
+ * As per convetion you should not change class variables, but use the corresponding
+ * setters.
+ */
 class MetarTemperature
 {
 protected:
+	// Calulate humidity from temeprature and dewpoint.
 	void makeHumidity();
 
 public:
@@ -11,7 +18,8 @@ public:
 	double dewpointCelsius;
 	double dewpointFahrenheit;
 
-	double humidity; // Calculated from temperature and dewpoint
+	// Calculated from temperature and dewpoint. See this->makeHumidity(). Is 0..100
+	double humidity;
 
 	MetarTemperature(double degreesCelsius = 0, double dewpointCelsius = 0);
 	~MetarTemperature();

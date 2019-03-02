@@ -2,12 +2,12 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
-#include "AeroflyWeather.h"
-#include "AeroflyConfigFile.h"
 #include "BoShed.h"
 #include "FetchUrl.h"
-#include <curl/curl.h>
 #include "MetarParser.h"
+#include "AeroflyWeather.h"
+#include "AeroflyBlender.h"
+#include "AeroflyConfigFile.h"
 
 using namespace std;
 
@@ -58,7 +58,7 @@ void showAerofly(AeroflyWeather aerofly) {
 	}
 }
 
-// Show METAR data
+// Show METAR data via STDOUT
 void showMetar(MetarParser metar) {
 	std::cout << "ICAO code    " << metar.icao << endl;
 	printf(
@@ -119,6 +119,8 @@ int main(int argc, char* argv[])
 	string apikey = "";
 	string metarString = "";
 	bool isDryRun = false;
+
+	// 0: quiet; 1: normal; 2: verbose
 	unsigned short verbosity = 1;
 	string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
 

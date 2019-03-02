@@ -27,6 +27,3 @@ void MetarVisibility::setMax()
 {
 	this->setStatuteMiles(10);
 }
-
-
-

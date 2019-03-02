@@ -4,6 +4,13 @@
 #include "MetarParser.h"
 #include "FetchUrl.h"
 
+/**
+ * This class represents weather values in Aerofly FS 2. There are multiple methods
+ * supplied for changing value in Aerofly FS 2, the most prominent being "setFromMetarString".
+ *
+ * This class also comes with a setter by fetching value from an URL, and a setter
+ * which interprets a MetarParser object.
+ */
 class AeroflyWeather
 {
 private:
@@ -41,11 +48,19 @@ public:
 	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, std::vector<std::string> conditions);
 	void setThermalActivity(double celsius);
 	void setVisibility(unsigned long meters);
+
+	// Set cloud with index 0..2. Density is between 0..8.
 	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);
+
+	// Populate all values from a MetarParser object
 	void setFromMetar(const MetarParser& metar);
+
+	// Convert METAR information into Aerofly values
 	void setFromMetarString(std::string metarString);
+
+	// Fetch METAR from URL and convert it into Aerofly values
 	void setFromMetarUrl(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
+
+	// Fetch METAR from URL and convert it into Aerofly values
 	void setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
-
 };
-

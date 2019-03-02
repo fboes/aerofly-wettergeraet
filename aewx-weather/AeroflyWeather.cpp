@@ -4,15 +4,6 @@
 #include "BoShed.h"
 #include "FetchUrl.h"
 
-/**
- * @class AeroflyWeather
- * This class represents weather values in Aerofly FS 2. There are multiple methods
- * supplied for changing value in Aerofly FS 2, the most prominent being "setFromMetarString".
- *
- * This class also comes with a setter by fetching value from an URL, and a setter
- * which interprets a MetarParser object.
- */
-
 double AeroflyWeather::makeGust(double windSpeed, std::vector<std::string> conditions)
 {
 	auto gustSpeed = windSpeed;
@@ -114,7 +105,6 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 	}
 }
 
-// Set cloud 0..2
 void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum)
 {
 	srand((int)time(NULL));
@@ -128,7 +118,6 @@ void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned
 		)) / this->maxCloudsDensity;
 }
 
-// Populate all values from a MetarParser object
 void AeroflyWeather::setFromMetar(const MetarParser& metar)
 {
 	this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
@@ -142,14 +131,12 @@ void AeroflyWeather::setFromMetar(const MetarParser& metar)
 	}
 }
 
-// Convert METAR information into Aerofly values
 void AeroflyWeather::setFromMetarString(std::string metarString)
 {
 	MetarParser metar(metarString);
 	this->setFromMetar(metar);
 }
 
-// Fetch METAR from URL and convert it into Aerofly values
 void AeroflyWeather::setFromMetarUrl(std::string url, unsigned short fetchMode, std::string apiKey)
 {
 	FetchUrl urlFetcher;
@@ -157,7 +144,6 @@ void AeroflyWeather::setFromMetarUrl(std::string url, unsigned short fetchMode, 
 	this->setFromMetarString(metarString);
 }
 
-// Fetch METAR from URL and convert it into Aerofly values
 void AeroflyWeather::setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey)
 {
 	FetchUrl urlFetcher;

@@ -16,8 +16,6 @@ MetarParser::~MetarParser()
 {
 }
 
-// Populate class variables with data from metarString
-// Throws std::invalid_argument
 bool MetarParser::convert(std::string metarString)
 {
 	std::smatch match;
@@ -37,6 +35,7 @@ bool MetarParser::convert(std::string metarString)
 	// start parsing
 	// @see https://stackoverflow.com/questions/236129/how-do-i-iterate-over-the-words-of-a-string
 	unsigned short parsingMode = 0;
+	unsigned short currentCloud = 0;
 	std::string metarPart = "";
 	std::stringstream metarParts(metarString);
 
@@ -144,11 +143,11 @@ bool MetarParser::convert(std::string metarString)
 			break;
 		case 5:
 			// Clouds
-			if (std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*")) && this->currentCloud < 3) {
-				this->clouds[this->currentCloud].setCode(match[1].str());
-				this->clouds[this->currentCloud].setFeetAgl(std::stoi(match[2].str()) * 100);
-				this->ceiling = &this->clouds[this->currentCloud];
-				this->currentCloud++;
+			if (std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*")) && currentCloud < 3) {
+				this->clouds[currentCloud].setCode(match[1].str());
+				this->clouds[currentCloud].setFeetAgl(std::stoi(match[2].str()) * 100);
+				this->ceiling = &this->clouds[currentCloud];
+				currentCloud++;
 			}
 			break;
 		case 6:
@@ -193,7 +192,6 @@ bool MetarParser::convert(std::string metarString)
 	return true;
 }
 
-/* Return flight category like "VFR", "IFR" */
 std::string MetarParser::getFlightCategory()
 {
 	std::string flightCatgeory = "LIFR";

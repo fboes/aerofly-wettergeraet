@@ -1,4 +1,8 @@
 #pragma once
+
+/**
+ * Convert between units, like from feet to meters.
+ */
 namespace Convert
 {
 	double celsiusToFahrenheit(double celsius);

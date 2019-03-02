@@ -6,7 +6,6 @@
 const unsigned short FetchUrl::MODE_RAW = 0;
 const unsigned short FetchUrl::MODE_JSON = 1;
 
-// https://curl.haxx.se/libcurl/c/htmltitle.html
 int FetchUrl::writeBuffer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
 	if (writerData == NULL) {
@@ -17,7 +16,6 @@ int FetchUrl::writeBuffer(char *data, size_t size, size_t nmemb, std::string *wr
 	return size * nmemb;
 }
 
-// Actually this does not parse JSON, but finds the METAR string
 std::string FetchUrl::parseJson(std::string rawJson)
 {
 	std::smatch match;
@@ -36,8 +34,6 @@ FetchUrl::~FetchUrl()
 {
 }
 
-// Make HTTP request
-// Throws std::invalid_argument
 std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::string apiKey)
 {
 	// https://curl.haxx.se/libcurl/c/htmltitle.html
@@ -83,7 +79,6 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 	throw std::invalid_argument("Could no initiate CURL");
 }
 
-// Substitute XXXX with ICAO code
 std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey)
 {
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);

@@ -9,25 +9,47 @@
 #include "MetarTemperature.h"
 #include "MetarBarometer.h"
 
+/**
+ * Convert a METAR string into a structured object.
+ */
 class MetarParser
 {
-	unsigned short currentCloud = 0;
+public:
+	// ICAO code of METAR report
+	std::string icao = "";
 
-	public:
-		std::string icao = ""; // ICAO code of METAR report
-		MetarTime observed;    // Time and date of observation
-		MetarWind wind;        // Wind direction and strength
-		MetarVisibility visibility; // Range of visibility
-		std::vector<std::string> conditions; // Extra weather conditions like rain, snow
-		MetarCloud clouds [3];        // 0..2 cloud layers
-		MetarCloud * ceiling = NULL;  // Uppermost cloud layer
-		MetarTemperature temperature; // Temperature, dewpoint and humidity
-		MetarBarometer barometer;     // Pressure
+	// Time and date of observation
+	MetarTime observed;
 
-		MetarParser(std::string metarString = "");
-		~MetarParser();
+	// Wind direction and strength
+	MetarWind wind;
 
-		bool convert(std::string metarString);
-		std::string getFlightCategory();
+	// Range of visibility
+	MetarVisibility visibility;
+
+	// Extra weather conditions like rain, snow
+	std::vector<std::string> conditions;
+
+	// 0..2 cloud layers
+	MetarCloud clouds[3];
+
+	// Uppermost cloud layer
+	MetarCloud * ceiling = NULL;
+
+	// Temperature, dewpoint and humidity
+	MetarTemperature temperature;
+
+	// Pressure
+	MetarBarometer barometer;
+
+	MetarParser(std::string metarString = "");
+	~MetarParser();
+
+	// Populate class variables with data from metarString
+	// Throws std::invalid_argument
+	bool convert(std::string metarString);
+
+	/* Return flight category like "VFR", "IFR" */
+	std::string getFlightCategory();
 };
 
