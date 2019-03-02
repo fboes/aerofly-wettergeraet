@@ -1,12 +1,9 @@
 #include "pch.h"
 #include "AeroflyConfigFile.h"
-#include <iostream>
-#include <fstream>
 #include <regex>
-#include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
-#include <cerrno>
 
 void AeroflyConfigFile::setValue(std::string &subject, std::string key, std::string value, std::string keyGroup)
 {
@@ -63,28 +60,28 @@ bool AeroflyConfigFile::load(bool onlyOnce)
 	if (onlyOnce && this->fileBuffer != "") {
 		return true;
 	}
-	std::ifstream cfgFile(this->filename, std::ios::in | std::ios::binary);
-	if (cfgFile)
+	this->fileStream.open(this->filename, std::ios::in | std::ios::binary);
+	if (this->fileStream.is_open())
 	{
 		std::ostringstream contents;
-		contents << cfgFile.rdbuf();
-		cfgFile.close();
+		contents << this->fileStream.rdbuf();
+		this->fileStream.close();
 		this->fileBuffer = contents.str();
 		return true;
 	}
-	throw(errno);
+	throw std::invalid_argument("Could no open " + this->filename + " for reading");
 }
 
 bool AeroflyConfigFile::save()
 {
-	std::ofstream cfgFile(this->filename);
-	if (cfgFile.is_open())
+	this->fileStream.open(this->filename, std::ios::out);
+	if (this->fileStream.is_open())
 	{
-		cfgFile << this->fileBuffer;
-		cfgFile.close();
+		this->fileStream << this->fileBuffer;
+		this->fileStream.close();
 		return true;
 	}
-	throw(errno);
+	throw std::invalid_argument("Could no open " + this->filename + " for writing");
 }
 
 std::string AeroflyConfigFile::getFilename()
@@ -149,7 +146,7 @@ double AeroflyConfigFile::getTurbulence()
 
 void AeroflyConfigFile::setThermalActivity(double percent)
 {
-	this->setValue(this->fileBuffer, "thermal_activity", percent,"tmsettings_wind");
+	this->setValue(this->fileBuffer, "thermal_activity", percent, "tmsettings_wind");
 }
 
 double AeroflyConfigFile::getThermalActivity()
@@ -230,11 +227,11 @@ void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
 void AeroflyConfigFile::getToAeroflyObject(AeroflyWeather& aerofly)
 {
 	std::tie(aerofly.year, aerofly.month, aerofly.day) = this->getDate();
-	aerofly.hours           = this->getTime();
+	aerofly.hours = this->getTime();
 	std::tie(aerofly.windStrength, aerofly.windDirection) = this->getWind();
-	aerofly.windTurbulence  = this->getTurbulence();
+	aerofly.windTurbulence = this->getTurbulence();
 	aerofly.thermalActivity = this->getThermalActivity();
-	aerofly.visibility      = this->getVisibility();
+	aerofly.visibility = this->getVisibility();
 
 	for (int i = 0; i < 3; ++i) {
 		std::tie(aerofly.cloudHeight[i], aerofly.cloudDensity[i]) = this->getCloud(i);

@@ -2,6 +2,7 @@
 #include <string>
 #include "AeroflyWeather.h"
 #include <tuple>
+#include <fstream>
 
 /**
  * This represents the values of the Aerofly FS2 main configuration file.
@@ -12,6 +13,7 @@ class AeroflyConfigFile
 private:
 	std::string filename;
 	std::string fileBuffer;
+	std::fstream fileStream;
 
 	void setValue(std::string &subject, std::string key, std::string value, std::string keyGroup = "");
 	void setValue(std::string &subject, std::string key, double value, std::string keyGroup = "");
@@ -21,11 +23,13 @@ public:
 	AeroflyConfigFile(std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf");
 	~AeroflyConfigFile();
 
-	// Load this->filename into this->fileBuffer
-	// If onlyOnce is set to `true`, only load file if it has not been loaded before
+	// Load this->filename into this->fileBuffer.
+	// If onlyOnce is set to `true`, only load file if it has not been loaded before.
+	// Throws std::invalid_argument in case of errors.
 	bool load(bool onlyOnce = false);
 
-	// Save this->fileBuffer into this->filename
+	// Save this->fileBuffer into this->filename.
+	// Throws std::invalid_argument in case of errors.
 	bool save();
 
 	std::string getFilename();

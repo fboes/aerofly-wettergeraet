@@ -41,7 +41,7 @@ Making changes
 
 ### Emojis for `CHANGELOG.md`
 
-* :gift: `:gift:` New feature
-* :pill: `:pill:` Bugfix, repairing a broken functionality
-* :bomb: `:bomb:` Possibly breaking change, needs further explanation
+* 🎁 `:gift:` New feature
+* 💊 `:pill:` Bugfix, repairing a broken functionality
+* 💣 `:bomb:` Possibly breaking change, needs further explanation
 * :wrench: `:wrench:` Internal, technical improvement
