@@ -25,7 +25,7 @@ public:
 
 	// Blend this->currentSituation into target->situation.
 	// Step changes it percentual, e.g. `0.01` changes it by 1% per call.
-	// Returns number of changed values.
+	// Returns number of changed values, 0..11.
 	unsigned short blend(double step = 0.01);
 };
 

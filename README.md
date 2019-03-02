@@ -14,6 +14,15 @@ The METAR weather information can be supplied manually, or can be fetched from a
 
 AeroflyWX is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
 
+HTTP services
+-------------
+
+This tool is compatible with the following METAR API services:
+
+* http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache (default service)
+* https://3960.org/metar/ (set `--response raw`)
+* https://api.checkwx.com/metar/XXXX/decoded (you will need an API key, set it via `--apikey <YOUAPIKEY>`)
+
 Legal stuff
 -----------
 

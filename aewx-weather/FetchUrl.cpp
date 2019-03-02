@@ -20,7 +20,11 @@ std::string FetchUrl::parseJson(std::string rawJson)
 {
 	std::smatch match;
 	if (std::regex_search(rawJson, match, std::regex("\"([A-Z]+ \\d+Z [^\"]+)\""))) {
-		return match[1].str();
+		return std::regex_replace(
+			match[1].str(),
+			std::regex("\\\\"),
+			""
+		);
 	}
 
 	return rawJson;

@@ -25,12 +25,14 @@ static void showHelp(std::string cmd)
 		<< "                       If URL contains 'XXXX' this will be replaced by <ICAO>.\n"
 		<< "                       Defaults to URL of AvWX.\n"
 		<< "    --icao <ICAO>      ICAO code of airport the METAR will be fetched for.\n"
+		<< "                       If this is set to '?' the value will be asked for.\n"
 		<< "    --apikey <APIKEY>  Sent HTTP header 'X-API-Key' set to <APIKEY>.\n"
 		<< "    --response <TYPE>  How to interpret HTTP response. 'json' is default.\n"
-		<< "                       Set this to 'text' if the response is plain text.\n"
+		<< "                       Set this to 'raw' if the response is plain text.\n"
 		<< "                       Set this to 'json' if the response is JSON object.\n"
 		<< "    --metar <METAR>    Supply a valid METAR code enclosed in '\"'.\n"
 		<< "                       This will disable HTTP fetching.\n"
+		<< "                       If this is set to '?' the value will be asked for.\n"
 		<< "    --dry-run          Do not save 'main.mcf'\n"
 		<< "    --quiet            No console output\n"
 		<< "    --verbose          Show debug output\n"
@@ -152,7 +154,7 @@ int main(int argc, char* argv[])
 			icaoCode = (i + 1 < argc) ? string(argv[++i]) : icaoCode;
 		}
 		else if (currentArg == "--response") {
-			response = (i + 1 < argc && string(argv[++i]) == "text") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
+			response = (i + 1 < argc && string(argv[++i]) == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
 		}
 		else if (currentArg == "--apikey") {
 			apikey = (i + 1 < argc) ? string(argv[++i]) : apikey;
@@ -176,10 +178,14 @@ int main(int argc, char* argv[])
 
 	// Fetch remote data via HTTP(S)
 
+	if (metarString == "?") {
+		cout << "Please enter a METAR string: ";
+		getline(cin, metarString);
+	}
 	if (metarString == "" && url != "") {
-		if (icaoCode == "") {
+		if (icaoCode == "" || icaoCode == "?") {
 			cout << "Please enter an ICAO code: ";
-			cin >> icaoCode;
+			getline(cin, icaoCode);
 		}
 
 		FetchUrl urlFetcher;
@@ -187,7 +193,7 @@ int main(int argc, char* argv[])
 			std::cout << "URL          " << url << endl;
 		}
 		try {
-			metarString = urlFetcher.fetch(url, icaoCode, response);
+			metarString = urlFetcher.fetch(url, icaoCode, response, apikey);
 		}
 		catch (std::invalid_argument& e) {
 			std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
