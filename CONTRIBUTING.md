@@ -4,8 +4,8 @@ Contributing
 Submitting issues
 -----------------
 
-1. Search in the [Github issues](https://github.com/fboes/), if a similar issue has already been filed. If so, please contribute to this issue.
-2. On [opening a new issue on Github](https://github.com/fboes/), add a descriptive title describing in a few words your problem. Think of the terms you would have searched for to find this issue.
+1. Search in the [Github issues](https://github.com/fboes/aerofly-weather-cpp), if a similar issue has already been filed. If so, please contribute to this issue.
+2. On [opening a new issue on Github](https://github.com/fboes/aerofly-weather-cpp), add a descriptive title describing in a few words your problem. Think of the terms you would have searched for to find this issue.
 3. Leave a reproducible list of steps leading to the error.
 4. If possible add the Node and NPM version you ware using as well as the OS.
 
@@ -23,7 +23,7 @@ Structure of this project
 
 * `FetchUrl` fetches METAR strings from remote services
 * `MetarParser` converts METAR strings into a structured object. Lots of `Metar*` objects assist in doing so.
-* `AeroflyWeather` converts METAR objects into values usable in Aerofly FS 2.
+* `AeroflyWeather` converts METAR objects into values usable in Aerofly FS 2. `AeroflyBlender` can gradually change the current weather from current to target weather.
 * `AeroflyConfigFile` save Aerofly FS 2 values into the Aerolfy FS 2 main config file `main.mcf`.
 
 Making changes
@@ -44,4 +44,4 @@ Making changes
 * 🎁 `:gift:` New feature
 * 💊 `:pill:` Bugfix, repairing a broken functionality
 * 💣 `:bomb:` Possibly breaking change, needs further explanation
-* :wrench: `:wrench:` Internal, technical improvement
+* 🔧 `:wrench:` Internal, technical improvement

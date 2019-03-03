@@ -14,6 +14,33 @@ The METAR weather information can be supplied manually, or can be fetched from a
 
 AeroflyWX is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
 
+Installation
+------------
+
+As of now there is only a compiled version for Windows 10.
+
+1. Download the current release ZIP from https://github.com/fboes/aerofly-weather-cpp/releases.
+2. Unpack the ZIP file to some sensible location.
+3. Create a shortcut on your desktop by right-clicking `AeroflyWX.exe` > "Send to" > "Desktop (Create shortcut)".
+3. Start the application by clicking on the desktop link.
+
+In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
+
+Usage
+-----
+
+![](docs/aerofly-wx-cli.png)
+
+You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2. This file will be modified by the app.
+
+Before starting the app be sure that Aerofly FS 2 is _not_ running. On start-up the app will load the current settings from your `main.mcf`.
+
+By starting the app METAR data will be fetched from a remote internet service for the given ICAO code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
+
+Optionally you can enter a METAR code manually. Call the app with `--help` appended to see all options available.
+
+**Important:** Be sure to quit the app before starting Aerofly FS 2 to no accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
+
 HTTP services
 -------------
 
@@ -30,9 +57,18 @@ This tool is compatible with the following METAR services:
 .\AeroflyWX.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
 ```
 
+Update
+------
+
+Just repeat all steps for a regular installation.
+
 Legal stuff
 -----------
 
 Author: [Frank Boës](http://3960.org)
 
 Copyright & license: See [LICENSE.txt](LICENSE.txt) and [Curl's license](https://curl.haxx.se/docs/copyright.html)
+
+This tool is NOT affiliated with, endorsed, or sponsored by IPACS GbR. As stated in the [LICENSE.txt](LICENSE.txt), this tool comes with no warranty and might damage your files.
+
+This software complies with the General Data Protection Regulation (GDPR) as it does not collect nor transmits any personal data but for data your submit by using the CLI commands using URLs. For GDPR compliance of these services refer to the legal statements of these services.

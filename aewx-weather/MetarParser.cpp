@@ -40,7 +40,9 @@ bool MetarParser::convert(std::string metarString)
 	std::stringstream metarParts(metarString);
 
 	while (metarParts >> metarPart) {
-
+		if (parsingMode < 3 && std::regex_match(metarPart, std::regex("(\\d+)(?:/(\\d+))?(SM)?"))) {
+			parsingMode = 3; // no wind reported
+		}
 		if (parsingMode < 5 && std::regex_match(metarPart, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
 			parsingMode = 5; // no visibility / conditions reported
 		}

@@ -140,6 +140,8 @@
     </Link>
     <PostBuildEvent>
       <Command>COPY "$(SolutionDir)*.md" "$(TargetDir)"
+MKDIR "$(TargetDir)docs\"
+COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
 "C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\AeroflyWX.zip" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -184,7 +186,7 @@
     <ClCompile Include="AeroflyConfigFile.cpp" />
     <ClCompile Include="AeroflyWeather.cpp" />
     <ClCompile Include="MetarParser.cpp" />
-    <ClCompile Include="aewx-weather.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="FetchUrl.cpp" />
     <ClCompile Include="BoShed.cpp" />
     <ClCompile Include="Convert.cpp" />
