@@ -26,6 +26,10 @@ static void showHelp(std::string cmd)
 		<< "                       Defaults to URL of AvWX.\n"
 		<< "    --icao <ICAO>      ICAO code of airport the METAR will be fetched for.\n"
 		<< "                       If this is set to '?' the value will be asked for.\n"
+		<< "                       If this contains 'DEP', ICAO code will be fetched\n"
+		<< "                       from Aerofly FS 2 flightplan departure airport.\n"
+		<< "                       If this contains 'ARR', ICAO code will be fetched\n"
+		<< "                       from Aerofly FS 2 flightplan arrival airport.\n"
 		<< "    --apikey <APIKEY>  Sent HTTP header 'X-API-Key' set to <APIKEY>.\n"
 		<< "    --response <TYPE>  How to interpret HTTP response. 'json' is default.\n"
 		<< "                       Set this to 'raw' if the response is plain text.\n"
@@ -108,7 +112,20 @@ void showMetar(MetarParser metar) {
 	std::cout << "Flight category  " << metar.getFlightCategory() << endl;
 }
 
+// Return origin / desitnation ICAO code from flightplan depending on inIcao bein "DEP" or "ARR".
+std::string getIcaoFromFlightplan(std::string inIcao, std::tuple<std::string, std::string> flightplan) {
+	std::string origin;
+	std::string destination;
+	std::tie(origin, destination) = flightplan;
+	inIcao = (inIcao == "DEP") ? origin : destination;
+	return inIcao;
+}
 
+// Show error, exit with failure.
+void dieWithError(std::invalid_argument e) {
+	std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
+	exit(EXIT_FAILURE);
+}
 
 // ----------------------------------------------------------------------------
 
@@ -176,6 +193,16 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	// Open Aerofly configuration file
+
+	AeroflyConfigFile mainConfig(filename);
+	try {
+		mainConfig.load();
+	}
+	catch (std::invalid_argument& e) {
+		dieWithError(e);
+	}
+
 	// Fetch remote data via HTTP(S)
 
 	if (metarString == "?") {
@@ -187,6 +214,9 @@ int main(int argc, char* argv[])
 			cout << "Please enter an ICAO code: ";
 			getline(cin, icaoCode);
 		}
+		if (icaoCode == "DEP" || icaoCode == "ARR" || icaoCode == "") {
+			icaoCode = getIcaoFromFlightplan(icaoCode, mainConfig.getFlightplan());
+		}
 
 		FetchUrl urlFetcher;
 		if (verbosity > 1) {
@@ -196,8 +226,7 @@ int main(int argc, char* argv[])
 			metarString = urlFetcher.fetch(url, icaoCode, response, apikey);
 		}
 		catch (std::invalid_argument& e) {
-			std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
-			exit(EXIT_FAILURE);
+			dieWithError(e);
 		}
 	}
 	if (verbosity > 0) {
@@ -205,8 +234,7 @@ int main(int argc, char* argv[])
 	}
 
 	if (metarString == "") {
-		std::cerr << "\x1B[31mNo METAR code found\033[0m" << endl;
-		exit(EXIT_FAILURE);
+		dieWithError(std::invalid_argument("No METAR code found"));
 	}
 
 	// Parse METAR data
@@ -216,8 +244,7 @@ int main(int argc, char* argv[])
 		metar.convert(metarString);
 	}
 	catch (std::invalid_argument& e) {
-		std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
-		exit(EXIT_FAILURE);
+		dieWithError(e);
 	}
 	if (verbosity > 1) {
 		showMetar(metar);
@@ -231,17 +258,20 @@ int main(int argc, char* argv[])
 		showAerofly(aerofly);
 	}
 
-	// Open Aerofly configuration file
+	// Modify Aerofly Config file
 
-	AeroflyConfigFile mainConfig(filename);
-	mainConfig.load();
 	mainConfig.setFromAeroflyObject(aerofly);
 
 	if (!isDryRun) {
 		if (verbosity > 0) {
 			std::cout << "\nSaving file " << mainConfig.getFilename() << endl;
 		}
-		mainConfig.save();
+		try {
+			mainConfig.save();
+		}
+		catch (std::invalid_argument& e) {
+			dieWithError(e);
+		}
 	}
 
 	return 0;
