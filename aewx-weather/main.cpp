@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "BoShed.h"
 #include "FetchUrl.h"
-#include "MetarParser.h"
+#include "MetarParserSimple.h"
 #include "AeroflyWeather.h"
 #include "AeroflyBlender.h"
 #include "AeroflyConfigFile.h"
@@ -59,13 +59,13 @@ void showAerofly(AeroflyWeather aerofly) {
 
 	for (int i = 0; i < 3; ++i) {
 		std::cout << "\nCloud layer" + std::to_string(i + 1) << endl;
-		std::cout << BoShed::progress(aerofly.cloudHeight[i], "Height") << endl;
-		std::cout << BoShed::progress(aerofly.cloudDensity[i], "Density") << endl;
+		std::cout << BoShed::progress(aerofly.clouds[i].height, "Height") << endl;
+		std::cout << BoShed::progress(aerofly.clouds[i].density, "Density") << endl;
 	}
 }
 
 // Show METAR data via STDOUT
-void showMetar(MetarParser metar) {
+void showMetar(MetarParserSimple metar) {
 	std::cout << "ICAO code    " << metar.icao << endl;
 	printf(
 		"Date         %d-%d-%d %d:%dZ\n",
@@ -76,38 +76,28 @@ void showMetar(MetarParser metar) {
 		metar.wind.degrees, metar.wind.degreesFrom, metar.wind.speedKts, metar.wind.gustKts
 	);
 	printf(
-		"Visibility   %f statute miles, %f meters\n",
-		metar.visibility.statuteMiles, metar.visibility.meters
+		"Visibility   %f meters\n",
+		metar.visibilityMeters
 	);
-	MetarCloud * cloud = &metar.clouds[0];
-	printf(
-		"Cloud 0      Min %d, max %d at %dft, %dm\n",
-		cloud->densityMinimum, cloud->densityMaximum, cloud->baseFeetAgl, cloud->baseMetersAgl
-	);
-	cloud = &metar.clouds[1];
-	printf(
-		"Cloud 1      Min %d, max %d at %dft, %dm\n",
-		cloud->densityMinimum, cloud->densityMaximum, cloud->baseFeetAgl, cloud->baseMetersAgl
-	);
-	cloud = &metar.clouds[2];
-	printf(
-		"Cloud 2      Min %d, max %d at %dft, %dm\n",
-		cloud->densityMinimum, cloud->densityMaximum, cloud->baseFeetAgl, cloud->baseMetersAgl
-	);
-	if (metar.ceiling) {
-		cloud = metar.ceiling;
+	for (int i = 0; i < 3; ++i) {
 		printf(
-			"Ceiling      Min %d, max %d at %dft, %dm\n",
-			cloud->densityMinimum, cloud->densityMaximum, cloud->baseFeetAgl, cloud->baseMetersAgl
+			"Cloud 0      Min %d, max %d at %dft\n",
+			metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum, metar.clouds[i].baseFeetAgl
+		);
+	}
+	if (metar.ceiling) {
+		printf(
+			"Ceiling      Min %d, max %d at %dft\n",
+			metar.ceiling->densityMinimum, metar.ceiling->densityMaximum, metar.ceiling->baseFeetAgl
 		);
 	}
 	printf(
-		"Temperature  %f deg C, %f deg F, Dewpoint  %f deg C, %f deg F, Humidity %f%%\n",
-		metar.temperature.degreesCelsius, metar.temperature.degreesFahrenheit, metar.temperature.dewpointCelsius, metar.temperature.dewpointFahrenheit, metar.temperature.humidity
+		"Temperature  %f deg C, Dewpoint  %f deg C, Humidity %f%%\n",
+		metar.temperatureCelsius, metar.dewpointCelsius, metar.getHumidity()
 	);
 	printf(
-		"Pressure     %fkpa, %fInch Hg\n",
-		metar.barometer.kpa, metar.barometer.inhg
+		"Pressure     %fkpa\n",
+		metar.barometerKpa
 	);
 	std::cout << "Flight category  " << metar.getFlightCategory() << endl;
 }
@@ -240,7 +230,7 @@ int main(int argc, char* argv[])
 
 	// Parse METAR data
 
-	MetarParser metar;
+	MetarParserSimple metar;
 	try {
 		metar.convert(metarString);
 	}

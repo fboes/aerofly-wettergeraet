@@ -220,7 +220,7 @@ void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
 	this->setVisibility(aerofly.visibility);
 
 	for (int i = 0; i < 3; ++i) {
-		this->setCloud(i, aerofly.cloudHeight[i], aerofly.cloudDensity[i]);
+		this->setCloud(i, aerofly.clouds[i].height, aerofly.clouds[i].density);
 	}
 }
 
@@ -234,6 +234,6 @@ void AeroflyConfigFile::getToAeroflyObject(AeroflyWeather& aerofly)
 	aerofly.visibility = this->getVisibility();
 
 	for (int i = 0; i < 3; ++i) {
-		std::tie(aerofly.cloudHeight[i], aerofly.cloudDensity[i]) = this->getCloud(i);
+		std::tie(aerofly.clouds[i].height, aerofly.clouds[i].density) = this->getCloud(i);
 	}
 }

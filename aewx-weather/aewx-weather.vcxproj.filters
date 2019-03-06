@@ -33,31 +33,13 @@
     <ClInclude Include="AeroflyConfigFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MetarTemperature.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarVisibility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarWind.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarBarometer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarCloud.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MetarParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AeroflyBlender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetarParserSimple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,31 +62,13 @@
     <ClCompile Include="AeroflyConfigFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MetarBarometer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarCloud.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarTemperature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarVisibility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarWind.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MetarParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AeroflyBlender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetarParserSimple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

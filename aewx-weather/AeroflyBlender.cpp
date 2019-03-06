@@ -73,8 +73,8 @@ unsigned short AeroflyBlender::blend(double step)
 	hasChanged += this->blendValue((&this->currentSituation)->visibility, this->targetSituation->visibility, step);
 
 	for (int i = 0; i < 3; ++i) {
-		hasChanged += this->blendValue((&this->currentSituation)->cloudHeight[i], this->targetSituation->cloudHeight[i], step);
-		hasChanged += this->blendValue((&this->currentSituation)->cloudDensity[i], this->targetSituation->cloudDensity[i], step);
+		hasChanged += this->blendValue((&this->currentSituation)->clouds[i].height, this->targetSituation->clouds[i].height, step);
+		hasChanged += this->blendValue((&this->currentSituation)->clouds[i].density, this->targetSituation->clouds[i].density, step);
 	}
 	return hasChanged;
 }

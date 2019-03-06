@@ -49,7 +49,7 @@ public:
 	// Throws std::invalid_argument in case of errors.
 	bool convert(std::string metarString);
 
-	/* Return flight category like "VFR", "IFR" */
+	// Return flight category like "VFR", "IFR".
 	std::string getFlightCategory();
 };
 

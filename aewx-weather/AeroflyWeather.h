@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "MetarParser.h"
+#include "MetarParserSimple.h"
 #include "FetchUrl.h"
 
 /**
@@ -27,8 +27,14 @@ private:
 	double makeGust(double gustSpeed, std::vector<std::string> conditions);
 
 public:
-	double cloudDensity[3]{ 0.0, 0.0, 0.0 }; // 0.0..1.0
-	double cloudHeight[3]{ 0.0, 0.0, 0.0 };  // 0.0..1.0
+	// Represents a cloud layer
+	struct AeroflyCloud {
+		double density = 0; // 0.0..1.0
+		double height = 0; // 0.0..1.0
+
+	};
+
+	AeroflyCloud clouds[3];
 	double visibility = 1.0;  // 0.0..1.0
 	unsigned int year = 2018; // Four-digit-year
 	unsigned int month = 5;   // 1..12
@@ -53,7 +59,7 @@ public:
 	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);
 
 	// Populate all values from a MetarParser object
-	void setFromMetar(const MetarParser& metar);
+	void setFromMetar(const MetarParserSimple& metar);
 
 	// Convert METAR information into Aerofly values
 	void setFromMetarString(std::string metarString);

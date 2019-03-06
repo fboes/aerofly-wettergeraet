@@ -32,6 +32,11 @@ namespace Convert {
 		return kph / 3600 * 1000;
 	}
 
+	double kphToKts(double kph)
+	{
+		return kph / 1.852;
+	}
+
 	double mpsToKts(double mps) {
 		return mps * 1.9438445;
 	}

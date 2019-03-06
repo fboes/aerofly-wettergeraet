@@ -112,20 +112,20 @@ void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned
 		densityMinimum--;
 	}
 
-	this->cloudHeight[index] = baseFeetAgl / this->maxCloudsHeight;
-	this->cloudDensity[index] = (densityMinimum + (
+	this->clouds[index].density = (densityMinimum + (
 		(rand() % 100 / 100.0) * (densityMaximum - densityMinimum)
 		)) / this->maxCloudsDensity;
+	this->clouds[index].height = baseFeetAgl / this->maxCloudsHeight;
 }
 
-void AeroflyWeather::setFromMetar(const MetarParser& metar)
+void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 {
 	this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
 	this->setTime(metar.observed.hours, metar.observed.minutes);
 	this->setWind(metar.wind.speedKts, metar.wind.degrees);
 	this->setTurbulence(metar.wind.speedKts, metar.wind.gustKts, metar.wind.degreesFrom, metar.wind.degreesTo, metar.conditions);
-	this->setThermalActivity(metar.temperature.degreesCelsius);
-	this->setVisibility((int)metar.visibility.meters);
+	this->setThermalActivity(metar.temperatureCelsius);
+	this->setVisibility((int)metar.visibilityMeters);
 	for (int i = 0; i < 3; ++i) {
 		this->setCloud(i, metar.clouds[i].baseFeetAgl, metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum);
 	}
@@ -133,7 +133,7 @@ void AeroflyWeather::setFromMetar(const MetarParser& metar)
 
 void AeroflyWeather::setFromMetarString(std::string metarString)
 {
-	MetarParser metar(metarString);
+	MetarParserSimple metar(metarString);
 	this->setFromMetar(metar);
 }
 

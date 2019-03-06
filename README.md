@@ -14,10 +14,16 @@ The METAR weather information can be supplied manually, or can be fetched from a
 
 AeroflyWX is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
 
-Installation
+Requirements
 ------------
 
-As of now there is only a compiled version for Windows 10.
+* Microsoft Windows 10 has to be installed.
+* IPACS Aerofly FS 2 has to be installed.
+* A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter.
+* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If you have no internet connection, supply a METAR string via `--metar "<METAR>"`.If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+
+Installation
+------------
 
 1. Download the current release ZIP from https://github.com/fboes/aerofly-weather-cpp/releases.
 2. Unpack the ZIP file to some sensible location.

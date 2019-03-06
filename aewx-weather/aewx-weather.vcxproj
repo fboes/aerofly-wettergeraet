@@ -168,16 +168,10 @@ COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
     <ClInclude Include="AeroflyBlender.h" />
     <ClInclude Include="AeroflyConfigFile.h" />
     <ClInclude Include="AeroflyWeather.h" />
-    <ClInclude Include="MetarParser.h" />
     <ClInclude Include="FetchUrl.h" />
     <ClInclude Include="BoShed.h" />
     <ClInclude Include="Convert.h" />
-    <ClInclude Include="MetarBarometer.h" />
-    <ClInclude Include="MetarCloud.h" />
-    <ClInclude Include="MetarTemperature.h" />
-    <ClInclude Include="MetarTime.h" />
-    <ClInclude Include="MetarVisibility.h" />
-    <ClInclude Include="MetarWind.h" />
+    <ClInclude Include="MetarParserSimple.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -185,17 +179,11 @@ COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
     <ClCompile Include="AeroflyBlender.cpp" />
     <ClCompile Include="AeroflyConfigFile.cpp" />
     <ClCompile Include="AeroflyWeather.cpp" />
-    <ClCompile Include="MetarParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FetchUrl.cpp" />
     <ClCompile Include="BoShed.cpp" />
     <ClCompile Include="Convert.cpp" />
-    <ClCompile Include="MetarBarometer.cpp" />
-    <ClCompile Include="MetarCloud.cpp" />
-    <ClCompile Include="MetarTemperature.cpp" />
-    <ClCompile Include="MetarTime.cpp" />
-    <ClCompile Include="MetarVisibility.cpp" />
-    <ClCompile Include="MetarWind.cpp" />
+    <ClCompile Include="MetarParserSimple.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
