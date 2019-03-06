@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include "Argumentor.h"
 #include "BoShed.h"
 #include "FetchUrl.h"
 #include "MetarParserSimple.h"
@@ -10,39 +11,6 @@
 #include "AeroflyConfigFile.h"
 
 using namespace std;
-
-// Show help output for CLI parameters
-static void showHelp(std::string cmd)
-{
-	std::cerr << "Usage: " << cmd << " [options...] [FILE]\n"
-		<< "Copy METAR information from URL into your Aerofly FS2 configuration file.\n"
-		<< "If no options are supplied, the required information will be asked for.\n"
-		<< "Arguments:\n"
-		<< "    [FILE]             File to modify. Defaults to 'main.mcf' in standard\n"
-		<< "                       Aerofly document path.\n"
-		<< "Options:\n"
-		<< "    --url <URL>        Fetch response via HTTP from <URL>.\n"
-		<< "                       If URL contains 'XXXX' this will be replaced by <ICAO>.\n"
-		<< "                       Defaults to URL of AvWX.\n"
-		<< "    --icao <ICAO>      ICAO code of airport the METAR will be fetched for.\n"
-		<< "                       If this is set to '?' the value will be asked for.\n"
-		<< "                       If this contains 'DEP', ICAO code will be fetched\n"
-		<< "                       from Aerofly FS 2 flightplan departure airport.\n"
-		<< "                       If this contains 'ARR', ICAO code will be fetched\n"
-		<< "                       from Aerofly FS 2 flightplan arrival airport.\n"
-		<< "    --apikey <APIKEY>  Sent HTTP header 'X-API-Key' set to <APIKEY>.\n"
-		<< "    --response <TYPE>  How to interpret HTTP response. 'json' is default.\n"
-		<< "                       Set this to 'raw' if the response is plain text.\n"
-		<< "                       Set this to 'json' if the response is JSON object.\n"
-		<< "    --metar <METAR>    Supply a valid METAR code enclosed in '\"'.\n"
-		<< "                       This will disable HTTP fetching.\n"
-		<< "                       If this is set to '?' the value will be asked for.\n"
-		<< "    --dry-run          Do not save 'main.mcf'\n"
-		<< "    --quiet            No console output\n"
-		<< "    --verbose          Show debug output\n"
-		<< "    --help             Display this help and exit\n"
-		<< std::endl;
-}
 
 // Output AeroflyWeather to STDOUT
 void showAerofly(AeroflyWeather aerofly) {
@@ -122,71 +90,22 @@ void dieWithError(std::invalid_argument e) {
 // Main programme
 int main(int argc, char* argv[])
 {
-	string icaoCode = "";
-	string url = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
-	unsigned short response = FetchUrl::MODE_JSON;
-	string apikey = "";
-	string metarString = "";
-	bool isDryRun = false;
-
-	// 0: quiet; 1: normal; 2: verbose
-	unsigned short verbosity = 1;
-	string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
+	Argumentor argumentor(argc, argv);
 
 #ifdef _DEBUG
-	icaoCode = "KSFO";
-	//url = "https://3960.org/metar/XXXX.txt";
+	argumentor.icaoCode = "KSFO";
+	//argumentor.url = "https://3960.org/metar/XXXX.txt";
 	//response = FetchUrl::MODE_RAW;
-	//metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
-	//metarString = "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2";
-	metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
-	isDryRun = true;
-	verbosity = 2;
+	//argumentor.metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
+	//argumentor.metarString = "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2";
+	argumentor.metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
+	argumentor.isDryRun = true;
+	argumentor.verbosity = 2;
 #endif
-
-	// Parsing CLI parameters
-	// @see http://www.cplusplus.com/articles/DEN36Up4/
-
-	string currentArg = "";
-	for (int i = 1; i < argc; ++i) {
-		currentArg = string(argv[i]);
-
-		if (currentArg == "--help") {
-			showHelp(argv[0]);
-			exit(EXIT_FAILURE);
-		}
-		else if (currentArg == "--url") {
-			url = (i + 1 < argc) ? string(argv[++i]) : url;
-		}
-		else if (currentArg == "--icao") {
-			icaoCode = (i + 1 < argc) ? string(argv[++i]) : icaoCode;
-		}
-		else if (currentArg == "--response") {
-			response = (i + 1 < argc && string(argv[++i]) == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
-		}
-		else if (currentArg == "--apikey") {
-			apikey = (i + 1 < argc) ? string(argv[++i]) : apikey;
-		}
-		else if (currentArg == "--metar") {
-			metarString = (i + 1 < argc) ? string(argv[++i]) : metarString;
-		}
-		else if (currentArg == "--dry-run") {
-			isDryRun = true;
-		}
-		else if (currentArg == "--quiet") {
-			verbosity = 0;
-		}
-		else if (currentArg == "--verbose") {
-			verbosity = 2;
-		}
-		else {
-			filename = argv[i];
-		}
-	}
 
 	// Open Aerofly configuration file
 
-	AeroflyConfigFile mainConfig(filename);
+	AeroflyConfigFile mainConfig(argumentor.filename);
 	try {
 		mainConfig.load();
 	}
@@ -196,35 +115,35 @@ int main(int argc, char* argv[])
 
 	// Fetch remote data via HTTP(S)
 
-	if (metarString == "?") {
+	if (argumentor.metarString == "?") {
 		cout << "Please enter a METAR string: ";
-		getline(cin, metarString);
+		getline(cin, argumentor.metarString);
 	}
-	if (metarString == "" && url != "") {
-		if (icaoCode == "" || icaoCode == "?") {
+	if (argumentor.metarString == "" && argumentor.url != "") {
+		if (argumentor.icaoCode == "" || argumentor.icaoCode == "?") {
 			cout << "Please enter an ICAO code: ";
-			getline(cin, icaoCode);
+			getline(cin, argumentor.icaoCode);
 		}
-		if (icaoCode == "DEP" || icaoCode == "ARR" || icaoCode == "") {
-			icaoCode = getIcaoFromFlightplan(icaoCode, mainConfig.getFlightplan());
+		if (argumentor.icaoCode == "DEP" || argumentor.icaoCode == "ARR" || argumentor.icaoCode == "") {
+			argumentor.icaoCode = getIcaoFromFlightplan(argumentor.icaoCode, mainConfig.getFlightplan());
 		}
 
 		FetchUrl urlFetcher;
-		if (verbosity > 1) {
-			std::cout << "URL          " << url << endl;
+		if (argumentor.verbosity > 1) {
+			std::cout << "URL          " << argumentor.url << endl;
 		}
 		try {
-			metarString = urlFetcher.fetch(url, icaoCode, response, apikey);
+			argumentor.metarString = urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey);
 		}
 		catch (std::invalid_argument& e) {
 			dieWithError(e);
 		}
 	}
-	if (verbosity > 0) {
-		std::cout << "METAR        " << metarString << endl;
+	if (argumentor.verbosity > 0) {
+		std::cout << "METAR        " << argumentor.metarString << endl;
 	}
 
-	if (metarString == "") {
+	if (argumentor.metarString == "") {
 		dieWithError(std::invalid_argument("No METAR code found"));
 	}
 
@@ -232,12 +151,12 @@ int main(int argc, char* argv[])
 
 	MetarParserSimple metar;
 	try {
-		metar.convert(metarString);
+		metar.convert(argumentor.metarString);
 	}
 	catch (std::invalid_argument& e) {
 		dieWithError(e);
 	}
-	if (verbosity > 1) {
+	if (argumentor.verbosity > 1) {
 		showMetar(metar);
 	}
 
@@ -245,7 +164,7 @@ int main(int argc, char* argv[])
 
 	AeroflyWeather aerofly;
 	aerofly.setFromMetar(metar);
-	if (verbosity > 0) {
+	if (argumentor.verbosity > 0) {
 		showAerofly(aerofly);
 	}
 
@@ -253,8 +172,8 @@ int main(int argc, char* argv[])
 
 	mainConfig.setFromAeroflyObject(aerofly);
 
-	if (!isDryRun) {
-		if (verbosity > 0) {
+	if (!argumentor.isDryRun) {
+		if (argumentor.verbosity > 0) {
 			std::cout << "\nSaving file " << mainConfig.getFilename() << endl;
 		}
 		try {

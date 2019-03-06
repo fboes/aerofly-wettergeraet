@@ -168,6 +168,7 @@ COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
     <ClInclude Include="AeroflyBlender.h" />
     <ClInclude Include="AeroflyConfigFile.h" />
     <ClInclude Include="AeroflyWeather.h" />
+    <ClInclude Include="Argumentor.h" />
     <ClInclude Include="FetchUrl.h" />
     <ClInclude Include="BoShed.h" />
     <ClInclude Include="Convert.h" />
@@ -179,6 +180,7 @@ COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
     <ClCompile Include="AeroflyBlender.cpp" />
     <ClCompile Include="AeroflyConfigFile.cpp" />
     <ClCompile Include="AeroflyWeather.cpp" />
+    <ClCompile Include="Argumentor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FetchUrl.cpp" />
     <ClCompile Include="BoShed.cpp" />

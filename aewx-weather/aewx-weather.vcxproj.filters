@@ -42,6 +42,9 @@
     <ClInclude Include="MetarParserSimple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Argumentor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MetarParserSimple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Argumentor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

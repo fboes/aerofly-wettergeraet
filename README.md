@@ -63,6 +63,22 @@ This tool is compatible with the following METAR services:
 .\AeroflyWX.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
 ```
 
+Change default values
+---------------------
+
+You may set the default values for `.\AeroflyWX.exe` by setting environment variables:
+
+```batch
+set  AEROFLYWX_URL=http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache
+setx AEROFLYWX_URL %AEROFLYWX_URL%
+
+set  AEROFLYWX_APIKEY=12345abcd
+setx AEROFLYWX_APIKEY %AEROFLYWX_APIKEY%
+
+set  AEROFLYWX_RESPONSE=raw
+setx AEROFLYWX_RESPONSE %AEROFLYWX_RESPONSE%
+```
+
 Update
 ------
 
