@@ -142,7 +142,8 @@
       <Command>COPY "$(SolutionDir)*.md" "$(TargetDir)"
 MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
-"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\AeroflyWX.zip" "$(TargetDir)"</Command>
+DEL "$(TargetDir)..\AeroflyWX.zip"
+"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\AeroflyWX.zip" "$(TargetDir)" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
