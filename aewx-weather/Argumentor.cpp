@@ -27,6 +27,7 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ "    --metar <METAR>    Supply a valid METAR code enclosed in '\"'.\n"
 		+ "                       This will disable HTTP fetching.\n"
 		+ "                       If this is set to '?' the value will be asked for.\n"
+		+ "    --hours <HOURS>    Offset time by <HOURS> hours, e.g. '-8'\n"
 		+ "    --dry-run          Do not save 'main.mcf'\n"
 		+ "    --quiet            No console output\n"
 		+ "    --verbose          Show debug output\n"
@@ -35,16 +36,24 @@ std::string Argumentor::showHelp(std::string cmd)
 
 Argumentor::Argumentor(int argc, char* argv[])
 {
-	if (getenv("AEROFLYWX_URL") != "") {
+	// Getting ENV variable values
+	if (getenv("AEROFLYWX_URL") && getenv("AEROFLYWX_URL") != "") {
 		this->url = getenv("AEROFLYWX_URL");
 	}
-	if (getenv("AEROFLYWX_APIKEY") != "") {
+	if (getenv("AEROFLYWX_APIKEY") && getenv("AEROFLYWX_APIKEY") != "") {
 		this->apikey = getenv("AEROFLYWX_APIKEY");
 	}
-	if (getenv("AEROFLYWX_RESPONSE") != "") {
+	if (getenv("AEROFLYWX_RESPONSE") && getenv("AEROFLYWX_RESPONSE") != "") {
 		this->response = ( getenv("AEROFLYWX_RESPONSE") == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
 	}
+	if (getenv("AEROFLYWX_HOURS") && getenv("AEROFLYWX_HOURS") != "") {
+		this->hours = std::stoi(getenv("AEROFLYWX_HOURS"));
+	}
+	if (getenv("AEROFLYWX_FILE") && getenv("AEROFLYWX_FILE") != "") {
+		this->filename = getenv("AEROFLYWX_FILE");
+	}
 
+	// Reading CLI arguments
 	std::string currentArg = "";
 	for (int i = 1; i < argc; ++i) {
 		currentArg = std::string(argv[i]);
@@ -68,6 +77,9 @@ Argumentor::Argumentor(int argc, char* argv[])
 		else if (currentArg == "--metar") {
 			this->metarString = (i + 1 < argc) ? std::string(argv[++i]) : this->metarString;
 		}
+		else if (currentArg == "--hours") {
+			this->hours = (i + 1 < argc) ? std::stoi(argv[++i]) : this->hours;
+		}
 		else if (currentArg == "--dry-run") {
 			this->isDryRun = true;
 		}
@@ -82,7 +94,6 @@ Argumentor::Argumentor(int argc, char* argv[])
 		}
 	}
 }
-
 
 Argumentor::~Argumentor()
 {

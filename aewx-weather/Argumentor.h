@@ -19,6 +19,8 @@ public:
 
 	std::string metarString = "";
 
+	int hours = 0;
+
 	bool isDryRun = false;
 
 	// 0: quiet; 1: normal; 2: verbose

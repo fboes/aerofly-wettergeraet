@@ -8,6 +8,12 @@
  */
 class MetarParserSimple
 {
+private:
+	// Keep time and date in bounds
+	void fixTimeDate();
+
+	int fixDegrees(int degrees);
+
 public:
 	struct MetarTimeSimple {
 		// Four-digit year
@@ -98,6 +104,10 @@ public:
 	// Get humidity in percent 0..1
 	double getHumidity();
 
+	// Set date / time to current UTC time, but allow for modification.
 	void setDate(short day = -1, short hours = -1, short minutes = -1);
+
+	// Change parsed time by hoursOffset.
+	void addHours(int hoursOffset);
 };
 

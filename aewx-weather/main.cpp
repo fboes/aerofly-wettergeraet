@@ -99,6 +99,7 @@ int main(int argc, char* argv[])
 	//argumentor.metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
 	//argumentor.metarString = "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2";
 	argumentor.metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
+	argumentor.hours = -20;
 	argumentor.isDryRun = true;
 	argumentor.verbosity = 2;
 #endif
@@ -152,6 +153,7 @@ int main(int argc, char* argv[])
 	MetarParserSimple metar;
 	try {
 		metar.convert(argumentor.metarString);
+		metar.addHours(argumentor.hours);
 	}
 	catch (std::invalid_argument& e) {
 		dieWithError(e);

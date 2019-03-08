@@ -7,6 +7,61 @@
 #include <iterator>
 #include <regex>
 
+void MetarParserSimple::fixTimeDate()
+{
+	// This is a naive approach, but it does the job
+	// Minutes
+	while (observed.minutes >= 60) {
+		observed.minutes -= 60;
+		observed.hours++;
+	}
+	while (observed.minutes < 0) {
+		observed.minutes += 60;
+		observed.hours--;
+	}
+
+	// Hours
+	while (observed.hours >= 24) {
+		observed.hours -= 24;
+		observed.day++;
+	}
+	while (observed.hours < 0) {
+		observed.hours += 24;
+		observed.day--;
+	}
+
+	// Day
+	while (observed.day > 31) {
+		observed.day -= 31;
+		observed.month++;
+	}
+	while (observed.day < 1) {
+		observed.day += 31;
+		observed.month--;
+	}
+
+	// Month
+	while (observed.month > 12) {
+		observed.month -= 12;
+		observed.year++;
+	}
+	while (observed.month < 1) {
+		observed.month += 12;
+		observed.year--;
+	}
+}
+
+int MetarParserSimple::fixDegrees(int degrees)
+{
+	while (degrees >= 360) {
+		degrees -= 360;
+	}
+	while (degrees < 0) {
+		degrees += 360;
+	}
+	return degrees;
+}
+
 MetarParserSimple::MetarParserSimple(std::string metarString)
 {
 	// this->observed TODO
@@ -81,9 +136,9 @@ bool MetarParserSimple::convert(std::string metarString)
 					this->wind.degreesTo = 359;
 				}
 				else {
-					this->wind.degrees = BoShed::rotatingValue(std::stoi(match[1].str()), 359);
-					this->wind.degreesFrom = BoShed::rotatingValue(this->wind.degrees, 359);
-					this->wind.degreesTo = BoShed::rotatingValue(this->wind.degrees, 359);
+					this->wind.degrees = this->fixDegrees(std::stoi(match[1].str()));
+					this->wind.degreesFrom = this->fixDegrees(this->wind.degrees);
+					this->wind.degreesTo = this->fixDegrees(this->wind.degrees);
 				}
 
 				std::string gust = (match[3].str() != "") ? match[3].str() : match[2].str();
@@ -127,8 +182,8 @@ bool MetarParserSimple::convert(std::string metarString)
 			}
 			else if (std::regex_match(metarPart, match, std::regex("(\\d+)V(\\d+)"))) {
 				// Variable wind direction
-				this->wind.degreesFrom = BoShed::rotatingValue(std::stoi(match[1].str()), 359);
-				this->wind.degreesTo = BoShed::rotatingValue(std::stoi(match[2].str()), 359);
+				this->wind.degreesFrom = this->fixDegrees(std::stoi(match[1].str()));
+				this->wind.degreesTo = this->fixDegrees(std::stoi(match[2].str()));
 			}
 			break;
 		case 4:
@@ -258,7 +313,16 @@ void MetarParserSimple::setDate(short day, short hours, short minutes)
 	ptm = gmtime(&rawtime);
 	this->observed.year = ptm->tm_year + 1900;
 	this->observed.month = ptm->tm_mon + 1;
-	this->observed.day = (day >= 0) ? BoShed::rotatingValue(day, 31, 1) : ptm->tm_mday;
-	this->observed.hours = (hours >= 0) ? BoShed::rotatingValue(hours, 23) : ptm->tm_hour;
-	this->observed.minutes = (minutes >= 0) ? BoShed::rotatingValue(minutes, 59) : ptm->tm_min;
+	this->observed.day = (day >= 0) ? day : ptm->tm_mday;
+	this->observed.hours = (hours >= 0) ? hours : ptm->tm_hour;
+	this->observed.minutes = (minutes >= 0) ? minutes : ptm->tm_min;
+	this->fixTimeDate();
+}
+
+void MetarParserSimple::addHours(int hoursOffset)
+{
+	if (hoursOffset != 0) {
+		this->observed.hours += hoursOffset, 23;
+		this->fixTimeDate();
+	}
 }
