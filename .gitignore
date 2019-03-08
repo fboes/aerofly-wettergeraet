@@ -2,3 +2,5 @@
 /packages
 Debug
 Release
+/build/*
+!/build/.gitkeep

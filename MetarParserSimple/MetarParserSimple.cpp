@@ -1,7 +1,6 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "MetarParserSimple.h"
 #include "Convert.h"
-#include "BoShed.h"
 #include <string>
 #include <sstream>
 #include <iterator>
@@ -93,7 +92,10 @@ bool MetarParserSimple::convert(std::string metarString)
 	// start parsing
 	// @see https://stackoverflow.com/questions/236129/how-do-i-iterate-over-the-words-of-a-string
 	unsigned short parsingMode = 0;
+	unsigned short currentCondition = 0;
+	unsigned short sizeofConditions = sizeof(this->conditions) / sizeof(this->conditions[0]);
 	unsigned short currentCloud = 0;
+	unsigned short sizeofClouds = sizeof(this->clouds) / sizeof(this->clouds[0]);
 	std::string metarPart = "";
 	std::stringstream metarParts(metarString);
 
@@ -112,7 +114,7 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 0:
 			// ICAO Code
 			if (metarPart != "METAR") {
-				this->icao = metarPart;
+				this->icao = &metarPart[0u];
 				parsingMode = 1;
 			}
 			break;
@@ -189,24 +191,18 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 4:
 			// Conditions
 			if (std::regex_match(metarPart, match, std::regex("(\\+|-|VC|RE)?([A-Z][A-Z])([A-Z][A-Z])?([A-Z][A-Z])?"))) {
-				if (match[1].str() != "") {
-					this->conditions.push_back(match[1].str());
-				}
-				if (match[2].str() != "") {
-					this->conditions.push_back(match[2].str());
-				}
-				if (match[3].str() != "") {
-					this->conditions.push_back(match[3].str());
-				}
-				if (match[4].str() != "") {
-					this->conditions.push_back(match[4].str());
+				for (unsigned int i = 1; i <= 4; i++) {
+					if (currentCondition < sizeofConditions && match[i].str() != "") {
+						this->conditions[currentCondition] = &match[i].str()[0u];
+						currentCondition ++;
+					}
 				}
 				// may occur multiple times
 			}
 			break;
 		case 5:
 			// Clouds
-			if (std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*")) && currentCloud < 3) {
+			if (currentCloud < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
 				this->clouds[currentCloud].code = match[1].str();
 				this->clouds[currentCloud].baseFeetAgl = (std::stoi(match[2].str()) * 100);
 				if (this->clouds[currentCloud].code == "FEW") {
@@ -325,4 +321,14 @@ void MetarParserSimple::addHours(int hoursOffset)
 		this->observed.hours += hoursOffset, 23;
 		this->fixTimeDate();
 	}
+}
+
+bool MetarParserSimple::hasCondition(std::string testCondition)
+{
+	for (unsigned int i = 0; i <= sizeof(this->conditions) / sizeof(this->conditions[0]); i++) {
+		if (this->conditions[i] == testCondition) {
+			return true;
+		}
+	}
+	return false;
 }

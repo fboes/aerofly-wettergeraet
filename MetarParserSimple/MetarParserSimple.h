@@ -3,10 +3,22 @@
 #include <map>
 #include <vector>
 
+#ifdef METARPARSERSIMPLE_EXPORTS
+#	define METARPARSERSIMPLE_API __declspec(dllexport)
+#	define EXPIMP_TEMPLATE
+#else
+#	define METARPARSERSIMPLE_API __declspec(dllimport)
+#	define EXPIMP_TEMPLATE extern
+#endif
+
+//EXPIMP_TEMPLATE template class METARPARSERSIMPLE_API std::vector<int>;
+//EXPIMP_TEMPLATE template class METARPARSERSIMPLE_API std::vector<char>;
+
 /**
  * Convert a METAR string into a structured object.
+ * @see https://stackoverflow.com/questions/16419318/one-way-of-eliminating-c4251-warning-when-using-stl-classes-in-the-dll-interface
  */
-class MetarParserSimple
+class METARPARSERSIMPLE_API MetarParserSimple
 {
 private:
 	// Keep time and date in bounds
@@ -62,7 +74,7 @@ public:
 	};
 
 	// ICAO code of METAR report
-	std::string icao = "";
+	char * icao;
 
 	// Time of observation
 	MetarTimeSimple observed;
@@ -74,7 +86,7 @@ public:
 	double visibilityMeters = 0;
 
 	// Extra weather conditions like rain, snow
-	std::vector<std::string> conditions;
+	char * conditions[6];
 
 	// 0..2 cloud layers:
 	MetarCloudSimple clouds[3];
@@ -109,5 +121,8 @@ public:
 
 	// Change parsed time by hoursOffset.
 	void addHours(int hoursOffset);
+
+	// Test if a certain condition is contained in METAR information.
+	bool hasCondition(std::string testCondition);
 };
 

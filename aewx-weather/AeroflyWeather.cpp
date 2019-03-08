@@ -4,28 +4,28 @@
 #include "BoShed.h"
 #include "FetchUrl.h"
 
-double AeroflyWeather::makeGust(double windSpeed, std::vector<std::string> conditions)
+double AeroflyWeather::makeGust(double windSpeed, char * const conditions[6])
 {
 	auto gustSpeed = windSpeed;
 
 	// Get gusts from weather
-	for (auto const& condition : conditions) {
-		if (condition == "WS") {
-			// Wind Shear
-			gustSpeed = std::max(windSpeed + 10.0, 45.0);
-		}
-		else if (condition == "SS" || condition == "DS") {
-			// Storm
-			gustSpeed = std::max(windSpeed + 5.0, 40.0);
-		}
-		else if (condition == "FC") {
-			// Funnel cloud(s) (tornado or waterspout)
-			gustSpeed = std::max(windSpeed + 20.0, 90.0);
-		}
-		else if (condition == "SQ") {
-			// Squalls
-			gustSpeed = windSpeed += 10;
-		}
+	for (unsigned int i = 0; i <= sizeof(conditions) / sizeof(conditions[0]); i++) {
+			if (conditions[i] == "WS") {
+				// Wind Shear
+				gustSpeed = std::max(windSpeed + 10.0, 45.0);
+			}
+			else if (conditions[i] == "SS" || conditions[i] == "DS") {
+				// Storm
+				gustSpeed = std::max(windSpeed + 5.0, 40.0);
+			}
+			else if (conditions[i] == "FC") {
+				// Funnel cloud(s) (tornado or waterspout)
+				gustSpeed = std::max(windSpeed + 20.0, 90.0);
+			}
+			else if (conditions[i] == "SQ") {
+				// Squalls
+				gustSpeed = windSpeed += 10;
+			}
 	}
 
 	// Make some extra gusts (Gusts are only reported if it is above the mean wind speed by 10kts or more)
@@ -65,7 +65,7 @@ void AeroflyWeather::setWind(double kts, unsigned int degrees)
 	this->windStrength = BoShed::percent(combinedWindForce);
 }
 
-void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, std::vector<std::string> conditions)
+void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char * const conditions[6])
 {
 	const double degreesRange = std::abs((degreesTo - degreesFrom) / 360.0);
 

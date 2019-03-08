@@ -1,5 +1,5 @@
-Aerofly Weather 2 (AeroflyWX)
-==============================
+![](docs/favicon-64x64.png) Aerofly Weather 2 (AeroflyWX)
+=========================================================
 
 Copy METAR weather information into [IPCAS' Aerofly FS 2](https://www.aerofly.com/).
 
@@ -20,7 +20,7 @@ Requirements
 * Microsoft Windows 10 has to be installed.
 * IPACS Aerofly FS 2 has to be installed.
 * A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter.
-* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If you have no internet connection, supply a METAR string via `--metar "<METAR>"`.If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If you have no internet connection, supply a METAR string via `--metar "<METAR>"`. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
 
 Installation
 ------------
@@ -52,43 +52,21 @@ HTTP services
 
 This tool is compatible with the following METAR services:
 
-```batch
-: Supply METAR manually
-.\AeroflyWX.exe --metar ?
+* [AVWX](http://avwx.rest/): This is the default HTTP service.
+* [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
 
-: AVWX - this is the default HTTP service
-.\AeroflyWX.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
-
-: CheckWX - you will need to get an API key
-.\AeroflyWX.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
-```
-
-Change default values
----------------------
-
-You may set the default values for `.\AeroflyWX.exe` by setting environment variables:
-
-```batch
-set  AEROFLYWX_URL=http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache
-setx AEROFLYWX_URL %AEROFLYWX_URL%
-
-set  AEROFLYWX_APIKEY=12345abcd
-setx AEROFLYWX_APIKEY %AEROFLYWX_APIKEY%
-
-set  AEROFLYWX_RESPONSE=raw
-setx AEROFLYWX_RESPONSE %AEROFLYWX_RESPONSE%
-
-set  AEROFLYWX_HOURS=-8
-setx AEROFLYWX_HOURS %AEROFLYWX_HOURS%
-
-set  AEROFLYWX_FILE="main.mcf"
-setx AEROFLYWX_FILE %AEROFLYWX_FILE%
-```
+You may also try any other HTTP service which offers METAR information as raw text or JSON. See the [configuration guide on how to set different METAR services](docs/configuration.md).
 
 Update
 ------
 
 Just repeat all steps for a regular installation.
+
+Status
+-------
+
+![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/fboes/aerofly-weather.svg)
+![GitHub](https://img.shields.io/github/license/fboes/aerofly-weather.svg)
 
 Legal stuff
 -----------
