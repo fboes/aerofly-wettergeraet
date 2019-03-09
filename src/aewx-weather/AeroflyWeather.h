@@ -31,10 +31,10 @@ public:
 	struct AeroflyCloud {
 		double density = 0; // 0.0..1.0
 		double height = 0; // 0.0..1.0
-
 	};
 
-	AeroflyCloud clouds[3];
+
+	AeroflyCloud clouds[3];   // "cirrus", "cumulus", "cumulus_mediocris"
 	double visibility = 1.0;  // 0.0..1.0
 	unsigned int year = 2018; // Four-digit-year
 	unsigned int month = 5;   // 1..12

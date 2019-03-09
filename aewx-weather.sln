@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AeroflyWX", "aewx-weather\aewx-weather.vcxproj", "{5B39FB7B-C367-49BB-933B-626FC3057A76}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AeroflyWX", "src\aewx-weather\aewx-weather.vcxproj", "{5B39FB7B-C367-49BB-933B-626FC3057A76}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A4DBB4F-6E86-4839-9F98-1571A48783EC}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetarParserSimple", "MetarParserSimple\MetarParserSimple.vcxproj", "{E73E5FBC-5F94-482C-9A5A-B99C9010DA99}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetarParserSimple", "src\MetarParserSimple\MetarParserSimple.vcxproj", "{E73E5FBC-5F94-482C-9A5A-B99C9010DA99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
