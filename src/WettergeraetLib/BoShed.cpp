@@ -1,9 +1,6 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "BoShed.h"
-#include <string>
 #include <algorithm>
-
-using namespace std;
 
 namespace BoShed {
 	int rotatingValue(int input, const int max, const int min) {
@@ -20,6 +17,21 @@ namespace BoShed {
 		return input;
 	}
 
+	double rotatingValue(double input, const double max, const double min) {
+		if (min > max) {
+			throw std::invalid_argument("Min > max value error");
+		}
+		auto fullPull = max + 1.0 - min;
+		while (input > max) {
+			input -= fullPull;
+		}
+		while (input < min) {
+			input += fullPull;
+		}
+		return input;
+	}
+
+
 	double percent(double value, bool notMoreThan1)
 	{
 		if (notMoreThan1 && value > 1.0) {
@@ -31,7 +43,7 @@ namespace BoShed {
 		return value;
 	}
 
-	string progress(double value, std::string label, double valueBase, std::string valueUnit)
+	std::string progress(double value, std::string label, double valueBase, std::string valueUnit)
 	{
 		const int calcValue = (int)std::round(std::min(100.0, std::max(0.0, value * 100)));
 		label = label.substr(0, 10);

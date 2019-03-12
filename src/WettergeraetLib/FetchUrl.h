@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <regex>
 
 /**
  * Make HTTP request to fetch METAR data from remote services.
@@ -27,5 +26,4 @@ public:
 
 	// Like other fetch, but substitutes XXXX with ICAO code
 	std::string fetch(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
-
 };

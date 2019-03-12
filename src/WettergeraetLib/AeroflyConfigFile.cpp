@@ -1,9 +1,8 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "AeroflyConfigFile.h"
 #include <regex>
 #include <iostream>
 #include <sstream>
-#include <string>
 
 void AeroflyConfigFile::setValue(std::string &subject, std::string key, std::string value, std::string keyGroup)
 {

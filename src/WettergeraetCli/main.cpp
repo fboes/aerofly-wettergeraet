@@ -90,15 +90,16 @@ void dieWithError(std::invalid_argument e) {
 // Main programme
 int main(int argc, char* argv[])
 {
-	Argumentor argumentor(argc, argv);
+	Argumentor argumentor;
+	argumentor.getArgs(argc, argv);
 
 #ifdef _DEBUG
-	argumentor.icaoCode = "KSFO";
-	//argumentor.url = "https://3960.org/metar/XXXX.txt";
+	strcpy(argumentor.icaoCode, "KSFO");
+	//strcpy(argumentor.url, "https://3960.org/metar/XXXX.txt");
 	//response = FetchUrl::MODE_RAW;
-	//argumentor.metarString = "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012";
-	//argumentor.metarString = "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2";
-	argumentor.metarString = "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=";
+	//strcpy(argumentor.metarString, "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012");
+	//strcpy(argumentor.metarString, "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2");
+	strcpy(argumentor.metarString, "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
 	argumentor.hours = -20;
 	argumentor.isDryRun = true;
 	argumentor.verbosity = 2;
@@ -116,17 +117,18 @@ int main(int argc, char* argv[])
 
 	// Fetch remote data via HTTP(S)
 
-	if (argumentor.metarString == "?") {
-		cout << "Please enter a METAR string: ";
-		getline(cin, argumentor.metarString);
+	if (strcmp(argumentor.metarString, "?") == 0) {
+	cout << "Please enter a METAR string: ";
+	cin.getline(argumentor.metarString, 512);
 	}
-	if (argumentor.metarString == "" && argumentor.url != "") {
-		if (argumentor.icaoCode == "" || argumentor.icaoCode == "?") {
+	if (strlen(argumentor.metarString) == 0 && strlen(argumentor.url) != 0) {
+		if (strlen(argumentor.icaoCode) == 0 || strcmp(argumentor.icaoCode, "?") == 0) {
 			cout << "Please enter an ICAO code: ";
-			getline(cin, argumentor.icaoCode);
+			cin.getline(argumentor.icaoCode, 8);
+			//getline(cin, argumentor.icaoCode);
 		}
-		if (argumentor.icaoCode == "DEP" || argumentor.icaoCode == "ARR" || argumentor.icaoCode == "") {
-			argumentor.icaoCode = getIcaoFromFlightplan(argumentor.icaoCode, mainConfig.getFlightplan());
+		if (strcmp(argumentor.icaoCode, "DEP") == 0 || strcmp(argumentor.icaoCode, "ARR") == 0 || strlen(argumentor.icaoCode) == 0) {
+			strcpy(argumentor.icaoCode, getIcaoFromFlightplan(argumentor.icaoCode, mainConfig.getFlightplan()).c_str());
 		}
 
 		FetchUrl urlFetcher;
@@ -134,7 +136,7 @@ int main(int argc, char* argv[])
 			std::cout << "URL          " << argumentor.url << endl;
 		}
 		try {
-			argumentor.metarString = urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey);
+			strcpy(argumentor.metarString, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey).c_str());
 		}
 		catch (std::invalid_argument& e) {
 			dieWithError(e);
@@ -144,7 +146,7 @@ int main(int argc, char* argv[])
 		std::cout << "METAR        " << argumentor.metarString << endl;
 	}
 
-	if (argumentor.metarString == "") {
+	if (strlen(argumentor.metarString) == 0) {
 		dieWithError(std::invalid_argument("No METAR code found"));
 	}
 

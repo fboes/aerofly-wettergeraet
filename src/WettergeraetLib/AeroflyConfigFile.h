@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include "AeroflyWeather.h"
 #include <tuple>
 #include <fstream>

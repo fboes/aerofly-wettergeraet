@@ -1,28 +1,29 @@
-#include "pch.h"
+#include "stdafx.h"
 #include <algorithm>
+#include <time.h>
 #include "AeroflyWeather.h"
 #include "BoShed.h"
 #include "FetchUrl.h"
 
-double AeroflyWeather::makeGust(double windSpeed, char * const conditions[6])
+double AeroflyWeather::makeGust(double windSpeed, char const conditions[4][6])
 {
 	auto gustSpeed = windSpeed;
 
 	// Get gusts from weather
 	for (unsigned int i = 0; i <= sizeof(conditions) / sizeof(conditions[0]); i++) {
-			if (conditions[i] == "WS") {
+			if (strcmp(conditions[i], "WS") == 0) {
 				// Wind Shear
 				gustSpeed = std::max(windSpeed + 10.0, 45.0);
 			}
-			else if (conditions[i] == "SS" || conditions[i] == "DS") {
+			else if (strcmp(conditions[i], "SS") == 0 || strcmp(conditions[i], "DS") == 0) {
 				// Storm
 				gustSpeed = std::max(windSpeed + 5.0, 40.0);
 			}
-			else if (conditions[i] == "FC") {
+			else if (strcmp(conditions[i], "FC") == 0) {
 				// Funnel cloud(s) (tornado or waterspout)
 				gustSpeed = std::max(windSpeed + 20.0, 90.0);
 			}
-			else if (conditions[i] == "SQ") {
+			else if (strcmp(conditions[i], "SQ") == 0) {
 				// Squalls
 				gustSpeed = windSpeed += 10;
 			}
@@ -65,7 +66,7 @@ void AeroflyWeather::setWind(double kts, unsigned int degrees)
 	this->windStrength = BoShed::percent(combinedWindForce);
 }
 
-void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char * const conditions[6])
+void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6])
 {
 	const double degreesRange = std::abs((degreesTo - degreesFrom) / 360.0);
 
@@ -103,6 +104,11 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 		// Interpolate the last part
 		this->visibility += (1.0 - ((double)maxMiles / (double)this->maxVisibility)) * std::pow((meters / maxMiles), 8);
 	}
+}
+
+void AeroflyWeather::setHourOffset(double hourOffset)
+{
+	this->hourOffset = hourOffset;
 }
 
 void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum)
@@ -150,3 +156,4 @@ void AeroflyWeather::setFromMetarUrl(std::string url, std::string icaoCode, unsi
 	auto metarString = urlFetcher.fetch(url, icaoCode, fetchMode, apiKey);
 	this->setFromMetarString(metarString);
 }
+

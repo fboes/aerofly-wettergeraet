@@ -114,7 +114,7 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 0:
 			// ICAO Code
 			if (metarPart != "METAR") {
-				this->icao = &metarPart[0u];
+				strcpy(this->icao, metarPart.c_str());
 				parsingMode = 1;
 			}
 			break;
@@ -126,6 +126,8 @@ bool MetarParserSimple::convert(std::string metarString)
 					std::stoi(match[2].str()),
 					std::stoi(match[3].str())
 				);
+				// Assume great visibility until proven otherwise
+				this->visibilityMeters = Convert::milesToMeters(10);
 				parsingMode = 2;
 			}
 			break;
@@ -179,7 +181,6 @@ bool MetarParserSimple::convert(std::string metarString)
 				parsingMode = 4;
 			}
 			else if (metarPart == "CAVOK" || metarPart == "CLR") {
-				this->visibilityMeters = 9999;
 				parsingMode = 5; // no clouds & conditions reported
 			}
 			else if (std::regex_match(metarPart, match, std::regex("(\\d+)V(\\d+)"))) {
@@ -193,7 +194,7 @@ bool MetarParserSimple::convert(std::string metarString)
 			if (std::regex_match(metarPart, match, std::regex("(\\+|-|VC|RE)?([A-Z][A-Z])([A-Z][A-Z])?([A-Z][A-Z])?"))) {
 				for (unsigned int i = 1; i <= 4; i++) {
 					if (currentCondition < sizeofConditions && match[i].str() != "") {
-						this->conditions[currentCondition] = &match[i].str()[0u];
+						strcpy(this->conditions[currentCondition], match[i].str().c_str());
 						currentCondition ++;
 					}
 				}
@@ -203,21 +204,21 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 5:
 			// Clouds
 			if (currentCloud < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
-				this->clouds[currentCloud].code = match[1].str();
+				strcpy(this->clouds[currentCloud].code, match[1].str().c_str());
 				this->clouds[currentCloud].baseFeetAgl = (std::stoi(match[2].str()) * 100);
-				if (this->clouds[currentCloud].code == "FEW") {
+				if (strcmp(this->clouds[currentCloud].code, "FEW") == 0) {
 					this->clouds[currentCloud].densityMinimum = 1;
 					this->clouds[currentCloud].densityMaximum = 2;
 				}
-				else if (this->clouds[currentCloud].code == "SCT") {
+				else if (strcmp(this->clouds[currentCloud].code, "SCT") == 0) {
 					this->clouds[currentCloud].densityMinimum = 3;
 					this->clouds[currentCloud].densityMaximum = 4;
 				}
-				else if (this->clouds[currentCloud].code == "BKN") {
+				else if (strcmp(this->clouds[currentCloud].code, "BKN") == 0) {
 					this->clouds[currentCloud].densityMinimum = 5;
 					this->clouds[currentCloud].densityMaximum = 7;
 				}
-				else if (this->clouds[currentCloud].code == "OVC") {
+				else if (strcmp(this->clouds[currentCloud].code, "OVC") == 0) {
 					this->clouds[currentCloud].densityMinimum = 8;
 					this->clouds[currentCloud].densityMaximum = 8;
 				}
@@ -326,7 +327,7 @@ void MetarParserSimple::addHours(int hoursOffset)
 bool MetarParserSimple::hasCondition(std::string testCondition)
 {
 	for (unsigned int i = 0; i <= sizeof(this->conditions) / sizeof(this->conditions[0]); i++) {
-		if (this->conditions[i] == testCondition) {
+		if (strcmp(this->conditions[i], testCondition.c_str()) == 0) {
 			return true;
 		}
 	}

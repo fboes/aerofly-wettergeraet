@@ -10,19 +10,19 @@ This tool is compatible with the following METAR services:
 
 ```batch
 : Supply METAR manually
-.\AeroflyWX.exe --metar ?
+.\aerofly-wettergeraet.exe --metar ?
 
 : AVWX - this is the default HTTP service
-.\AeroflyWX.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
+.\aerofly-wettergeraet.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
 
 : CheckWX - you will need to get an API key
-.\AeroflyWX.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
+.\aerofly-wettergeraet.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
 ```
 
 Change default values
 ---------------------
 
-You may set the default values for `.\AeroflyWX.exe` by setting environment variables:
+You may set the default values for `.\aerofly-wettergeraet.exe` by setting environment variables:
 
 ```batch
 set  AEROFLYWX_URL="http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"

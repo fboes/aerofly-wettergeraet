@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
 #include "MetarParserSimple.h"
 #include "FetchUrl.h"
 
@@ -24,7 +22,7 @@ private:
 	double hourOffset = 0.0;
 	bool noRandom = false;
 
-	double makeGust(double gustSpeed, char * const conditions[6]);
+	double makeGust(double gustSpeed, char const conditions[4][6]);
 
 public:
 	// Represents a cloud layer
@@ -48,10 +46,12 @@ public:
 	AeroflyWeather();
 	~AeroflyWeather();
 
+	// Change time supplied from outside
+	void setHourOffset(double hourOffset);
 	void setDate(unsigned int year, unsigned int month, unsigned int day);
 	void setTime(unsigned int hours, unsigned int minutes);
 	void setWind(double kts, unsigned int degrees);
-	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char * const conditions[6]);
+	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6]);
 	void setThermalActivity(double celsius);
 	void setVisibility(unsigned long meters);
 

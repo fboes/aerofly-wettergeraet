@@ -61,7 +61,7 @@ public:
 
 	// Represents a cloud layer
 	struct MetarCloudSimple {
-		std::string code = "CLR";
+		char code[4] = "CLR";
 
 		// 0..8
 		unsigned short densityMinimum = 0;
@@ -74,7 +74,7 @@ public:
 	};
 
 	// ICAO code of METAR report
-	char * icao;
+	char icao[8] = "";
 
 	// Time of observation
 	MetarTimeSimple observed;
@@ -86,7 +86,7 @@ public:
 	double visibilityMeters = 0;
 
 	// Extra weather conditions like rain, snow
-	char * conditions[6];
+	char conditions[4][6];
 
 	// 0..2 cloud layers:
 	MetarCloudSimple clouds[3];

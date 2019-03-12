@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include "FetchUrl.h"
 
 /**
@@ -9,15 +8,15 @@
 class Argumentor
 {
 public:
-	std::string icaoCode = "";
+	char icaoCode[8] = "";
 
-	std::string url = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
+	char url[512] = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
 
 	unsigned short response = FetchUrl::MODE_JSON;
 
-	std::string apikey = "";
+	char apikey[64] = "";
 
-	std::string metarString = "";
+	char metarString[512] = "";
 
 	int hours = 0;
 
@@ -27,12 +26,14 @@ public:
 	unsigned short verbosity = 1;
 
 	// Location of main.mcf
-	std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
+	char filename[512] = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
 
 	// Show help output for CLI parameters
 	std::string showHelp(std::string cmd);
 
-	Argumentor(int argc, char* argv[]);
+	Argumentor();
 	~Argumentor();
+
+	void getArgs(int argc, char* argv[]);
 };
 

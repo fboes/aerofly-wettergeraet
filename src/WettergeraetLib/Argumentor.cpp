@@ -1,6 +1,5 @@
-#include "pch.h"
+#include "stdafx.h"
 #include "Argumentor.h"
-
 
 std::string Argumentor::showHelp(std::string cmd)
 {
@@ -34,14 +33,14 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ "    --help             Display this help and exit\n";
 }
 
-Argumentor::Argumentor(int argc, char* argv[])
+Argumentor::Argumentor()
 {
 	// Getting ENV variable values
 	if (getenv("AEROFLYWX_URL") && getenv("AEROFLYWX_URL") != "") {
-		this->url = getenv("AEROFLYWX_URL");
+		strcpy(this->url, getenv("AEROFLYWX_URL"));
 	}
 	if (getenv("AEROFLYWX_APIKEY") && getenv("AEROFLYWX_APIKEY") != "") {
-		this->apikey = getenv("AEROFLYWX_APIKEY");
+		strcpy(this->apikey, getenv("AEROFLYWX_APIKEY"));
 	}
 	if (getenv("AEROFLYWX_RESPONSE") && getenv("AEROFLYWX_RESPONSE") != "") {
 		this->response = ( getenv("AEROFLYWX_RESPONSE") == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
@@ -50,8 +49,16 @@ Argumentor::Argumentor(int argc, char* argv[])
 		this->hours = std::stoi(getenv("AEROFLYWX_HOURS"));
 	}
 	if (getenv("AEROFLYWX_FILE") && getenv("AEROFLYWX_FILE") != "") {
-		this->filename = getenv("AEROFLYWX_FILE");
+		strcpy(this->filename, getenv("AEROFLYWX_FILE"));
 	}
+}
+
+Argumentor::~Argumentor()
+{
+}
+
+void Argumentor::getArgs(int argc, char * argv[])
+{
 
 	// Reading CLI arguments
 	std::string currentArg = "";
@@ -62,24 +69,6 @@ Argumentor::Argumentor(int argc, char* argv[])
 			this->showHelp(argv[0]);
 			exit(EXIT_FAILURE);
 		}
-		else if (currentArg == "--url") {
-			this->url = (i + 1 < argc) ? std::string(argv[++i]) : this->url;
-		}
-		else if (currentArg == "--icao") {
-			this->icaoCode = (i + 1 < argc) ? std::string(argv[++i]) : this->icaoCode;
-		}
-		else if (currentArg == "--response") {
-			this->response = (i + 1 < argc && std::string(argv[++i]) == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
-		}
-		else if (currentArg == "--apikey") {
-			this->apikey = (i + 1 < argc) ? std::string(argv[++i]) : this->apikey;
-		}
-		else if (currentArg == "--metar") {
-			this->metarString = (i + 1 < argc) ? std::string(argv[++i]) : this->metarString;
-		}
-		else if (currentArg == "--hours") {
-			this->hours = (i + 1 < argc) ? std::stoi(argv[++i]) : this->hours;
-		}
 		else if (currentArg == "--dry-run") {
 			this->isDryRun = true;
 		}
@@ -89,12 +78,28 @@ Argumentor::Argumentor(int argc, char* argv[])
 		else if (currentArg == "--verbose") {
 			this->verbosity = 2;
 		}
+		else if (i + 1 < argc) {
+			if (currentArg == "--url") {
+				strcpy(this->url, argv[++i]);
+			}
+			else if (currentArg == "--icao") {
+				strcpy(this->icaoCode, argv[++i]);
+			}
+			else if (currentArg == "--response") {
+				this->response = (strcmp(argv[++i], "raw") == 0) ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
+			}
+			else if (currentArg == "--apikey") {
+				strcpy(this->apikey, argv[++i]);
+			}
+			else if (currentArg == "--metar") {
+				strcpy(this->metarString, argv[++i]);
+			}
+			else if (currentArg == "--hours") {
+				this->hours = std::stoi(argv[++i]);
+			}
+		}
 		else {
-			this->filename = argv[i];
+			strcpy(this->filename, argv[i]);
 		}
 	}
-}
-
-Argumentor::~Argumentor()
-{
 }
