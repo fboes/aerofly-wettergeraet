@@ -154,6 +154,7 @@ MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
 DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
 "C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\aerofly-wettergeraet.zip" "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
+      <Message>Build final ZIP</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
