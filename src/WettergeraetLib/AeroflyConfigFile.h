@@ -31,6 +31,8 @@ public:
 	// Throws std::invalid_argument in case of errors.
 	bool save();
 
+	void setFilename(std::string filename);
+
 	std::string getFilename();
 
 	std::string getFileBuffer();

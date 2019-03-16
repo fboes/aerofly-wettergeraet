@@ -137,23 +137,24 @@ void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 	}
 }
 
-void AeroflyWeather::setFromMetarString(std::string metarString)
+bool AeroflyWeather::setFromMetarString(std::string metarString)
 {
 	MetarParserSimple metar(metarString);
 	this->setFromMetar(metar);
+	return true;
 }
 
-void AeroflyWeather::setFromMetarUrl(std::string url, unsigned short fetchMode, std::string apiKey)
+bool AeroflyWeather::setFromMetarUrl(std::string url, unsigned short fetchMode, std::string apiKey)
 {
 	FetchUrl urlFetcher;
 	auto metarString = urlFetcher.fetch(url, fetchMode, apiKey);
-	this->setFromMetarString(metarString);
+	return this->setFromMetarString(metarString);
 }
 
-void AeroflyWeather::setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey)
+bool AeroflyWeather::setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey)
 {
 	FetchUrl urlFetcher;
 	auto metarString = urlFetcher.fetch(url, icaoCode, fetchMode, apiKey);
-	this->setFromMetarString(metarString);
+	return this->setFromMetarString(metarString);
 }
 

@@ -1,28 +1,38 @@
 ![](./favicon-64x64.png) Configuration of Aerofly Weather 2 (AeroflyWX)
 =======================================================================
 
-For more information about command line options, call this tool with `--help` appended.
+For more information about command line options, call this tool with `--help` appended with the command-line variant of this tool.
 
 HTTP services
 -------------
 
-This tool is compatible with the following METAR services:
+This tool has been tested with multiple METAR services. To change the METAR service for the command line variant `aerofly-wettergeraet.exe`:
 
 ```batch
 : Supply METAR manually
-.\aerofly-wettergeraet.exe --metar ?
+aerofly-wettergeraet.exe --metar ?
 
 : AVWX - this is the default HTTP service
-.\aerofly-wettergeraet.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
+aerofly-wettergeraet.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
 
 : CheckWX - you will need to get an API key
-.\aerofly-wettergeraet.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
+aerofly-wettergeraet.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
+```
+
+To change the METAR service for the command line variant `aerofly-wettergeraet-desktop.exe` change the target of your desktop shortcut like this:
+
+```batch
+: AVWX - this is the default HTTP service
+aerofly-wettergeraet-desktop.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
+
+: CheckWX - you will need to get an API key
+aerofly-wettergeraet-desktop.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
 ```
 
 Change default values
 ---------------------
 
-You may set the default values for `.\aerofly-wettergeraet.exe` by setting environment variables:
+You may set the default values for `aerofly-wettergeraet.exe` / `aerofly-wettergeraet-desktop.exe` by setting environment variables:
 
 ```batch
 set  AEROFLYWX_URL="http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"

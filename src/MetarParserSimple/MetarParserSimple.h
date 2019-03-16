@@ -11,9 +11,6 @@
 #	define EXPIMP_TEMPLATE extern
 #endif
 
-//EXPIMP_TEMPLATE template class METARPARSERSIMPLE_API std::vector<int>;
-//EXPIMP_TEMPLATE template class METARPARSERSIMPLE_API std::vector<char>;
-
 /**
  * Convert a METAR string into a structured object.
  * @see https://stackoverflow.com/questions/16419318/one-way-of-eliminating-c4251-warning-when-using-stl-classes-in-the-dll-interface
@@ -29,13 +26,13 @@ private:
 public:
 	struct MetarTimeSimple {
 		// Four-digit year
-		int year;
+		int year = 1970;
 
 		// 1..12
-		int month;
+		int month = 1;
 
 		// 1..31
-		int day;
+		int day = 1;
 
 		// 0..23
 		int hours = 0;

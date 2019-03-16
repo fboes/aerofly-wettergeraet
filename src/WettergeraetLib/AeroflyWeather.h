@@ -62,11 +62,11 @@ public:
 	void setFromMetar(const MetarParserSimple& metar);
 
 	// Convert METAR information into Aerofly values
-	void setFromMetarString(std::string metarString);
+	bool setFromMetarString(std::string metarString);
 
 	// Fetch METAR from URL and convert it into Aerofly values
-	void setFromMetarUrl(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
+	bool setFromMetarUrl(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
 
 	// Fetch METAR from URL and convert it into Aerofly values
-	void setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
+	bool setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
 };

@@ -120,7 +120,7 @@ bool MetarParserSimple::convert(std::string metarString)
 			break;
 		case 1:
 			// Observed Date
-			if (std::regex_match(metarPart, match, std::regex("(\\d\\d)(\\d\\d)(\\d\\d)Z"))) {
+			if (std::regex_match(metarPart, match, std::regex("([0-3]\\d)([0-2]\\d)([0-5]\\d)Z"))) {
 				this->setDate(
 					std::stoi(match[1].str()),
 					std::stoi(match[2].str()),

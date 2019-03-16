@@ -118,8 +118,8 @@ int main(int argc, char* argv[])
 	// Fetch remote data via HTTP(S)
 
 	if (strcmp(argumentor.metarString, "?") == 0) {
-	cout << "Please enter a METAR string: ";
-	cin.getline(argumentor.metarString, 512);
+		cout << "Please enter a METAR string: ";
+		cin.getline(argumentor.metarString, 512);
 	}
 	if (strlen(argumentor.metarString) == 0 && strlen(argumentor.url) != 0) {
 		if (strlen(argumentor.icaoCode) == 0 || strcmp(argumentor.icaoCode, "?") == 0) {

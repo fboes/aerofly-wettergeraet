@@ -50,25 +50,26 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 	curl = curl_easy_init();
 	if (curl) {
 		// @see https://curl.haxx.se/libcurl/c/CURLOPT_HTTPHEADER.html
-		struct curl_slist *list = NULL;
-		list = curl_slist_append(list, "User-Agent: AeroflyWX");
+		struct curl_slist *httpHeaders = NULL;
+		httpHeaders = curl_slist_append(httpHeaders, "User-Agent: AeroflyWX");
 		if (fetchMode == FetchUrl::MODE_JSON) {
-			list = curl_slist_append(list, "Accept: application/json");
+			httpHeaders = curl_slist_append(httpHeaders, "Accept: application/json");
 		}
 		if (apiKey != "") {
 			apiKey = "X-API-Key: " + apiKey;
-			list = curl_slist_append(list, apiKey.c_str());
+			httpHeaders = curl_slist_append(httpHeaders, apiKey.c_str());
 		}
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->writeBuffer);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, httpHeaders);
 		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
 		// Do request
 		res = curl_easy_perform(curl);
+		curl_slist_free_all(httpHeaders);
 		curl_easy_cleanup(curl);
 
 		if (res == CURLE_HTTP_RETURNED_ERROR) {

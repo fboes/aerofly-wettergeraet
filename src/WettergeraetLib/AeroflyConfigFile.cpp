@@ -42,12 +42,7 @@ std::string AeroflyConfigFile::getValue(std::string &subject, std::string key, s
 
 AeroflyConfigFile::AeroflyConfigFile(std::string filename)
 {
-	filename = std::regex_replace(
-		filename,
-		std::regex("%USERPROFILE%", std::regex_constants::icase),
-		getenv("USERPROFILE")
-	);
-	this->filename = filename;
+	this->setFilename(filename);
 }
 
 AeroflyConfigFile::~AeroflyConfigFile()
@@ -73,7 +68,7 @@ bool AeroflyConfigFile::load(bool onlyOnce)
 
 bool AeroflyConfigFile::save()
 {
-	this->fileStream.open(this->filename, std::ios::out);
+	this->fileStream.open(this->filename, std::ios::out | std::ios::binary);
 	if (this->fileStream.is_open())
 	{
 		this->fileStream << this->fileBuffer;
@@ -81,6 +76,16 @@ bool AeroflyConfigFile::save()
 		return true;
 	}
 	throw std::invalid_argument("Could no open " + this->filename + " for writing");
+}
+
+void AeroflyConfigFile::setFilename(std::string filename)
+{
+	filename = std::regex_replace(
+		filename,
+		std::regex("%USERPROFILE%", std::regex_constants::icase),
+		getenv("USERPROFILE")
+	);
+	this->filename = filename;
 }
 
 std::string AeroflyConfigFile::getFilename()
