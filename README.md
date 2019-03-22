@@ -12,7 +12,7 @@ The <i>Aerofly-Wettergerät</i> will copy the following METAR weather informatio
 
 The <i>Aerofly-Wettergerät</i> is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
 
-The <i>Aerofly-Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
+> The <i>Aerofly-Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
 
 Requirements
 ------------
@@ -20,7 +20,7 @@ Requirements
 * Microsoft Windows 10 has to be installed. See below for other operating systems.
 * IPACS Aerofly FS 2 has to be installed.
 * A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter.
-* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If you have no internet connection, supply a METAR string via `--metar "<METAR>"`. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
 
 Installation
 ------------
@@ -89,4 +89,4 @@ This tool is NOT affiliated with, endorsed, or sponsored by IPACS GbR. As stated
 
 This software complies with the General Data Protection Regulation (GDPR) as it does not collect nor transmits any personal data but for data your submit by using the CLI commands using URLs. For GDPR compliance of these services refer to the legal statements of these services.
 
-The <i>Aerofly-Wettergerät</i> (German for "weather machine") is handcrafted <i>wertarbeit</i>. 😉
+The <i>Aerofly-Wettergerät</i> (German for "weather machine") is handcrafted <i>Wertarbeit</i>. 😉
