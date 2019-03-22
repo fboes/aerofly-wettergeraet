@@ -3,16 +3,16 @@
 
 Copy METAR weather information into [IPCAS' Aerofly FS 2](https://www.aerofly.com/).
 
-The <i>Aerofly-Wettergerät</i> will copy the following METAR weather information from remote sources to your configuration file while Aerofly FS 2 is _not_ running:
+The <i>Aerofly Wettergerät</i> will copy the following METAR weather information from remote sources to your configuration file while Aerofly FS 2 is _not_ running:
 
 * Time and day (will set the year and month to current year and month because they are not present in METAR information)
 * Wind & turbulences
 * Thermal activity
 * Clouds (height & density)
 
-The <i>Aerofly-Wettergerät</i> is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
+The <i>Aerofly Wettergerät</i> is capable of setting weather values which you cannot access in Aerofly FS 2. This is tested and is done deliberately.
 
-> The <i>Aerofly-Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
+> The <i>Aerofly Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
 
 Requirements
 ------------
@@ -35,11 +35,11 @@ In case you want to use this application on a different operation system, consid
 Usage
 -----
 
-This tool comes in two variants: The desktop app <i>Aerofly-Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
+This tool comes in two variants: The desktop app <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
 
 ![Aerofly Wettergerät Desktop Application](docs/aerofly-wx-desktop.png)
 
-…and the command-line <i>Aerofly-Wettergerät</i> (`aerofly-wettergeraet.exe`).
+…and the command-line <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet.exe`).
 
 ![Aerofly Wettergerät Command Line Application](docs/aerofly-wx-cli.png)
 
@@ -47,7 +47,7 @@ Both variants have more or less the same capabilities.
 
 You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2. This file will be modified by the app.
 
-Before starting the <i>Aerofly-Wettergerät</i> be sure that Aerofly FS 2 is _not_ running. On start-up the app will load the current settings from your `main.mcf`.
+Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2 is _not_ running. On start-up the app will load the current settings from your `main.mcf`.
 
 By starting the app METAR data will be fetched from a remote internet service for the given ICAO code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
 
@@ -89,4 +89,4 @@ This tool is NOT affiliated with, endorsed, or sponsored by IPACS GbR. As stated
 
 This software complies with the General Data Protection Regulation (GDPR) as it does not collect nor transmits any personal data but for data your submit by using the CLI commands using URLs. For GDPR compliance of these services refer to the legal statements of these services.
 
-The <i>Aerofly-Wettergerät</i> (German for "weather machine") is handcrafted <i>Wertarbeit</i>. 😉
+The <i>Aerofly Wettergerät</i> (German for "weather machine") is handcrafted <i>Wertarbeit</i>. 😉

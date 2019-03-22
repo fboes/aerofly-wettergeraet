@@ -210,6 +210,7 @@ void Frame::fromObjectToInput()
 	auto hour = floor(this->aerofly.hours);
 	this->utcDateValue.SetHour(hour);
 	this->utcDateValue.SetMinute(round((this->aerofly.hours - hour) * 60));
+	this->utcDateValue.SetSecond(0);
 
 	this->utcTimeInput->SetValue(this->utcDateValue);
 	this->utcDateInput->SetValue(this->utcDateValue);
@@ -236,7 +237,7 @@ void Frame::fromInputToObject()
 	this->aerofly.day = date.GetDay();
 
 	auto time = this->utcTimeInput->GetValue();
-	this->aerofly.hours = time.GetHour() + time.GetMinute() / 60.0;
+	this->aerofly.hours = time.GetHour() + time.GetMinute() / 60.0 + time.GetSecond() / (60.0 * 60.0);
 
 	this->aerofly.windDirection = this->windDirectionInput->GetValue();
 	this->aerofly.windStrength = this->windStrengthInput->GetValue() / 100.0;
