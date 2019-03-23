@@ -106,6 +106,11 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 	}
 }
 
+void AeroflyWeather::setNearestAirport(char const nearestAirport[8])
+{
+	strcpy(this->nearestAirport, nearestAirport);
+}
+
 void AeroflyWeather::setHourOffset(double hourOffset)
 {
 	this->hourOffset = hourOffset;
@@ -126,6 +131,7 @@ void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned
 
 void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 {
+	this->setNearestAirport(metar.icao);
 	this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
 	this->setTime(metar.observed.hours, metar.observed.minutes);
 	this->setWind(metar.wind.speedKts, metar.wind.degrees);

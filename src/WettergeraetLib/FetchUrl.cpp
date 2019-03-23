@@ -84,8 +84,19 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 	throw std::invalid_argument("Could no initiate CURL");
 }
 
-std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey)
+std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey, bool lowercase)
 {
+	icaoCode = std::regex_replace(
+		icaoCode,
+		std::regex("[^a-zA-z0-9]"),
+		""
+	);
+	if (lowercase) {
+		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::tolower);
+	}
+	else {
+		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::toupper);
+	}
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);
 	return this->fetch(url, fetchMode, apiKey);
 }

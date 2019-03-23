@@ -202,7 +202,7 @@ Frame::~Frame()
 
 void Frame::fromObjectToInput()
 {
-	this->icaoInput->SetValue(wxString(this->argumentor.icaoCode));
+	this->icaoInput->SetValue(wxString(this->aerofly.nearestAirport));
 
 	this->utcDateValue.SetYear(this->aerofly.year);
 	this->utcDateValue.SetMonth((wxDateTime::Month)(this->aerofly.month - 1));
@@ -260,11 +260,14 @@ void Frame::loadMainMcf()
 	this->mainConfig.getToAeroflyObject(this->aerofly);
 	this->utcDateValue.SetToCurrent();
 	this->metarInput->SetValue("");
-	if (strlen(this->argumentor.icaoCode) == 0) {
-		std::string origin;
-		std::string destination;
-		std::tie(origin, destination) = this->mainConfig.getFlightplan();
-		strcpy(this->argumentor.icaoCode, origin.c_str());
+	std::string origin;
+	std::string destination;
+	std::tie(origin, destination) = this->mainConfig.getFlightplan();
+	if (origin != "") {
+		strcpy(this->aerofly.nearestAirport, origin.c_str());
+	}
+	else {
+		strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
 	}
 	this->fromObjectToInput();
 }

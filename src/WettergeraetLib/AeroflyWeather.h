@@ -42,6 +42,7 @@ public:
 	double windStrength = 0.0;    // 0.0..1.0
 	double windTurbulence = 0.0;  // 0.0..1.0
 	double thermalActivity = 0.0; // 0.0..1.0
+	char nearestAirport[8] = "";  // ICAO code of METAR report
 
 	AeroflyWeather();
 	~AeroflyWeather();
@@ -54,6 +55,7 @@ public:
 	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6]);
 	void setThermalActivity(double celsius);
 	void setVisibility(unsigned long meters);
+	void setNearestAirport(char const nearestAirport[8]);
 
 	// Set cloud with index 0..2. Density is between 0..8.
 	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);

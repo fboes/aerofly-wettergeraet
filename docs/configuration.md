@@ -1,4 +1,4 @@
-![](./favicon-64x64.png) Configuration of Aerofly Weather 2 (AeroflyWX)
+![](./favicon-64x64.png) Configuration of the <i>Aerofly Wettergerät</i>
 =======================================================================
 
 For more information about command line options, call this tool with `--help` appended with the command-line variant of this tool.

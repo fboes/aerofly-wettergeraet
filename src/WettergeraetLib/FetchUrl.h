@@ -24,6 +24,7 @@ public:
 	// Throws std::invalid_argument
 	std::string fetch(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
 
-	// Like other fetch, but substitutes XXXX with ICAO code
-	std::string fetch(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
+	// Like other fetch, but substitutes XXXX with ICAO code.
+	// The icaoCode will be converted to uppercase, or lowercase if `lowercase` is set.
+	std::string fetch(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "", bool lowercase = false);
 };
