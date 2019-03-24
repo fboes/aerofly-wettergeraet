@@ -34,12 +34,12 @@ Making changes
 
 1. [Fork the repository on GitHub](https://help.github.com/articles/fork-a-repo/)
 2. Load this project into your code editor.
-3. Create a new feature branch from `master` branch, like `feature/my-cool-feature`.
+3. Create a new feature branch from `develop` branch, like `feature/my-cool-feature`.
 4. Start developing. Coding guidelines will be enforced by `.editorconfig`.
 5. If you are really nice you will supply a test for the stuff you coded.
 5. Add a line to the `CHANGELOG.md` to tell people what you did in your feature.
 6. Commit with a meaningful commit message (e.g. the line you put into `CHANGELOG.md`) & push to your repository.
-7. Run `npm test`. Be sure that all tests pass before proceeding any further.
+7. Run testing procedures. Be sure that all tests pass before proceeding any further.
 8. [Submit a pull request](https://help.github.com/articles/about-pull-requests/).
 
 ### Emojis for `CHANGELOG.md`
