@@ -83,7 +83,9 @@ Legal stuff
 
 Author: [Frank Boës](https://3960.org)
 
-Copyright & license: See [LICENSE.txt](LICENSE.txt) and [Curl's license](docs/LICENSE-curl.txt), also found at https://curl.haxx.se/docs/copyright.html.
+Copyright & license: See [LICENSE.txt](LICENSE.txt)  
+and [Curl's license](docs/LICENSE-curl.txt), also found at https://curl.haxx.se/docs/copyright.html  
+and [WxWidgets's license](docs/LICENSE-wxwidgets.txt), also found at https://www.wxwidgets.org/about/licence/.
 
 This tool is NOT affiliated with, endorsed, or sponsored by IPACS GbR. As stated in the [LICENSE.txt](LICENSE.txt), this tool comes with no warranty and might damage your files.
 
