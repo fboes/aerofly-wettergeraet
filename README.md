@@ -25,7 +25,7 @@ Requirements
 Installation
 ------------
 
-1. Download the current release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases.
+1. Download the current release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
 2. Unpack the ZIP file to some sensible location.
 3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".
 3. Start the desktop application by clicking on the desktop link.

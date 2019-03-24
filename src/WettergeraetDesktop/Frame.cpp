@@ -21,10 +21,14 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	{
 		wxMenu *file = new wxMenu;
 		file->Append(wxID_OPEN, wxT("&Load 'main.mcf'"));
+		file->AppendSeparator();
 		file->Append(wxID_EXIT, wxT("&Exit"));
 		menubar->Append(file, wxT("&File"));
 
 		wxMenu *help = new wxMenu;
+		help->Append(wxID_HELP, wxT("View &help"));
+		help->Append(EL_MENU_UPDATE, wxT("Check for &updates"));
+		help->AppendSeparator();
 		help->Append(wxID_ABOUT, wxT("&About"));
 		menubar->Append(help, wxT("&Help"));
 	}
@@ -342,10 +346,22 @@ void Frame::actionLoadMainMcf(wxCommandEvent& WXUNUSED(event))
 	this->loadMainMcf();
 }
 
+void Frame::actionUpdate(wxCommandEvent& WXUNUSED(event))
+{
+	wxLaunchDefaultBrowser("https://github.com/fboes/aerofly-wettergeraet/releases/latest");
+}
+
+void Frame::actionHelp(wxCommandEvent& WXUNUSED(event))
+{
+	wxLaunchDefaultBrowser("https://github.com/fboes/aerofly-wettergeraet/blob/master/README.md");
+}
+
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
 //EVT_BUTTON(Frame::EL_BUTTON_PARSE, Frame::actionParse)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
+EVT_MENU(wxID_HELP, Frame::actionHelp)
+EVT_MENU(EL_MENU_UPDATE, Frame::actionUpdate)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionLoadMainMcf)

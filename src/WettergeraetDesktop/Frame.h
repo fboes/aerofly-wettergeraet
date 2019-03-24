@@ -44,6 +44,7 @@ public:
 	static const unsigned short EL_CTRL_METAR = 4;
 	static const unsigned short EL_CTRL_DATETIME = 5;
 	static const unsigned short EL_CTRL_SLIDER = 6;
+	static const unsigned short EL_MENU_UPDATE = 7;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -70,4 +71,8 @@ public:
 	virtual void actionAbout(wxCommandEvent&);
 
 	virtual void actionLoadMainMcf(wxCommandEvent&);
+
+	virtual void actionUpdate(wxCommandEvent&);
+
+	virtual void actionHelp(wxCommandEvent&);
 };
