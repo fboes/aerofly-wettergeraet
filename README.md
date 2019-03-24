@@ -35,7 +35,7 @@ In case you want to use this application on a different operation system, consid
 Usage
 -----
 
-This tool comes in two variants: The desktop app <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
+This tool comes in two variants: The desktop application <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
 
 ![Aerofly Wettergerät Desktop Application](docs/aerofly-wx-desktop.png)
 
@@ -45,17 +45,17 @@ This tool comes in two variants: The desktop app <i>Aerofly Wettergerät</i> (`a
 
 Both variants have more or less the same capabilities.
 
-You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2. This file will be modified by the app.
+You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2. This file will be modified by the application.
 
-Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2 is _not_ running. On start-up the app will load the current settings from your `main.mcf`.
+Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2 is _not_ running. On start-up the application will load the current settings from your `main.mcf`.
 
-By starting the app METAR data will be fetched from a remote internet service for the given ICAO code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
+By starting the application METAR data will be fetched from a remote internet service for the given ICAO code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
 
 Optionally you can enter a METAR code manually.
 
 _Note:_ The desktop application requires you to actually hit the "Fetch" button to fetch METAR information from the internet, and to hit the "Save" button to copy the data to your `main.mcf`.
 
-**Important:** Be sure to quit the app before starting Aerofly FS 2 to not accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
+**Important:** Be sure to quit the application before starting Aerofly FS 2 to not accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
 
 HTTP services
 -------------

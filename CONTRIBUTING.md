@@ -21,6 +21,15 @@ Dependencies:
 
 Remember to integrate via `vcpkg integrate install`.
 
+### Icons
+
+The `docs` folder contains the application icons.
+
+1. The application icon was as SVG build in [Inkscape](https://inkscape.org/).
+1. From there it is exported as PNG.
+1. The PNG is converted into the application icons via https://icoconvert.com/.
+1. This icon gets copied to the corresponding projects.
+
 Structure of this project
 -------------------------
 
