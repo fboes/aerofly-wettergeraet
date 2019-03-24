@@ -53,4 +53,4 @@ setx AEROFLYWX_FILE %AEROFLYWX_FILE%
 
 ---
 
-Return to [table of contents](../README.md).
+Return to [table of contents](README.md).
