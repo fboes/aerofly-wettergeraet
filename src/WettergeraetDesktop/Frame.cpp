@@ -1,5 +1,5 @@
 #define wxUSE_DATEPICKCTRL 1
-#define MY_APP_VERSION_STRING "1.1.0"
+#define MY_APP_VERSION_STRING "1.1.1"
 
 #include <wx/wx.h>
 #include <wx/datectrl.h>
@@ -28,6 +28,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		wxMenu *help = new wxMenu;
 		help->Append(wxID_HELP, wxT("View &help"));
 		help->Append(EL_MENU_UPDATE, wxT("Check for &updates"));
+		help->Append(EL_MENU_FIND_ICAO, wxT("Find &ICAO airport codes"));
 		help->AppendSeparator();
 		help->Append(wxID_ABOUT, wxT("&About"));
 		menubar->Append(help, wxT("&Help"));
@@ -45,7 +46,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		// build hbox1
 		wxBoxSizer *hbox1 = new wxBoxSizer(wxHORIZONTAL);
 		{
-			wxStaticText *icaoLabel = new wxStaticText(panel, wxID_ANY, wxT("ICAO code"));
+			wxStaticText *icaoLabel = new wxStaticText(panel, wxID_ANY, wxT("ICAO airport code"));
 			hbox1->Add(icaoLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			this->icaoInput = new wxTextCtrl(panel, wxID_ANY);
@@ -70,9 +71,6 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			hbox2->Add(this->metarInput, 3, wxLEFT | wxEXPAND);
 
 			hbox2->Add(10, -1);
-
-			/*wxButton *parseButton = new wxButton(panel, Frame::EL_BUTTON_PARSE, wxT("Convert METAR data"), wxPoint(5, 5));
-			hbox2->Add(parseButton, 1, wxLEFT);*/
 		}
 		vbox->Add(hbox2, 1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 		vbox->Add(-1, 10);
@@ -204,6 +202,8 @@ Frame::~Frame()
 
 }
 
+// --------------------------------------------------------------------------------------
+
 void Frame::fromObjectToInput()
 {
 	this->icaoInput->SetValue(wxString(this->aerofly.nearestAirport));
@@ -276,11 +276,13 @@ void Frame::loadMainMcf()
 	this->fromObjectToInput();
 }
 
+// --------------------------------------------------------------------------------------
+
 void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 {
 	auto icaoCode = this->icaoInput->GetValue();
 	if (icaoCode == "") {
-		this->metarInput->SetValue("No ICAO code given");
+		this->metarInput->SetValue("No ICAO airport code given");
 		return;
 	}
 	this->metarInput->SetValue("Loading...");
@@ -288,7 +290,6 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 	try {
 		auto metarString = urlFetcher.fetch(this->argumentor.url, icaoCode, this->argumentor.response, this->argumentor.apikey);
 		this->metarInput->SetValue(metarString);
-		//this->metarInput->SetValue("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
 		this->saveButton->SetFocus();
 	}
 	catch (std::invalid_argument& e) {
@@ -304,7 +305,6 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 	}
 	try {
 		this->aerofly.setFromMetarString(metarInput);
-		//this->icaoInput->SetValue();
 		this->fromObjectToInput();
 	}
 	catch (std::invalid_argument& e) {
@@ -332,7 +332,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 	aboutInfo.SetName("Aerofly Wetterger\u00E4t");
 	aboutInfo.SetVersion(MY_APP_VERSION_STRING);
 	aboutInfo.SetDescription(_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n\nCurrentAPI:\n") + this->argumentor.url);
-	aboutInfo.SetCopyright("(C) 2019");
+	aboutInfo.SetCopyright("\u00A9 2019");
 	aboutInfo.SetWebSite("https://github.com/fboes/aerofly-wettergeraet");
 	aboutInfo.AddDeveloper("Frank Bo\u00EBs");
 	aboutInfo.SetIcon(wxICON(APPICON));
@@ -356,15 +356,19 @@ void Frame::actionHelp(wxCommandEvent& WXUNUSED(event))
 	wxLaunchDefaultBrowser("https://github.com/fboes/aerofly-wettergeraet/blob/master/README.md");
 }
 
+void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
+{
+	wxLaunchDefaultBrowser("https://www.world-airport-codes.com/");
+}
+
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
-//EVT_BUTTON(Frame::EL_BUTTON_PARSE, Frame::actionParse)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
 EVT_MENU(wxID_HELP, Frame::actionHelp)
 EVT_MENU(EL_MENU_UPDATE, Frame::actionUpdate)
+EVT_MENU(EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionLoadMainMcf)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
-//EVT_COMMAND_SCROLL_CHANGED(Frame::actionSave);
 wxEND_EVENT_TABLE()

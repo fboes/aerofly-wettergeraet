@@ -42,7 +42,7 @@ public:
 	double windStrength = 0.0;    // 0.0..1.0
 	double windTurbulence = 0.0;  // 0.0..1.0
 	double thermalActivity = 0.0; // 0.0..1.0
-	char nearestAirport[8] = "";  // ICAO code of METAR report
+	char nearestAirport[8] = "";  // ICAO airport code of METAR report
 
 	AeroflyWeather();
 	~AeroflyWeather();

@@ -25,9 +25,10 @@ Requirements
 Installation
 ------------
 
-1. Download the current release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
-2. Unpack the ZIP file to some sensible location.
-3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".
+1. Download the latest release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
+2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet`.
+3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".  
+   You might want to re-label the shortcut to "Aerofly Wettergerät".
 3. Start the desktop application by clicking on the desktop link.
 
 In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
@@ -49,7 +50,7 @@ You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This cr
 
 Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2 is _not_ running. On start-up the application will load the current settings from your `main.mcf`.
 
-By starting the application METAR data will be fetched from a remote internet service for the given ICAO code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
+By starting the application METAR data will be fetched from a remote internet service for the given ICAO airport code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2 values. It also allows for changing values which are not accessible from inside Aerofly FS 2.
 
 Optionally you can enter a METAR code manually.
 

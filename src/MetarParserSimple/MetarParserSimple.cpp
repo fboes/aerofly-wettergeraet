@@ -112,7 +112,7 @@ bool MetarParserSimple::convert(std::string metarString)
 
 		switch (parsingMode) {
 		case 0:
-			// ICAO Code
+			// ICAO Airport Code
 			if (metarPart != "METAR") {
 				strcpy(this->icao, metarPart.c_str());
 				parsingMode = 1;

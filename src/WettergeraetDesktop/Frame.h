@@ -45,6 +45,7 @@ public:
 	static const unsigned short EL_CTRL_DATETIME = 5;
 	static const unsigned short EL_CTRL_SLIDER = 6;
 	static const unsigned short EL_MENU_UPDATE = 7;
+	static const unsigned short EL_MENU_FIND_ICAO = 8;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -75,4 +76,7 @@ public:
 	virtual void actionUpdate(wxCommandEvent&);
 
 	virtual void actionHelp(wxCommandEvent&);
+
+	virtual void actionFindIcao(wxCommandEvent&);
+
 };

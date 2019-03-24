@@ -90,7 +90,7 @@ void AeroflyWeather::setThermalActivity(double celsius)
 
 void AeroflyWeather::setVisibility(unsigned long meters)
 {
-	const unsigned long maxMiles = 10 * 1609.344;
+	const unsigned long maxMiles = (long)(10 * 1609.344);
 	if (this->maxVisibility > 9999 && (meters == 9999 || meters == 10000)) {
 		// because meters cannot be greater than 9999
 		// but miles can reach up to 10sm

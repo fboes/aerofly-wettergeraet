@@ -70,7 +70,7 @@ public:
 		unsigned long baseFeetAgl = 0;
 	};
 
-	// ICAO code of METAR report
+	// ICAO airport code of METAR report
 	char icao[8] = "";
 
 	// Time of observation

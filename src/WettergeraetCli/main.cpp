@@ -70,7 +70,7 @@ void showMetar(MetarParserSimple metar) {
 	std::cout << "Flight category  " << metar.getFlightCategory() << endl;
 }
 
-// Return origin / desitnation ICAO code from flightplan depending on inIcao bein "DEP" or "ARR".
+// Return origin / destination ICAO airport code from flightplan depending on inIcao bein "DEP" or "ARR".
 std::string getIcaoFromFlightplan(std::string inIcao, std::tuple<std::string, std::string> flightplan) {
 	std::string origin;
 	std::string destination;
