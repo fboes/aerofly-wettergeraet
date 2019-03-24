@@ -17,7 +17,7 @@ This project was built with Microsoft Visual Studio 2017.
 Dependencies:
 
 1. [Curl](https://curl.haxx.se/): Install via `vcpkg install curl`
-1. [WxWidgets](#): Install via `vcpkg install wxwidgets`
+1. [WxWidgets](https://www.wxwidgets.org/): Install via `vcpkg install wxwidgets`
 
 Remember to integrate via `vcpkg integrate install`.
 
