@@ -55,7 +55,7 @@ Optionally you can enter a METAR code manually.
 
 _Note:_ The desktop application requires you to actually hit the "Fetch" button to fetch METAR information from the internet, and to hit the "Save" button to copy the data to your `main.mcf`.
 
-**Important:** Be sure to quit the app before starting Aerofly FS 2 to no accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
+**Important:** Be sure to quit the app before starting Aerofly FS 2 to not accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
 
 HTTP services
 -------------
