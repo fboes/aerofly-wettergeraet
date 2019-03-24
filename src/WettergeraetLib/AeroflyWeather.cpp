@@ -90,8 +90,7 @@ void AeroflyWeather::setThermalActivity(double celsius)
 
 void AeroflyWeather::setVisibility(unsigned long meters)
 {
-	const unsigned long maxMiles = 10 * 1609;
-	meters = std::min(maxMiles, meters);
+	const unsigned long maxMiles = 10 * 1609.344;
 	if (this->maxVisibility > 9999 && (meters == 9999 || meters == 10000)) {
 		// because meters cannot be greater than 9999
 		// but miles can reach up to 10sm
@@ -99,7 +98,7 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 		meters = maxMiles;
 	}
 	this->visibility = BoShed::percent((double)meters / (double)this->maxVisibility, true);
-	if (this->maxVisibility > maxMiles) {
+	if (meters <= maxMiles && this->maxVisibility > maxMiles) {
 		// max visibility range cannot be reached, because in METAR there is only <= 10 sm
 		// Interpolate the last part
 		this->visibility += (1.0 - ((double)maxMiles / (double)this->maxVisibility)) * std::pow((meters / maxMiles), 8);

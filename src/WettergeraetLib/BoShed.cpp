@@ -35,7 +35,7 @@ namespace BoShed {
 	double percent(double value, bool notMoreThan1)
 	{
 		if (notMoreThan1 && value > 1.0) {
-			return value;
+			return 1.0;
 		}
 		if (value < 0.0) {
 			return 0.0;

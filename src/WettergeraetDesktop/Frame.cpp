@@ -1,5 +1,5 @@
 #define wxUSE_DATEPICKCTRL 1
-#define MY_APP_VERSION_STRING "1.0.1"
+#define MY_APP_VERSION_STRING "1.1.0"
 
 #include <wx/wx.h>
 #include <wx/datectrl.h>
