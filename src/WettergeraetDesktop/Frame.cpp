@@ -6,10 +6,14 @@
 #include <wx/timectrl.h>
 #include <wx/aboutdlg.h>
 #include <wx/icon.h>
+#include <wx/event.h>
 #include <math.h>
 #include "Frame.h"
 #include "Argumentor.h"
 #include "AeroflyConfigFile.h"
+
+const char* Frame::EL_BUTTON_SAVE_LABEL = "Save main.mcf";
+const char* Frame::EL_BUTTON_SAVE_LABEL_DIRTY = "Save main.mcf \u2022";
 
 Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 480))
 {
@@ -82,7 +86,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			hbox3->Add(utcTimeLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			wxDateTime utcDateValue = wxDateTime::Now();
-			this->utcTimeInput = new wxTimePickerCtrl(panel, wxID_ANY, utcDateValue);
+			this->utcTimeInput = new wxTimePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
 			hbox3->Add(this->utcTimeInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox3->Add(10, -1);
@@ -90,7 +94,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *utcDateLabel = new wxStaticText(panel, wxID_ANY, wxT("Date (UTC)"));
 			hbox3->Add(utcDateLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->utcDateInput = new wxDatePickerCtrl(panel, wxID_ANY, utcDateValue);
+			this->utcDateInput = new wxDatePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
 			hbox3->Add(this->utcDateInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -115,7 +119,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 				wxStaticText *clouds0HeightLabel = new wxStaticText(panel, wxID_ANY, cloudName + " height (%)");
 				hbox8->Add(clouds0HeightLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-				this->clouds[i].heightInput = new wxSlider(panel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+				this->clouds[i].heightInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 				hbox8->Add(this->clouds[i].heightInput, 1, wxALIGN_CENTER_VERTICAL);
 
 				hbox8->Add(10, -1);
@@ -123,7 +127,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 				wxStaticText *clouds0DensityLabel = new wxStaticText(panel, wxID_ANY, cloudName + " density (%)");
 				hbox8->Add(clouds0DensityLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-				this->clouds[i].densityInput = new wxSlider(panel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+				this->clouds[i].densityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 				hbox8->Add(this->clouds[i].densityInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 			}
 			vbox->Add(hbox8, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -136,7 +140,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *windDirectionLabel = new wxStaticText(panel, wxID_ANY, wxT("Wind direction (\u00B0)"));
 			hbox5->Add(windDirectionLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->windDirectionInput = new wxSlider(panel, wxID_ANY, 180, 0, 359, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->windDirectionInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 180, 0, 359, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox5->Add(this->windDirectionInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox5->Add(10, -1);
@@ -144,7 +148,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *windStrengthLabel = new wxStaticText(panel, wxID_ANY, wxT("Wind strength (%)"));
 			hbox5->Add(windStrengthLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->windStrengthInput = new wxSlider(panel, wxID_ANY, 50, 0, 200, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->windStrengthInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 200, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox5->Add(this->windStrengthInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox5, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -156,7 +160,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *windTurbulenceLabel = new wxStaticText(panel, wxID_ANY, wxT("Turbulence (%)"));
 			hbox6->Add(windTurbulenceLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->windTurbulenceInput = new wxSlider(panel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->windTurbulenceInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox6->Add(this->windTurbulenceInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox6->Add(10, -1);
@@ -164,7 +168,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *thermalActivityLabel = new wxStaticText(panel, wxID_ANY, wxT("Thermal activity (%)"));
 			hbox6->Add(thermalActivityLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->thermalActivityInput = new wxSlider(panel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->thermalActivityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox6->Add(this->thermalActivityInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox6, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -176,7 +180,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (%)"));
 			hbox7->Add(visbilityLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->visbilityInput = new wxSlider(panel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->visbilityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox7->Add(this->visbilityInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox7->Add(10, -1);
@@ -184,7 +188,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *noLabel = new wxStaticText(panel, wxID_ANY, wxT(""));
 			hbox7->Add(noLabel, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 
-			this->saveButton = new wxButton(panel, wxID_SAVE, wxT("Save main.mcf"), wxPoint(5, 5));
+			this->saveButton = new wxButton(panel, wxID_SAVE, this->EL_BUTTON_SAVE_LABEL_DIRTY, wxPoint(5, 5));
 			hbox7->Add(this->saveButton, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox7, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -257,23 +261,40 @@ void Frame::fromInputToObject()
 	}
 }
 
+void Frame::markAsClean()
+{
+	this->saveButton->SetLabel(this->EL_BUTTON_SAVE_LABEL);
+}
+
+void Frame::markAsDirty()
+{
+	this->saveButton->SetLabel(this->EL_BUTTON_SAVE_LABEL_DIRTY);
+}
+
 void Frame::loadMainMcf()
 {
-	this->mainConfig.setFilename(this->argumentor.filename);
-	this->mainConfig.load();
-	this->mainConfig.getToAeroflyObject(this->aerofly);
-	this->utcDateValue.SetToCurrent();
-	this->metarInput->SetValue("");
-	std::string origin;
-	std::string destination;
-	std::tie(origin, destination) = this->mainConfig.getFlightplan();
-	if (origin != "") {
-		strcpy(this->aerofly.nearestAirport, origin.c_str());
+	try {
+		this->mainConfig.setFilename(this->argumentor.filename);
+		this->mainConfig.load();
+		this->mainConfig.getToAeroflyObject(this->aerofly);
+		this->utcDateValue.SetToCurrent();
+		this->metarInput->SetValue("");
+		std::string origin;
+		std::string destination;
+		std::tie(origin, destination) = this->mainConfig.getFlightplan();
+		if (origin != "") {
+			strcpy(this->aerofly.nearestAirport, origin.c_str());
+		}
+		else {
+			strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
+		}
+		this->fromObjectToInput();
+		this->markAsClean();
 	}
-	else {
-		strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
+	catch (std::invalid_argument& e) {
+		this->metarInput->SetValue(e.what());
+		return;
 	}
-	this->fromObjectToInput();
 }
 
 // --------------------------------------------------------------------------------------
@@ -291,6 +312,7 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		auto metarString = urlFetcher.fetch(this->argumentor.url, icaoCode, this->argumentor.response, this->argumentor.apikey);
 		this->metarInput->SetValue(metarString);
 		this->saveButton->SetFocus();
+		this->markAsDirty();
 	}
 	catch (std::invalid_argument& e) {
 		this->metarInput->SetValue(e.what());
@@ -315,10 +337,17 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 void Frame::actionSave(wxCommandEvent& WXUNUSED(event))
 {
 	if (!this->argumentor.isDryRun) {
-		this->fromInputToObject();
-		this->mainConfig.setFromAeroflyObject(this->aerofly);
-		this->mainConfig.save();
+		try {
+			this->fromInputToObject();
+			this->mainConfig.setFromAeroflyObject(this->aerofly);
+			this->mainConfig.save();
+		}
+		catch (std::invalid_argument& e) {
+			this->metarInput->SetValue(e.what());
+			return;
+		}
 	}
+	this->markAsClean();
 }
 
 void Frame::actionExit(wxCommandEvent& WXUNUSED(event))
@@ -361,14 +390,21 @@ void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
 	wxLaunchDefaultBrowser("https://www.world-airport-codes.com/");
 }
 
+void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
+{
+	this->markAsDirty();
+}
+
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
 EVT_MENU(wxID_HELP, Frame::actionHelp)
-EVT_MENU(EL_MENU_UPDATE, Frame::actionUpdate)
-EVT_MENU(EL_MENU_FIND_ICAO, Frame::actionFindIcao)
+EVT_MENU(Frame::EL_MENU_UPDATE, Frame::actionUpdate)
+EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionLoadMainMcf)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
+EVT_SLIDER(Frame::EL_CTRL_SLIDER, Frame::actionMarkAsDirty)
+//EVT_DATE_CHANGED(Frame::EL_CTRL_DATETIME, Frame::actionMarkAsDirty)
 wxEND_EVENT_TABLE()

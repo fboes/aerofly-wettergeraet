@@ -58,6 +58,8 @@ _Note:_ The desktop application requires you to actually hit the "Fetch" button 
 
 **Important:** Be sure to quit the application before starting Aerofly FS 2 to not accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
 
+For troubleshooting look into the [Frequently Asked Questions](docs/faq.md).
+
 HTTP services
 -------------
 

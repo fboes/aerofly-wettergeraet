@@ -3,6 +3,7 @@ Change log
 
 * 🎁 Add "Update" / "Help" menu entries
 * 🎁 Add "Find ICAO airport codes" menu entries
+* 🎁 Add marker for unsaved changes
 
 1.1.0
 -----

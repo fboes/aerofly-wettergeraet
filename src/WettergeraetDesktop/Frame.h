@@ -36,6 +36,9 @@ private:
 	cloudsInputs clouds[3]; // "cirrus", "cumulus", "cumulus_mediocris"
 	wxButton *saveButton;
 
+	static const char* EL_BUTTON_SAVE_LABEL;
+	static const char* EL_BUTTON_SAVE_LABEL_DIRTY;
+
 	DECLARE_EVENT_TABLE()
 
 public:
@@ -55,6 +58,12 @@ public:
 
 	// Copy state of form to objects
 	virtual void fromInputToObject();
+
+	// Show user that current state has been saved.
+	virtual void markAsClean();
+
+	// Show user that current state has not yet been saved.
+	virtual void markAsDirty();
 
 	virtual void loadMainMcf();
 
@@ -78,5 +87,7 @@ public:
 	virtual void actionHelp(wxCommandEvent&);
 
 	virtual void actionFindIcao(wxCommandEvent&);
+
+	virtual void actionMarkAsDirty(wxCommandEvent&);
 
 };
