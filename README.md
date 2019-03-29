@@ -94,4 +94,4 @@ This tool is NOT affiliated with, endorsed, or sponsored by IPACS GbR. As stated
 
 This software complies with the General Data Protection Regulation (GDPR) as it does not collect nor transmits any personal data but for data your submit by using the CLI commands using URLs. For GDPR compliance of these services refer to the legal statements of these services.
 
-The <i>Aerofly Wettergerät</i> (German for "weather machine") is handcrafted <i>Wertarbeit</i>. 😉
+The <i>Aerofly Wettergerät</i> (German for "weather device") is handcrafted <i>Wertarbeit</i>. 😉
