@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WettergeraetCli", "src\WettergeraetCli\WettergeraetCli.vcxproj", "{5B39FB7B-C367-49BB-933B-626FC3057A76}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet", "src\WettergeraetCli\WettergeraetCli.vcxproj", "{5B39FB7B-C367-49BB-933B-626FC3057A76}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A4DBB4F-6E86-4839-9F98-1571A48783EC}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,13 +23,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetarParserSimple", "src\MetarParserSimple\MetarParserSimple.vcxproj", "{E73E5FBC-5F94-482C-9A5A-B99C9010DA99}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet-metarparser", "src\MetarParserSimple\MetarParserSimple.vcxproj", "{E73E5FBC-5F94-482C-9A5A-B99C9010DA99}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Testing", "src\Testing\Testing.vcxproj", "{A259D198-E74F-45B8-BFC8-E694AAD7A63C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet-testing", "src\Testing\Testing.vcxproj", "{A259D198-E74F-45B8-BFC8-E694AAD7A63C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WettergeraetLib", "src\WettergeraetLib\WettergeraetLib.vcxproj", "{BC0BA3A0-9257-4E40-B30C-6C829E2CEC1E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet-lib", "src\WettergeraetLib\WettergeraetLib.vcxproj", "{BC0BA3A0-9257-4E40-B30C-6C829E2CEC1E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WettergeraetDesktop", "src\WettergeraetDesktop\WettergeraetDesktop.vcxproj", "{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet-desktop", "src\WettergeraetDesktop\WettergeraetDesktop.vcxproj", "{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aerofly-wettergeraet-dll", "src\WettergeraetAeroflyDll\aerofly_fs_2_external_dll_sample.vcxproj", "{19E52193-A102-4A36-BF1E-84CEE2A08DA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,12 +73,20 @@ Global
 		{BC0BA3A0-9257-4E40-B30C-6C829E2CEC1E}.Release|x64.Build.0 = Release|x64
 		{BC0BA3A0-9257-4E40-B30C-6C829E2CEC1E}.Release|x86.ActiveCfg = Release|Win32
 		{BC0BA3A0-9257-4E40-B30C-6C829E2CEC1E}.Release|x86.Build.0 = Release|Win32
-		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Debug|x64.ActiveCfg = Debug|Win32
+		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Debug|x64.ActiveCfg = Debug|x64
+		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Debug|x64.Build.0 = Debug|x64
 		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Debug|x86.ActiveCfg = Debug|Win32
 		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Debug|x86.Build.0 = Debug|Win32
-		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Release|x64.ActiveCfg = Release|Win32
+		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Release|x64.ActiveCfg = Release|x64
+		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Release|x64.Build.0 = Release|x64
 		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Release|x86.ActiveCfg = Release|Win32
 		{6A021B60-13B5-4AA5-8EA7-F12382DAA6B6}.Release|x86.Build.0 = Release|Win32
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Debug|x64.ActiveCfg = Debug|x64
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Debug|x64.Build.0 = Debug|x64
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Debug|x86.ActiveCfg = Debug|x64
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Release|x64.ActiveCfg = Release|x64
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Release|x64.Build.0 = Release|x64
+		{19E52193-A102-4A36-BF1E-84CEE2A08DA2}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

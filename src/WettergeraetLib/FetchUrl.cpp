@@ -6,7 +6,7 @@
 const unsigned short FetchUrl::MODE_RAW = 0;
 const unsigned short FetchUrl::MODE_JSON = 1;
 
-int FetchUrl::writeBuffer(char *data, size_t size, size_t nmemb, std::string *writerData)
+size_t FetchUrl::writeBuffer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
 	if (writerData == NULL) {
 		return 0;

@@ -114,7 +114,7 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 0:
 			// ICAO Airport Code
 			if (metarPart != "METAR") {
-				strcpy(this->icao, metarPart.c_str());
+				strcpy_s(this->icao, 8, metarPart.c_str());
 				parsingMode = 1;
 			}
 			break;
@@ -194,7 +194,7 @@ bool MetarParserSimple::convert(std::string metarString)
 			if (std::regex_match(metarPart, match, std::regex("(\\+|-|VC|RE)?([A-Z][A-Z])([A-Z][A-Z])?([A-Z][A-Z])?"))) {
 				for (unsigned int i = 1; i <= 4; i++) {
 					if (currentCondition < sizeofConditions && match[i].str() != "") {
-						strcpy(this->conditions[currentCondition], match[i].str().c_str());
+						strcpy_s(this->conditions[currentCondition], 4, match[i].str().c_str());
 						currentCondition ++;
 					}
 				}
@@ -204,7 +204,7 @@ bool MetarParserSimple::convert(std::string metarString)
 		case 5:
 			// Clouds
 			if (currentCloud < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
-				strcpy(this->clouds[currentCloud].code, match[1].str().c_str());
+				strcpy_s(this->clouds[currentCloud].code, 4, match[1].str().c_str());
 				this->clouds[currentCloud].baseFeetAgl = (std::stoi(match[2].str()) * 100);
 				if (strcmp(this->clouds[currentCloud].code, "FEW") == 0) {
 					this->clouds[currentCloud].densityMinimum = 1;

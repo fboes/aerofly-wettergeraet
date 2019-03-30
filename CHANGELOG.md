@@ -1,6 +1,8 @@
 Change log
 ==========
 
+* 🎁 Add 64bit build settings
+
 1.1.1
 -----
 

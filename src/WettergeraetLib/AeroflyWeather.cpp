@@ -107,7 +107,7 @@ void AeroflyWeather::setVisibility(unsigned long meters)
 
 void AeroflyWeather::setNearestAirport(char const nearestAirport[8])
 {
-	strcpy(this->nearestAirport, nearestAirport);
+	strcpy_s(this->nearestAirport, 8, nearestAirport);
 }
 
 void AeroflyWeather::setHourOffset(double hourOffset)
