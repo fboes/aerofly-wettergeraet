@@ -15,7 +15,7 @@
     <RootNamespace>aerofly_fs_2_external_dll_sample</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <ProjectName>WettergeraetAeroflyDll</ProjectName>
+    <ProjectName>aerofly-wettergeraet-dll</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -43,7 +43,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(USERPROFILE)\Documents\Aerofly FS 2\external_dll\</OutDir>
-    <TargetName>aerofly-wettergeraet-dll</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(USERPROFILE)\Documents\Aerofly FS 2\external_dll\</OutDir>

@@ -7,6 +7,9 @@
  */
 class Argumentor
 {
+private:
+	char * getEnv(const char* varName);
+
 public:
 	char icaoCode[8] = "";
 

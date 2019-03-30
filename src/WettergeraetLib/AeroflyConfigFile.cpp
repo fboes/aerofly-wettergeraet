@@ -80,11 +80,17 @@ bool AeroflyConfigFile::save()
 
 void AeroflyConfigFile::setFilename(std::string filename)
 {
-	filename = std::regex_replace(
-		filename,
-		std::regex("%USERPROFILE%", std::regex_constants::icase),
-		getenv("USERPROFILE")
-	);
+	char *userprofileDirectory;
+	size_t len;
+	errno_t err = _dupenv_s(&userprofileDirectory, &len, "USERPROFILE");
+	if (!err) {
+		filename = std::regex_replace(
+			filename,
+			std::regex("%USERPROFILE%", std::regex_constants::icase),
+			userprofileDirectory
+		);
+	}
+	free(userprofileDirectory);
 	this->filename = filename;
 }
 

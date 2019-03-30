@@ -8,7 +8,7 @@ class FetchUrl
 {
 private:
 	// https://curl.haxx.se/libcurl/c/htmltitle.html
-	static int writeBuffer(char * data, size_t size, size_t nmemb, std::string * writerData);
+	static size_t writeBuffer(char * data, size_t size, size_t nmemb, std::string * writerData);
 
 	// Actually this does not parse JSON, but finds the METAR string
 	std::string parseJson(std::string rawJson);

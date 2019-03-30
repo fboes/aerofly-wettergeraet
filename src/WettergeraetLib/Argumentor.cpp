@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "Argumentor.h"
 
+char * Argumentor::getEnv(const char * varName)
+{
+	char *pValue;
+	size_t len;
+	errno_t err = _dupenv_s(&pValue, &len, varName);
+	return pValue;
+	// 	free(pValue);
+}
+
 std::string Argumentor::showHelp(std::string cmd)
 {
 	return "Usage: " + cmd + " [options...] [FILE]\n"
@@ -36,20 +45,25 @@ std::string Argumentor::showHelp(std::string cmd)
 Argumentor::Argumentor()
 {
 	// Getting ENV variable values
-	if (getenv("AEROFLYWX_URL") && getenv("AEROFLYWX_URL") != "") {
-		strcpy(this->url, getenv("AEROFLYWX_URL"));
+	auto envUrl = this->getEnv("AEROFLYWX_URL");
+	if (envUrl && envUrl != "") {
+		strcpy_s(this->url, 512, envUrl);
 	}
-	if (getenv("AEROFLYWX_APIKEY") && getenv("AEROFLYWX_APIKEY") != "") {
-		strcpy(this->apikey, getenv("AEROFLYWX_APIKEY"));
+	auto envApikey = this->getEnv("AEROFLYWX_APIKEY");
+	if (envApikey && envApikey != "") {
+		strcpy_s(this->apikey, 64, envApikey);
 	}
-	if (getenv("AEROFLYWX_RESPONSE") && getenv("AEROFLYWX_RESPONSE") != "") {
-		this->response = ( getenv("AEROFLYWX_RESPONSE") == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
+	auto envResponse = this->getEnv("AEROFLYWX_RESPONSE");
+	if (envResponse && envResponse != "") {
+		this->response = (envResponse == "raw") ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
 	}
-	if (getenv("AEROFLYWX_HOURS") && getenv("AEROFLYWX_HOURS") != "") {
-		this->hours = std::stoi(getenv("AEROFLYWX_HOURS"));
+	auto envHours = this->getEnv("AEROFLYWX_HOURS");
+	if (envHours && envHours != "") {
+		this->hours = std::stoi(envHours);
 	}
-	if (getenv("AEROFLYWX_FILE") && getenv("AEROFLYWX_FILE") != "") {
-		strcpy(this->filename, getenv("AEROFLYWX_FILE"));
+	auto envFilename = this->getEnv("AEROFLYWX_FILE");
+	if (envFilename && envFilename != "") {
+		strcpy_s(this->filename, 512, envFilename);
 	}
 }
 
@@ -80,26 +94,26 @@ void Argumentor::getArgs(int argc, char * argv[])
 		}
 		else if (i + 1 < argc) {
 			if (currentArg == "--url") {
-				strcpy(this->url, argv[++i]);
+				strcpy_s(this->url, 512, argv[++i]);
 			}
 			else if (currentArg == "--icao") {
-				strcpy(this->icaoCode, argv[++i]);
+				strcpy_s(this->icaoCode, 8, argv[++i]);
 			}
 			else if (currentArg == "--response") {
 				this->response = (strcmp(argv[++i], "raw") == 0) ? FetchUrl::MODE_RAW : FetchUrl::MODE_JSON;
 			}
 			else if (currentArg == "--apikey") {
-				strcpy(this->apikey, argv[++i]);
+				strcpy_s(this->apikey, 64, argv[++i]);
 			}
 			else if (currentArg == "--metar") {
-				strcpy(this->metarString, argv[++i]);
+				strcpy_s(this->metarString, 512, argv[++i]);
 			}
 			else if (currentArg == "--hours") {
 				this->hours = std::stoi(argv[++i]);
 			}
 		}
 		else {
-			strcpy(this->filename, argv[i]);
+			strcpy_s(this->filename, 512, argv[i]);
 		}
 	}
 }

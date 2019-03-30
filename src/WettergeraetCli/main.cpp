@@ -94,12 +94,12 @@ int main(int argc, char* argv[])
 	argumentor.getArgs(argc, argv);
 
 #ifdef _DEBUG
-	strcpy(argumentor.icaoCode, "KSFO");
-	//strcpy(argumentor.url, "https://3960.org/metar/XXXX.txt");
+	strcpy_s(argumentor.icaoCode, 8, "KSFO");
+	//strcpy_s(argumentor.url, "https://3960.org/metar/XXXX.txt");
 	//response = FetchUrl::MODE_RAW;
-	//strcpy(argumentor.metarString, "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012");
-	//strcpy(argumentor.metarString, "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2");
-	strcpy(argumentor.metarString, "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
+	//strcpy_s(argumentor.metarString, 512, "KSFO 281756Z 04004KT 9SM BKN037 OVC047 12/05 A3017 RMK AO2 SLP214 T01170050 10117 20094 53012");
+	//strcpy_s(argumentor.metarString, 512, "KDVO 022335Z AUTO 4SM BR BKN007 BKN013 12/12 A2988 RMK AO2");
+	strcpy_s(argumentor.metarString, 512, "METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
 	argumentor.hours = -20;
 	argumentor.isDryRun = true;
 	argumentor.verbosity = 2;
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 			//getline(cin, argumentor.icaoCode);
 		}
 		if (strcmp(argumentor.icaoCode, "DEP") == 0 || strcmp(argumentor.icaoCode, "ARR") == 0 || strlen(argumentor.icaoCode) == 0) {
-			strcpy(argumentor.icaoCode, getIcaoFromFlightplan(argumentor.icaoCode, mainConfig.getFlightplan()).c_str());
+			strcpy_s(argumentor.icaoCode, 8, getIcaoFromFlightplan(argumentor.icaoCode, mainConfig.getFlightplan()).c_str());
 		}
 
 		FetchUrl urlFetcher;
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 			std::cout << "URL          " << argumentor.url << endl;
 		}
 		try {
-			strcpy(argumentor.metarString, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey).c_str());
+			strcpy_s(argumentor.metarString, 512, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey).c_str());
 		}
 		catch (std::invalid_argument& e) {
 			dieWithError(e);

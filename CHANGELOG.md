@@ -1,6 +1,11 @@
 Change log
 ==========
 
+* 🎁 Add 64bit build settings
+
+1.1.1
+-----
+
 * 🎁 Add "Update" / "Help" menu entries
 * 🎁 Add "Find ICAO airport codes" menu entries
 * 🎁 Add marker for unsaved changes
