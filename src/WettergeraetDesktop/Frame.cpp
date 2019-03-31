@@ -1,5 +1,4 @@
 #define wxUSE_DATEPICKCTRL 1
-#define MY_APP_VERSION_STRING "1.2.0"
 
 #include <wx/wx.h>
 #include <wx/datectrl.h>
@@ -359,7 +358,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 {
 	wxAboutDialogInfo aboutInfo;
 	aboutInfo.SetName("Aerofly Wetterger\u00E4t");
-	aboutInfo.SetVersion(MY_APP_VERSION_STRING);
+	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" ") + this->argumentor.APP_TARGET);
 	aboutInfo.SetDescription(_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n\nCurrentAPI:\n") + this->argumentor.url);
 	aboutInfo.SetCopyright("\u00A9 2019");
 	aboutInfo.SetWebSite("https://github.com/fboes/aerofly-wettergeraet");

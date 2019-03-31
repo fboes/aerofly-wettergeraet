@@ -80,9 +80,9 @@ std::string getIcaoFromFlightplan(std::string inIcao, std::tuple<std::string, st
 }
 
 // Show error, exit with failure.
-void dieWithError(std::invalid_argument e) {
+int dieWithError(std::invalid_argument e) {
 	std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
-	exit(EXIT_FAILURE);
+	return EXIT_FAILURE;
 }
 
 // ----------------------------------------------------------------------------
@@ -92,6 +92,15 @@ int main(int argc, char* argv[])
 {
 	Argumentor argumentor;
 	argumentor.getArgs(argc, argv);
+
+	if (argumentor.isShowHelp) {
+		std::cout << argumentor.showHelp(argv[0]) << endl;
+		exit(EXIT_FAILURE);
+	}
+	else if (argumentor.isShowVersion) {
+		std::cout << argumentor.showVersion() << endl;
+		exit(EXIT_FAILURE);
+	}
 
 #ifdef _DEBUG
 	strcpy_s(argumentor.icaoCode, 8, "KSFO");
@@ -112,7 +121,7 @@ int main(int argc, char* argv[])
 		mainConfig.load();
 	}
 	catch (std::invalid_argument& e) {
-		dieWithError(e);
+		return dieWithError(e);
 	}
 
 	// Fetch remote data via HTTP(S)
@@ -139,7 +148,7 @@ int main(int argc, char* argv[])
 			strcpy_s(argumentor.metarString, 512, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey).c_str());
 		}
 		catch (std::invalid_argument& e) {
-			dieWithError(e);
+			return dieWithError(e);
 		}
 	}
 	if (argumentor.verbosity > 0) {
@@ -147,7 +156,7 @@ int main(int argc, char* argv[])
 	}
 
 	if (strlen(argumentor.metarString) == 0) {
-		dieWithError(std::invalid_argument("No METAR code found"));
+		return dieWithError(std::invalid_argument("No METAR code found"));
 	}
 
 	// Parse METAR data
@@ -158,7 +167,7 @@ int main(int argc, char* argv[])
 		metar.addHours(argumentor.hours);
 	}
 	catch (std::invalid_argument& e) {
-		dieWithError(e);
+		return dieWithError(e);
 	}
 	if (argumentor.verbosity > 1) {
 		showMetar(metar);
@@ -184,9 +193,9 @@ int main(int argc, char* argv[])
 			mainConfig.save();
 		}
 		catch (std::invalid_argument& e) {
-			dieWithError(e);
+			return dieWithError(e);
 		}
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }

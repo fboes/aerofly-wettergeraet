@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "Argumentor.h"
 
+const char* Argumentor::APP_VERSION = "1.2.0";
+#if _WIN64
+const char* Argumentor::APP_TARGET = "64bit";
+#else
+const char* Argumentor::APP_TARGET = "32bit";
+#endif
+
 char * Argumentor::getEnv(const char * varName)
 {
 	char *pValue;
@@ -39,7 +46,16 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ "    --dry-run          Do not save 'main.mcf'\n"
 		+ "    --quiet            No console output\n"
 		+ "    --verbose          Show debug output\n"
+		+ "    --version          Show version information and exit\n"
 		+ "    --help             Display this help and exit\n";
+}
+
+std::string Argumentor::showVersion(std::string appname)
+{
+	return ((appname != "") ? appname + " " : "")
+		+ std::string(Argumentor::APP_VERSION)
+		+ " (" + std::string(Argumentor::APP_TARGET) + ")"
+		;
 }
 
 Argumentor::Argumentor()
@@ -80,8 +96,10 @@ void Argumentor::getArgs(int argc, char * argv[])
 		currentArg = std::string(argv[i]);
 
 		if (currentArg == "--help") {
-			this->showHelp(argv[0]);
-			exit(EXIT_FAILURE);
+			this->isShowHelp = true;
+		}
+		else if (currentArg == "--version") {
+			this->isShowVersion = true;
 		}
 		else if (currentArg == "--dry-run") {
 			this->isDryRun = true;

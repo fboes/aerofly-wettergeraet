@@ -303,16 +303,16 @@ double MetarParserSimple::getHumidity()
 void MetarParserSimple::setDate(short day, short hours, short minutes)
 {
 	time_t rawtime;
-	struct tm * ptm;
+	struct tm ptm;
 
 	time(&rawtime);
 
-	ptm = gmtime(&rawtime);
-	this->observed.year = ptm->tm_year + 1900;
-	this->observed.month = ptm->tm_mon + 1;
-	this->observed.day = (day >= 0) ? day : ptm->tm_mday;
-	this->observed.hours = (hours >= 0) ? hours : ptm->tm_hour;
-	this->observed.minutes = (minutes >= 0) ? minutes : ptm->tm_min;
+	gmtime_s(&ptm, &rawtime);
+	this->observed.year = ptm.tm_year + 1900;
+	this->observed.month = ptm.tm_mon + 1;
+	this->observed.day = (day >= 0) ? day : ptm.tm_mday;
+	this->observed.hours = (hours >= 0) ? hours : ptm.tm_hour;
+	this->observed.minutes = (minutes >= 0) ? minutes : ptm.tm_min;
 	this->fixTimeDate();
 }
 

@@ -151,8 +151,9 @@
 COPY "$(SolutionDir)*.txt" "$(TargetDir)"
 MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
-DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
-"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\aerofly-wettergeraet.zip" "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
+SET ZIPFILE="$(TargetDir)..\..\aerofly-wettergeraet-$(Platform).zip"
+DEL %ZIPFILE%
+"C:\Program Files\7-Zip\7z.exe" a %ZIPFILE% "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
       <Message>Build final ZIP</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -180,8 +181,9 @@ DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
 COPY "$(SolutionDir)*.txt" "$(TargetDir)"
 MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
-DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
-"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\aerofly-wettergeraet.zip" "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
+SET ZIPFILE="$(TargetDir)..\..\aerofly-wettergeraet-$(Platform).zip"
+DEL %ZIPFILE%
+"C:\Program Files\7-Zip\7z.exe" a %ZIPFILE% "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Build final zip</Message>

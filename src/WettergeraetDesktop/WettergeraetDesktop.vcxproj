@@ -106,7 +106,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\MetarParserSimple;..\WettergeraetLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -122,7 +122,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\MetarParserSimple;..\WettergeraetLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\MetarParserSimple;..\WettergeraetLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -156,8 +156,9 @@
 COPY "$(SolutionDir)*.txt" "$(TargetDir)"
 MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
-DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
-"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\aerofly-wettergeraet.zip" "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
+SET ZIPFILE="$(TargetDir)..\..\aerofly-wettergeraet-$(Platform).zip"
+DEL %ZIPFILE%
+"C:\Program Files\7-Zip\7z.exe" a %ZIPFILE% "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
       <Message>Build final zip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -169,7 +170,7 @@ DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WXUSINGDLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\MetarParserSimple;..\WettergeraetLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -185,8 +186,9 @@ DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
 COPY "$(SolutionDir)*.txt" "$(TargetDir)"
 MKDIR "$(TargetDir)docs\"
 COPY "$(SolutionDir)docs\" "$(TargetDir)docs\"
-DEL "$(TargetDir)..\aerofly-wettergeraet.zip"
-"C:\Program Files\7-Zip\7z.exe" a "$(TargetDir)..\aerofly-wettergeraet.zip" "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
+SET ZIPFILE="$(TargetDir)..\..\aerofly-wettergeraet-$(Platform).zip"
+DEL %ZIPFILE%
+"C:\Program Files\7-Zip\7z.exe" a %ZIPFILE% "$(TargetDir)*" -r "-x!*.iobj" "-x!*.ipdb" "-x!*.pdb" "-x!*.exp" "-x!*.lib" "-x!Test*"</Command>
       <Message>Build final zip</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
