@@ -1,6 +1,9 @@
 Change log
 ==========
 
+1.2.0
+-----
+
 * 💊 Remove unsecure functions
 * 🎁 Add 64bit build settings
 
