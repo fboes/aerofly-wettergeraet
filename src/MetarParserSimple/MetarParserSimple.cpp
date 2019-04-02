@@ -77,6 +77,10 @@ bool MetarParserSimple::convert(std::string metarString)
 {
 	std::smatch match;
 
+	if (metarString == "") {
+		return false;
+	}
+
 	if (std::regex_search(metarString, match, std::regex(" (\\d) (\\d)/(\\d)(SM)"))) {
 		// convert visbility range like `1 1/2 SM` to `3/2 SM`
 		std::string newFract = std::to_string(
@@ -100,6 +104,9 @@ bool MetarParserSimple::convert(std::string metarString)
 	std::stringstream metarParts(metarString);
 
 	while (metarParts >> metarPart) {
+		if (metarPart == "") {
+			break;
+		}
 		if (parsingMode < 3 && std::regex_match(metarPart, std::regex("(\\d+)(?:/(\\d+))?(SM)?"))) {
 			parsingMode = 3; // no wind reported
 		}
@@ -113,7 +120,7 @@ bool MetarParserSimple::convert(std::string metarString)
 		switch (parsingMode) {
 		case 0:
 			// ICAO Airport Code
-			if (metarPart != "METAR") {
+			if (metarPart != "METAR" && std::regex_match(metarPart, match, std::regex("([A-Za-z0-9]+)"))) {
 				strcpy_s(this->icao, 8, metarPart.c_str());
 				parsingMode = 1;
 			}

@@ -26,7 +26,7 @@ Installation
 ------------
 
 1. Download the latest release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
-2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet`.
+2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet-x64\`.
 3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".  
    You might want to re-label the shortcut to "Aerofly Wettergerät".
 3. Start the desktop application by clicking on the desktop link.

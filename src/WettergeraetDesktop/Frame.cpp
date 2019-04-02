@@ -359,7 +359,11 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 	wxAboutDialogInfo aboutInfo;
 	aboutInfo.SetName("Aerofly Wetterger\u00E4t");
 	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" ") + this->argumentor.APP_TARGET);
-	aboutInfo.SetDescription(_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n\nCurrentAPI:\n") + this->argumentor.url);
+	aboutInfo.SetDescription(
+		_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n")
+		+ _("\nCurrent API URL:\n") + this->argumentor.url
+		+ _("\nCurrent API Key:\n") + this->argumentor.apikey
+	);
 	aboutInfo.SetCopyright("\u00A9 2019");
 	aboutInfo.SetWebSite("https://github.com/fboes/aerofly-wettergeraet");
 	aboutInfo.AddDeveloper("Frank Bo\u00EBs");
