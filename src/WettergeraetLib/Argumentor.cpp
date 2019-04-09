@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Argumentor.h"
 
-const char* Argumentor::APP_VERSION = "1.2.0";
+const char* Argumentor::APP_VERSION = "1.2.1";
 #if _WIN64
-const char* Argumentor::APP_TARGET = "64bit";
+const char* Argumentor::APP_TARGET = "64-bit";
 #else
-const char* Argumentor::APP_TARGET = "32bit";
+const char* Argumentor::APP_TARGET = "32-bit";
 #endif
 
 char * Argumentor::getEnv(const char * varName)
@@ -26,6 +26,7 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ "    [FILE]             File to modify. Defaults to 'main.mcf' in standard\n"
 		+ "                       Aerofly document path.\n"
 		+ "Options:\n"
+		+ "    --file <FILE>     Like `[FILE]`, see above.\n"
 		+ "    --url <URL>        Fetch response via HTTP from <URL>.\n"
 		+ "                       If URL contains 'XXXX' this will be replaced by <ICAO>.\n"
 		+ "                       Defaults to URL of AvWX.\n"
@@ -111,7 +112,10 @@ void Argumentor::getArgs(int argc, char * argv[])
 			this->verbosity = 2;
 		}
 		else if (i + 1 < argc) {
-			if (currentArg == "--url") {
+			if (currentArg == "--file") {
+				strcpy_s(this->filename, 512, argv[i]);
+			}
+			else if (currentArg == "--url") {
 				strcpy_s(this->url, 512, argv[++i]);
 			}
 			else if (currentArg == "--icao") {

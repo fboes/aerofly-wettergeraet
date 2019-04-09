@@ -1,6 +1,10 @@
 Change log
 ==========
 
+1.2.1
+-----
+
+* 💊 Fix handling of `--file` parameter, as it did not work as advertised.
 * 💊 Improve error handling
 * 💊 Fix handling of non-valid JSON API replies.
 
