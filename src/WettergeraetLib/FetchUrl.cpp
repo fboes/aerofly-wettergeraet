@@ -27,7 +27,7 @@ std::string FetchUrl::parseJson(std::string rawJson)
 		);
 	}
 
-	return rawJson;
+	return "";
 }
 
 FetchUrl::FetchUrl()

@@ -2,6 +2,7 @@ Change log
 ==========
 
 * 💊 Improve error handling
+* 💊 Fix handling of non-valid JSON API replies.
 
 1.2.0
 -----
