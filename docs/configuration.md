@@ -52,10 +52,11 @@ These variables are available:
 
 In Windows 10 set environment variables by following these steps:
 
-1. Click the Windows icon on your task bar and enter "Environment variables". Click the app icon.
-2. In the Environment Variables window, click the "New" button. If the variable already exists, select the variable and click the "Edit" button.
-3. Add the variable name (see above), and set the variable value to a value you want it to have.
-4. Confirm your modification via "Ok".
+1. Click the Windows icon on your task bar and enter "Environment". Click the app icon for "Edit the system environment variables".
+2. In the "System properties" window, click the "Environment variables" button. You will see the user variables.
+3. Click the "New" button to add a new variable. If the desired variable already exists, select the variable and click the "Edit" button.
+4. Add the variable name (see above), and set the variable value to a value you want it to have.
+5. Confirm your modification via "Ok".
 
 In Windows 10 set environment variables from the command line by opening up a terminal and enter the following lines:
 
