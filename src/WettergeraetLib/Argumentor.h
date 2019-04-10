@@ -9,6 +9,8 @@ class Argumentor
 {
 private:
 	char * getEnv(const char* varName);
+	std::string showHelpOption(std::string label, std::string description, const int indentLength = 2, const int columnLength = 21);
+
 
 public:
 	static const char* APP_VERSION;

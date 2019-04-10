@@ -34,26 +34,40 @@ aerofly-wettergeraet-desktop.exe --url "http://avwx.rest/api/metar/XXXX?options=
 : CheckWX - you will need to get an API key
 aerofly-wettergeraet-desktop.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
 ```
+
 Change default values
 ---------------------
 
-You may set the default values for `aerofly-wettergeraet.exe` / `aerofly-wettergeraet-desktop.exe` by setting environment variables:
+You may set the default values for `aerofly-wettergeraet.exe` / `aerofly-wettergeraet-desktop.exe` by setting environment variables. After settings these, every startup of the <i>Wettergerät</i> will use these values if not overriden by command line parameters.
+
+These variables are available:
+
+| Variable             | Example value           | Description                                |
+| -------------------- | ----------------------- | ------------------------------------------ |
+| `AEROFLYWX_FILE`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
+| `AEROFLYWX_URL`      | `http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
+| `AEROFLYWX_APIKEY`   | `12345abcd`             | Sent HTTP header `X-API-Key` set to this value for all HTTP API calls. |
+| `AEROFLYWX_RESPONSE` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
+| `AEROFLYWX_HOURS`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |
+
+In Windows 10 set environment variables by following these steps:
+
+1. Click the Windows icon on your task bar and enter "Environment variables". Click the app icon.
+2. In the Environment Variables window, click the "New" button. If the variable already exists, select the variable and click the "Edit" button.
+3. Add the variable name (see above), and set the variable value to a value you want it to have.
+4. Confirm your modification via "Ok".
+
+In Windows 10 set environment variables from the command line by opening up a terminal and enter the following lines:
 
 ```batch
-set  AEROFLYWX_URL="http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
-setx AEROFLYWX_URL %AEROFLYWX_URL%
+set  VARIABLE="VALUE"
+setx VARIABLE %VARIABLE%
+```
 
-set  AEROFLYWX_APIKEY="12345abcd"
-setx AEROFLYWX_APIKEY %AEROFLYWX_APIKEY%
+For Mac OSX / Linux open up a terminal and enter the following lines:
 
-set  AEROFLYWX_RESPONSE="raw"
-setx AEROFLYWX_RESPONSE %AEROFLYWX_RESPONSE%
-
-set  AEROFLYWX_HOURS=-8
-setx AEROFLYWX_HOURS %AEROFLYWX_HOURS%
-
-set  AEROFLYWX_FILE="main.mcf"
-setx AEROFLYWX_FILE %AEROFLYWX_FILE%
+```bash
+VARIABLE="VALUE"
 ```
 
 ---
