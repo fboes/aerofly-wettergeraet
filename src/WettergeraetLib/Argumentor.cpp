@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Argumentor.h"
-#include <regex>
+#include <sstream>
+#include <iterator>
 
 const char* Argumentor::APP_VERSION = "1.2.1";
 #if _WIN64
@@ -22,17 +23,37 @@ std::string Argumentor::showHelpOption(std::string label, std::string descriptio
 {
 
 	label = label.substr(0, columnLength - indentLength - 2);
-	std::string spacer = std::string(columnLength, ' ');
+	std::string spacer = "\n" + std::string(columnLength, ' ');
 
 	std::string string = std::string(indentLength, ' ');
 	string += label + std::string(columnLength - indentLength - label.length(), ' ');
-	string += std::regex_replace(
-		description,
-		std::regex("\n"),
-		"$&" + spacer
-	);
+	string += this->wordwrap(description, 72 - columnLength, spacer);
 	string += "\n";
 	return string;
+}
+
+std::string Argumentor::wordwrap(std::string candidate, const int maxLineLength, std::string wrapper)
+{
+	std::string output = "";
+	std::string currentWord = "";
+	std::stringstream candidateWords(candidate);
+	int currentLineLength = 0;
+	int currentWordLength = 0;
+
+	while (candidateWords >> currentWord) {
+		currentWordLength = (int)currentWord.length();
+		if (currentLineLength + currentWordLength < maxLineLength) {
+			output += (currentLineLength != 0) ? " " : "";
+			currentLineLength += 1 + currentWordLength;
+		}
+		else {
+			output += wrapper;
+			currentLineLength = 1;
+		}
+		output += currentWord;
+	}
+
+	return output;
 }
 
 std::string Argumentor::showHelp(std::string cmd)
@@ -41,14 +62,14 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ "Copy METAR information from URL into your Aerofly FS2 configuration file.\n"
 		+ "If no options are supplied, the required information will be asked for.\n"
 		+ "Arguments:\n"
-		+ this->showHelpOption("[FILE]", "Absolute file location of your `main.mcf`. Defaults to\nyour standard Aerofly document path.")
+		+ this->showHelpOption("[FILE]", "Absolute file location of your `main.mcf`. Defaults to your standard Aerofly document path.")
 		+ "Options:\n"
 		+ this->showHelpOption("--file <FILE>", "Like `[FILE]`, see above.")
-		+ this->showHelpOption("--url <URL>", "Fetch response via HTTP from <URL>.\nIf URL contains `XXXX` this will be replaced by <ICAO>.\nDefaults to URL of AvWX.")
-		+ this->showHelpOption("--icao <ICAO>", "ICAO code of airport the METAR will be fetched for.\nIf this is set to `?` the value will be asked for.\nIf this contains `DEP`, ICAO airport code will be fetched\nfrom Aerofly FS 2 flightplan departure airport.\nIf this contains `ARR`, ICAO airport code will be fetched\nfrom Aerofly FS 2 flightplan arrival airport.")
-		+ this->showHelpOption("--apikey <APIKEY>", "Sent HTTP header `X-API-Key` set to <APIKEY> for\nall HTTP API calls.")
-		+ this->showHelpOption("--response <TYPE>", "How to interpret HTTP response. `json` is default.\nSet this to `raw` if the response is plain text.\nSet this to `json` if the response is JSON object.")
-		+ this->showHelpOption("--metar <METAR>", "Supply a valid METAR code enclosed in `\"`.\nThis will disable HTTP fetching.\nIf this is set to `?` the value will be asked for.")
+		+ this->showHelpOption("--url <URL>", "Fetch response via HTTP from <URL>. If URL contains `XXXX` this will be replaced by <ICAO>. Defaults to URL of AvWX.")
+		+ this->showHelpOption("--icao <ICAO>", "ICAO code of airport the METAR will be fetched for. If this is set to `?` the value will be asked for. If this contains `DEP`, ICAO airport code will be fetched from Aerofly FS 2 flightplan departure airport. If this contains `ARR`, ICAO airport code will be fetched from Aerofly FS 2 flightplan arrival airport.")
+		+ this->showHelpOption("--apikey <APIKEY>", "Sent HTTP header `X-API-Key` set to <APIKEY> for all HTTP API calls.")
+		+ this->showHelpOption("--response <TYPE>", "How to interpret HTTP response. `json` is default. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.")
+		+ this->showHelpOption("--metar <METAR>", "Supply a valid METAR code enclosed in `\"`. This will disable HTTP fetching. If this is set to `?` the value will be asked for.")
 		+ this->showHelpOption("--hours <HOURS>", "Offset time read from METAR code by <HOURS> hours, e.g. '-8'.")
 		;
 }

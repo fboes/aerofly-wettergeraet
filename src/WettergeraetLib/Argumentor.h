@@ -10,6 +10,7 @@ class Argumentor
 private:
 	char * getEnv(const char* varName);
 	std::string showHelpOption(std::string label, std::string description, const int indentLength = 2, const int columnLength = 21);
+	std::string wordwrap(std::string candidate, const int maxLineLength = 82, std::string wrapper = "\n");
 
 
 public:
