@@ -764,57 +764,6 @@ extern "C"
 //    time += delta_time;
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 6: visual only - set the aircraft's position and orientation from your dynamics model
-    //                          example uses longitude/latitude/altitude pitch/bank/heading
-//    static double time = 0;
-//    time += delta_time;
-//
-//    //
-//    // start at Speck-Fehraltdorf, use time to change position and orientation
-//    //
-//    //const double longitude = tm_helper_deg_to_rad(  8.76070 );
-//    //const double latitude  = tm_helper_deg_to_rad( 47.37500 );
-//    //const double altitude  = 0.3048 * 1765.0;
-//
-//    static tm_vector3d position = tm_vector3d( 0, 0, 0.5 );//tmcoordinates_PositionFromLatLonAlt( latitude, longitude, altitude );
-//
-//    const auto world_east  = tm_vector3d( 1, 0, 0 );//tmcoordinates_GetEastAt( position );
-//    const auto world_north = tm_vector3d( 0, 1, 0 );//tmcoordinates_GetNorthAt( position );
-//    const auto world_up    = tm_vector3d( 0, 0, 1 );//tmcoordinates_GetUpAt( position );
-//
-//    //
-//    // aircraft direction and up vector from heading, pitch and bank
-//    // 
-//    // rotation sequence: heading - pitch - bank
-//    //
-//    const  double pitch   = tm_helper_deg_to_rad( 0.0 );
-//    const  double bank    = tm_helper_deg_to_rad( 2.91 * sin( 0.25 * time ) * sin( 0.25 * time ) );
-//    static double heading = 0.0; //tm_helper_deg_to_rad( 90.0 + 56.8 );  // heading counterclockwise starting at east in radians  
-//
-//    heading += delta_time * 9.81 * bank / 2.0;
-//
-//    //
-//    // orientation vectors from pitch/bank/heading
-//    //
-//    const auto aircraft_forward         =  cos( pitch   ) * ( cos( heading ) * world_east + sin( heading ) * world_north ) + sin( pitch ) * world_up;
-//    const auto aircraft_up_with_pitch   = -sin( pitch   ) * ( cos( heading ) * world_east + sin( heading ) * world_north ) + cos( pitch ) * world_up;
-//    const auto aircraft_left_horizontal =                    -sin( heading ) * world_east + cos( heading ) * world_north;
-//
-//    const auto aircraft_up              =  cos( bank ) * aircraft_up_with_pitch + sin( bank ) * aircraft_left_horizontal;
-//    const auto aircraft_left            = -sin( bank ) * aircraft_up_with_pitch + cos( bank ) * aircraft_left_horizontal;
-//
-//    position = position + 2.0 * delta_time * aircraft_forward;
-//
-//    //
-//    // assemble orientation matrix and quaternion 
-//    //
-//    tm_matrix3d orientation = tm_matrix3d( aircraft_forward.x, aircraft_left.x, aircraft_up.x,
-//                                           aircraft_forward.y, aircraft_left.y, aircraft_up.y,
-//                                           aircraft_forward.z, aircraft_left.z, aircraft_up.z  );
-//
-//    tm_quaterniond q = tm_MatrixToQuaternion<tm_matrix3d,double>( orientation );
 //
 //    //
 //    // send messages
@@ -824,71 +773,6 @@ extern "C"
 //    MessageSimulationExternalOrientation.SetValue( tm_vector4d( q.r, q.x, q.y, q.z ) );
 //    MessageSimulationExternalOrientation.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
   }
-
-  //
-  // you better should not use the next function or you should now 100% what you intend to do!
-  // this function allows you to override the VR head position and orientation
-  // be very careful, this function is called right in our render loop, ensure you
-  // are doing just a quick calculation here and no time consuming stuff!
-  //
-/*
-  __declspec( dllexport ) bool Aerofly_FS_2_External_DLL_VRHeadDataUpdate( const tm_double       time_absolute,
-                                                                           tm_vector3d          &vr_head_position,
-                                                                           tm_quaterniond       &vr_head_orientation_quaternion,
-                                                                           const tm_uint32       vr_num_controllers,
-                                                                           const tm_vector3d    &vr_controller0_position,
-                                                                           const tm_quaterniond &vr_controller0_orientation,
-                                                                           const tm_vector3d    &vr_controller1_position,
-                                                                           const tm_quaterniond &vr_controller1_orientation )
-  {
-    //
-    // vr_head_position and vr_head_orientation are the position and orientation as returned by the VR
-    // the coordinate system is:
-    //   x - forward
-    //   y - left
-    //   z - up
-    //
-    const tm_matrix3d vr_head_orientation = tm_QuaternionToMatrix( vr_head_orientation_quaternion );
-
-
-    // JUST A SAMPLE
-    // TO DO -> please write here your corrected position and orientation
-    double JUST_A_TEST = sin( time_absolute );
-
-    tm_vector3d vr_new_head_position = vr_head_position; // +tm_vector3d( 0, 0, JUST_A_TEST );
-
-    const tm_vector3d vr_head_x = tm_vector3d( vr_head_orientation.xx, vr_head_orientation.xy, vr_head_orientation.xz );
-    const tm_vector3d vr_head_z = tm_vector3d( vr_head_orientation.zx, vr_head_orientation.zy, vr_head_orientation.zz );
-    // diese beispielcode dreht die orientierung der brille um die vr brille z-achse
-    tm_matrix3d vr_new_head_orientation = tm_matrix3d::CreateRotation( JUST_A_TEST, vr_head_z ) * vr_head_orientation;
-
-    //vr_new_head_orientation = vr_head_orientation;
-
-
-    //
-    // write back the values
-    //
-    vr_head_position = vr_new_head_position;
-    vr_head_orientation_quaternion = tm_MatrixToQuaternion<tm_matrix3d, double>( vr_new_head_orientation );
-
-
-    //
-    // these code lines are just for sample purposes, so one can output the head data in the extra window
-    //
-    {
-      std::lock_guard<std::mutex> lock_guard{ VR_DataMutex };
-      VR_Head_Position           = vr_head_position;
-      VR_Head_Orientation        = vr_head_orientation;
-      VR_NumControllers          = vr_num_controllers;
-      VR_Controller0_Position    = vr_controller0_position;
-      VR_Controller0_Orientation = vr_controller0_orientation;
-      VR_Controller1_Position    = vr_controller1_position;
-      VR_Controller1_Orientation = vr_controller0_orientation;
-    }
-
-    return true;
-  }
-*/
 }
 
 
