@@ -23,7 +23,7 @@ private:
 		wxSlider *heightInput;
 	};
 
-	wxTextCtrl *icaoInput;
+	wxComboBox *icaoInput;
 	wxButton *fetchButton;
 	wxTextCtrl *metarInput;
 	wxTimePickerCtrl *utcTimeInput;

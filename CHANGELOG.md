@@ -1,6 +1,8 @@
 Change log
 ==========
 
+* 🎁 Add ICAO code combobox with codes from current flightplan
+
 1.2.1
 -----
 

@@ -52,7 +52,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *icaoLabel = new wxStaticText(panel, wxID_ANY, wxT("ICAO airport code"));
 			hbox1->Add(icaoLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->icaoInput = new wxTextCtrl(panel, wxID_ANY);
+			this->icaoInput = new wxComboBox(panel, wxID_ANY);
 			hbox1->Add(this->icaoInput, 2, wxALIGN_CENTER_VERTICAL);
 
 			hbox1->Add(10, -1);
@@ -281,12 +281,19 @@ void Frame::loadMainMcf()
 		std::string origin;
 		std::string destination;
 		std::tie(origin, destination) = this->mainConfig.getFlightplan();
+		wxArrayString icaoChoices;
 		if (origin != "") {
 			strcpy(this->aerofly.nearestAirport, origin.c_str());
+			icaoChoices.Add(wxString(origin.c_str()));
 		}
 		else {
 			strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
 		}
+		if (destination != "" && origin != destination) {
+			icaoChoices.Add(wxString(destination.c_str()));
+		}
+		this->icaoInput->Set(icaoChoices);
+
 		this->fromObjectToInput();
 		this->markAsClean();
 	}

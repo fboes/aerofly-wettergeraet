@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-const char* Argumentor::APP_VERSION = "1.2.1";
+const char* Argumentor::APP_VERSION = "1.2.2";
 #if _WIN64
 const char* Argumentor::APP_TARGET = "64-bit";
 #else
@@ -21,12 +21,14 @@ char * Argumentor::getEnv(const char * varName)
 
 std::string Argumentor::showHelpOption(std::string label, std::string description, const int indentLength, const int columnLength)
 {
+	auto labelWidth = columnLength - indentLength - 2;
+	auto columnWidth = columnLength - indentLength - (int)label.length();
 
-	label = label.substr(0, columnLength - indentLength - 2);
+	label = label.substr(0, labelWidth);
 	std::string spacer = "\n" + std::string(columnLength, ' ');
 
 	std::string string = std::string(indentLength, ' ');
-	string += label + std::string(columnLength - indentLength - label.length(), ' ');
+	string += label + std::string(columnWidth, ' ');
 	string += this->wordwrap(description, 72 - columnLength, spacer);
 	string += "\n";
 	return string;
@@ -35,6 +37,7 @@ std::string Argumentor::showHelpOption(std::string label, std::string descriptio
 std::string Argumentor::wordwrap(std::string candidate, const int maxLineLength, std::string wrapper)
 {
 	std::string output = "";
+
 	std::string currentWord = "";
 	std::stringstream candidateWords(candidate);
 	int currentLineLength = 0;
@@ -43,12 +46,15 @@ std::string Argumentor::wordwrap(std::string candidate, const int maxLineLength,
 	while (candidateWords >> currentWord) {
 		currentWordLength = (int)currentWord.length();
 		if (currentLineLength + currentWordLength < maxLineLength) {
-			output += (currentLineLength != 0) ? " " : "";
-			currentLineLength += 1 + currentWordLength;
+			if (output != "") {
+				output += " ";
+				currentWordLength++;
+			}
+			currentLineLength += currentWordLength;
 		}
 		else {
 			output += wrapper;
-			currentLineLength = 1;
+			currentLineLength = 0;
 		}
 		output += currentWord;
 	}

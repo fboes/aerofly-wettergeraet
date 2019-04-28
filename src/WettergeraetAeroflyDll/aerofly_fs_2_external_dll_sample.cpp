@@ -35,10 +35,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(WIN32) || defined(WIN64)
-  #if defined(_MSC_VER)
-    #pragma warning ( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled
-    #pragma warning ( disable : 4577 )  // 'noexcept' used with no exception handling mode specified; termination on exception is not guaranteed. Specify /EHsc
-  #endif
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled
+#pragma warning ( disable : 4577 )  // 'noexcept' used with no exception handling mode specified; termination on exception is not guaranteed. Specify /EHsc
+#endif
 #endif
 
 #include "./shared/input/tm_external_message.h"
@@ -265,9 +265,7 @@ F( CommandMoveHorizontal          , "Command.MoveHorizontal"          , tm_msg_d
 F( CommandMoveVertical            , "Command.MoveVertical"            , tm_msg_datatype::TYPE_DOUBLE,   tm_msg_flag::Value , tm_msg_access::ACCESS_W , tm_msg_units::UNIT_NONE                    , "                                                                                                             " ) \
 F( CommandRotate                  , "Command.Rotate"                  , tm_msg_datatype::TYPE_DOUBLE,   tm_msg_flag::Value , tm_msg_access::ACCESS_W , tm_msg_units::UNIT_NONE                    , "                                                                                                             " ) \
 F( CommandZoom                    , "Command.Zoom"                    , tm_msg_datatype::TYPE_DOUBLE,   tm_msg_flag::Value , tm_msg_access::ACCESS_W , tm_msg_units::UNIT_NONE                    , "                                                                                                             " )
-MESSAGE_LIST( TM_MESSAGE )
-
-
+	MESSAGE_LIST(TM_MESSAGE)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -277,29 +275,29 @@ MESSAGE_LIST( TM_MESSAGE )
 //////////////////////////////////////////////////////////////////////////////////////////////////
 struct tm_message_type
 {
-  tm_string       String;
-  tm_string_hash  StringHash;
-  template <tm_uint32 N> constexpr tm_message_type( const char( &str )[N] ) : String{ str }, StringHash{ str } { }
+	tm_string       String;
+	tm_string_hash  StringHash;
+	template <tm_uint32 N> constexpr tm_message_type(const char(&str)[N]) : String{ str }, StringHash{ str } { }
 };
 
-static std::vector<tm_message_type> MessageTypeList = 
+static std::vector<tm_message_type> MessageTypeList =
 {
-  MESSAGE_LIST( TM_MESSAGE_NAME )
+  MESSAGE_LIST(TM_MESSAGE_NAME)
 };
 
-static tm_string GetMessageName( const tm_external_message &message )
+static tm_string GetMessageName(const tm_external_message& message)
 {
-  for( const auto &mt : MessageTypeList )
-  {
-    if( message.GetID() == mt.StringHash.GetHash() ) { 
-		return mt.String; 
+	for (const auto& mt : MessageTypeList)
+	{
+		if (message.GetID() == mt.StringHash.GetHash()) {
+			return mt.String;
+		}
+		else {
+			//return message.GetID();
+		}
 	}
-	else {
-		//return message.GetID();
-	}
-  }
 
-  return tm_string( "unknown" );
+	return tm_string("unknown");
 }
 
 
@@ -337,218 +335,197 @@ static tm_quaterniond                    VR_Controller0_Orientation;
 static tm_vector3d                       VR_Controller1_Position;
 static tm_quaterniond                    VR_Controller1_Orientation;
 
-const int SAMPLE_WINDOW_WIDTH  = 640;
+const int SAMPLE_WINDOW_WIDTH = 640;
 const int SAMPLE_WINDOW_HEIGHT = 1080;
 
-void DebugOutput_Draw( HDC hDC )
+void DebugOutput_Draw(HDC hDC)
 {
-  // clear and draw to a bitmap instead to the hdc directly to avoid flicker
-  Gdiplus::Bitmap     backbuffer( SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT, PixelFormat24bppRGB );
-  Gdiplus::Graphics   graphics( &backbuffer );
-  Gdiplus::SolidBrush black( Gdiplus::Color( 255, 0, 0, 0 ) );
-  Gdiplus::FontFamily fontFamily( L"Courier New" );
-  Gdiplus::Font       font( &fontFamily, 12, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel );
-  Gdiplus::Color      clearcolor( 255, 220, 232, 244 );
+	// clear and draw to a bitmap instead to the hdc directly to avoid flicker
+	Gdiplus::Bitmap     backbuffer(SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT, PixelFormat24bppRGB);
+	Gdiplus::Graphics   graphics(&backbuffer);
+	Gdiplus::SolidBrush black(Gdiplus::Color(255, 0, 0, 0));
+	Gdiplus::FontFamily fontFamily(L"Courier New");
+	Gdiplus::Font       font(&fontFamily, 12, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
+	Gdiplus::Color      clearcolor(255, 220, 232, 244);
 
-  graphics.Clear( clearcolor );
+	graphics.Clear(clearcolor);
 
-  {
-    std::lock_guard<std::mutex> lock_guard{ MessageListMutex };
-    MessageListDebugOutput.swap( MessageListCopy );
-  }
-
-
-  {
-    float y = 4;
-    WCHAR text1[256];
-    WCHAR text2[256];
-
-	/*
-    tm_vector3d head_pos;
-    tm_matrix3d head_orientation;
-    tm_vector3d controller0_pos;
-    tm_vector3d controller1_pos;
-    int         vr_num_controllers = 0;
-    {
-      std::lock_guard<std::mutex> lock_guard{ VR_DataMutex };
-      head_pos = VR_Head_Position;
-      head_orientation = VR_Head_Orientation;
-      vr_num_controllers = VR_NumControllers;
-      if( vr_num_controllers > 0 ) controller0_pos = VR_Controller0_Position;
-      if( vr_num_controllers > 1 ) controller1_pos = VR_Controller1_Position;
-    }
-    _snwprintf_s( &text1[0], 255, _TRUNCATE, L"vrpos = %.3f %.3f %.3f", head_pos.x, head_pos.y, head_pos.z );
-    graphics.DrawString( &text1[0], -1, &font, Gdiplus::PointF( 10, y ), &black );
-    y += 16;
-    if( vr_num_controllers > 0 )
-    {
-      if(      vr_num_controllers > 1 ) { _snwprintf_s( &text1[0], 255, _TRUNCATE, L"vrc0pos = %.3f %.3f %.3f  vrc0pos = %.3f %.3f %.3f", controller0_pos.x, controller0_pos.y, controller0_pos.z, controller1_pos.x, controller1_pos.y, controller1_pos.z ); }
-      else if( vr_num_controllers > 0 ) { _snwprintf_s( &text1[0], 255, _TRUNCATE, L"vrc0pos = %.3f %.3f %.3f", controller0_pos.x, controller0_pos.y, controller0_pos.z ); }
-      graphics.DrawString( &text1[0], -1, &font, Gdiplus::PointF( 10, y ), &black );
-      y += 16;
-    }
-	*/
-
-    _snwprintf_s( &text1[0], 255, _TRUNCATE, L"messages = %llu  dt=%f", MessageListDebugOutput.size(), MessageDeltaTime );
-    graphics.DrawString( &text1[0], -1, &font, Gdiplus::PointF( 10, y ), &black );
-    y += 16;
-
-    int index = 0;
-	for (auto &message : MessageListDebugOutput)
 	{
-		auto message_name = GetMessageName(message);
-		auto message_name_string = message_name.c_str();
+		std::lock_guard<std::mutex> lock_guard{ MessageListMutex };
+		MessageListDebugOutput.swap(MessageListCopy);
+	}
 
-		if (strcmp(message_name_string, "Aircraft.NearestAirport") != 0
-			|| (
-				   strncmp(message_name_string, "Aircraft", 8) != 0
-				&& strncmp(message_name_string, "Autopilo", 8) != 0
-				&& strncmp(message_name_string, "Flightdi", 8) != 0
-				&& strncmp(message_name_string, "Performa", 8) != 0
-				&& strncmp(message_name_string, "Controls", 8) != 0
-				&& strncmp(message_name_string, "View", 4) != 0
-		)) {
-			switch (message.GetDataType())
-			{
-			case tm_msg_datatype::TYPE_VOID: {                                       _snwprintf_s(&text1[0], 255, _TRUNCATE, L"void");                                        } break;
-			case tm_msg_datatype::TYPE_INT: { const auto v = message.GetInt();      _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=%lld", v);                                   } break;
-			case tm_msg_datatype::TYPE_DOUBLE: { const auto v = message.GetDouble();   _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=%.3f", v);                                   } break;
-			case tm_msg_datatype::TYPE_VECTOR2D: { const auto v = message.GetVector2d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f)", v.x, v.y);                     } break;
-			case tm_msg_datatype::TYPE_VECTOR3D: { const auto v = message.GetVector3d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f %.3f)", v.x, v.y, v.z);           } break;
-			case tm_msg_datatype::TYPE_VECTOR4D: { const auto v = message.GetVector4d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f %.3f %.3f)", v.x, v.y, v.z, v.w); } break;
-			case tm_msg_datatype::TYPE_STRING: { const auto v = message.GetString();   _snwprintf_s(&text1[0], 255, _TRUNCATE, L"s='%hs'", v.c_str());                          } break;
+
+	{
+		float y = 4;
+		WCHAR text1[256];
+		WCHAR text2[256];
+
+		_snwprintf_s(&text1[0], 255, _TRUNCATE, L"messages = %llu  dt=%f", MessageListDebugOutput.size(), MessageDeltaTime);
+		graphics.DrawString(&text1[0], -1, &font, Gdiplus::PointF(10, y), &black);
+		y += 16;
+
+		int index = 0;
+
+		// AircraftHeight
+		// AircraftLongitude
+		// AircraftLatitude
+
+		for (auto& message : MessageListDebugOutput)
+		{
+			auto message_name = GetMessageName(message);
+			auto message_name_string = message_name.c_str();
+
+			if (strcmp(message_name_string, "Aircraft.NearestAirport") != 0
+				|| (
+					strncmp(message_name_string, "Aircraft", 8) != 0
+					&& strncmp(message_name_string, "Autopilo", 8) != 0
+					&& strncmp(message_name_string, "Flightdi", 8) != 0
+					&& strncmp(message_name_string, "Performa", 8) != 0
+					&& strncmp(message_name_string, "Controls", 8) != 0
+					&& strncmp(message_name_string, "View", 4) != 0
+					)) {
+				switch (message.GetDataType())
+				{
+				case tm_msg_datatype::TYPE_VOID: {                                       _snwprintf_s(&text1[0], 255, _TRUNCATE, L"void");                                        } break;
+				case tm_msg_datatype::TYPE_INT: { const auto v = message.GetInt();      _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=%lld", v);                                   } break;
+				case tm_msg_datatype::TYPE_DOUBLE: { const auto v = message.GetDouble();   _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=%.3f", v);                                   } break;
+				case tm_msg_datatype::TYPE_VECTOR2D: { const auto v = message.GetVector2d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f)", v.x, v.y);                     } break;
+				case tm_msg_datatype::TYPE_VECTOR3D: { const auto v = message.GetVector3d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f %.3f)", v.x, v.y, v.z);           } break;
+				case tm_msg_datatype::TYPE_VECTOR4D: { const auto v = message.GetVector4d(); _snwprintf_s(&text1[0], 255, _TRUNCATE, L"v=(%.3f %.3f %.3f %.3f)", v.x, v.y, v.z, v.w); } break;
+				case tm_msg_datatype::TYPE_STRING: { const auto v = message.GetString();   _snwprintf_s(&text1[0], 255, _TRUNCATE, L"s='%hs'", v.c_str());                          } break;
+				}
+
+				//_snwprintf_s( &text2[0], 255, _TRUNCATE, L"%3u:  size=%u", ++index, message.GetMessageSize() );
+				_snwprintf_s(&text2[0], 255, _TRUNCATE, L"%3u:", ++index);
+				graphics.DrawString(&text2[0], -1, &font, Gdiplus::PointF(0, y), &black);
+
+				graphics.DrawString(&text1[0], -1, &font, Gdiplus::PointF(40, y), &black);
+
+				_snwprintf_s(&text1[0], 255, _TRUNCATE, L"'%hs'  flags=%u", message_name.c_str(), message.GetFlags().GetFlags());
+				graphics.DrawString(&text1[0], -1, &font, Gdiplus::PointF(300, y), &black);
+
+				y += 16;
+				if (y > SAMPLE_WINDOW_HEIGHT)
+					break;
 			}
-
-			//_snwprintf_s( &text2[0], 255, _TRUNCATE, L"%3u:  size=%u", ++index, message.GetMessageSize() );
-			_snwprintf_s(&text2[0], 255, _TRUNCATE, L"%3u:", ++index);
-			graphics.DrawString(&text2[0], -1, &font, Gdiplus::PointF(0, y), &black);
-
-			graphics.DrawString(&text1[0], -1, &font, Gdiplus::PointF(40, y), &black);
-
-			_snwprintf_s(&text1[0], 255, _TRUNCATE, L"'%hs'  flags=%u", message_name.c_str(), message.GetFlags().GetFlags());
-			graphics.DrawString(&text1[0], -1, &font, Gdiplus::PointF(300, y), &black);
-
-			y += 16;
-			if (y > SAMPLE_WINDOW_HEIGHT)
-				break;
 		}
 	}
-  }
 
-  // copy 'backbuffer' image to screen
-  Gdiplus::Graphics graphics_final( hDC );
-  graphics_final.DrawImage( &backbuffer, 0, 0 );
+	// copy 'backbuffer' image to screen
+	Gdiplus::Graphics graphics_final(hDC);
+	graphics_final.DrawImage(&backbuffer, 0, 0);
 }
 
-LRESULT WINAPI DebugOutput_WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
+LRESULT WINAPI DebugOutput_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-  switch ( msg )
-  {
-    case WM_PAINT:
-      {
-        PAINTSTRUCT ps;
-        auto hDC = BeginPaint( hWnd, &ps );
-        DebugOutput_Draw( hDC );
-        EndPaint( hWnd, &ps );
-      }
-      return 0;
+	switch (msg)
+	{
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		auto hDC = BeginPaint(hWnd, &ps);
+		DebugOutput_Draw(hDC);
+		EndPaint(hWnd, &ps);
+	}
+	return 0;
 
-    case WM_TIMER:
-      InvalidateRect( hWnd, 0, FALSE );
-      return 0;
+	case WM_TIMER:
+		InvalidateRect(hWnd, 0, FALSE);
+		return 0;
 
-    case WM_CLOSE:
-      Global_DebugOutput_WindowCloseMessage = true;
-      break;
+	case WM_CLOSE:
+		Global_DebugOutput_WindowCloseMessage = true;
+		break;
 
-    case WM_DESTROY:
-      PostQuitMessage( 0 );
-      return 0;
-  }
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	}
 
-  return DefWindowProc( hWnd, msg, wParam, lParam );
+	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void DebugOutput_CreateWindow( HINSTANCE hInstance )
+void DebugOutput_CreateWindow(HINSTANCE hInstance)
 {
-  const char classname[] = "aerofly_external_dll_sample";
+	const char classname[] = "aerofly_external_dll_sample";
 
-  //
-  // init gdi+
-  //
-  Gdiplus::GdiplusStartupInput startupinput;
-  auto status = GdiplusStartup( &Global_DebugOutput_gdiplusToken, &startupinput, NULL );
+	//
+	// init gdi+
+	//
+	Gdiplus::GdiplusStartupInput startupinput;
+	auto status = GdiplusStartup(&Global_DebugOutput_gdiplusToken, &startupinput, NULL);
 
-  //
-  // fill in window class structure and register the class
-  //
-  WNDCLASS wc;
-  wc.style         = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc   = DebugOutput_WndProc;                // Window Procedure
-  wc.cbClsExtra    = 0;
-  wc.cbWndExtra    = 0;
-  wc.hInstance     = hInstance;                          // Owner of this class
-  wc.hIcon         = LoadIcon( NULL, IDI_INFORMATION );
-  wc.hCursor       = LoadCursor( NULL, IDC_ARROW );
-  wc.hbrBackground = (HBRUSH) ( COLOR_BACKGROUND + 1 );      // Default color
-  wc.lpszMenuName  = NULL;
-  wc.lpszClassName = classname;
-  RegisterClass( &wc );
+	//
+	// fill in window class structure and register the class
+	//
+	WNDCLASS wc;
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = DebugOutput_WndProc;                // Window Procedure
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = hInstance;                          // Owner of this class
+	wc.hIcon = LoadIcon(NULL, IDI_INFORMATION);
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);      // Default color
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = classname;
+	RegisterClass(&wc);
 
-  Global_DebugOutput_WindowCloseMessage = false;
+	Global_DebugOutput_WindowCloseMessage = false;
 
-  Global_DebugOutput_Window = CreateWindow( classname, "Aerofly External DLL Sample",
-                                            WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CW_USEDEFAULT,
-                                            0, SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT,
-                                            NULL,       // no parent window
-                                            NULL,       // Use the window class menu.
-                                            hInstance,  // This instance owns this window
-                                            NULL );     // We don't use any extra data
+	Global_DebugOutput_Window = CreateWindow(classname, "Aerofly External DLL Sample",
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CW_USEDEFAULT,
+		0, SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT,
+		NULL,       // no parent window
+		NULL,       // Use the window class menu.
+		hInstance,  // This instance owns this window
+		NULL);     // We don't use any extra data
 
 
-  auto s_width  = GetSystemMetrics( SM_CXSCREEN );
-  auto s_height = GetSystemMetrics( SM_CYSCREEN );
+	auto s_width = GetSystemMetrics(SM_CXSCREEN);
+	auto s_height = GetSystemMetrics(SM_CYSCREEN);
 
-  SetWindowPos( Global_DebugOutput_Window, HWND_TOP, s_width - SAMPLE_WINDOW_WIDTH, 0, SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT, SWP_SHOWWINDOW );
-  // set up timers
-  SetTimer( Global_DebugOutput_Window, 0, 500, 0 );
+	SetWindowPos(Global_DebugOutput_Window, HWND_TOP, s_width - SAMPLE_WINDOW_WIDTH, 0, SAMPLE_WINDOW_WIDTH, SAMPLE_WINDOW_HEIGHT, SWP_SHOWWINDOW);
+	// set up timers
+	SetTimer(Global_DebugOutput_Window, 0, 500, 0);
 
-  MSG msg;
-  while ( !Global_DebugOutput_WindowCloseMessage && GetMessage( &msg, Global_DebugOutput_Window, 0, 0 ) )
-  {
-    TranslateMessage( &msg );
-    DispatchMessage( &msg );
-  }
+	MSG msg;
+	while (!Global_DebugOutput_WindowCloseMessage && GetMessage(&msg, Global_DebugOutput_Window, 0, 0))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 
-  DestroyWindow( Global_DebugOutput_Window );
-  Global_DebugOutput_Window = NULL;
+	DestroyWindow(Global_DebugOutput_Window);
+	Global_DebugOutput_Window = NULL;
 
-  //
-  // shutdown gdi+
-  //
-  Gdiplus::GdiplusShutdown( Global_DebugOutput_gdiplusToken );
+	//
+	// shutdown gdi+
+	//
+	Gdiplus::GdiplusShutdown(Global_DebugOutput_gdiplusToken);
 }
 
-void DebugOutput_WindowUpdate( const double delta_time, const std::vector<tm_external_message> &message_list_receive )
+void DebugOutput_WindowUpdate(const double delta_time, const std::vector<tm_external_message>& message_list_receive)
 {
-  // this is just for the debug output window
-  std::lock_guard<std::mutex> lock_guard{ MessageListMutex };
-  MessageListCopy = message_list_receive;
-  MessageDeltaTime = delta_time;
+	// this is just for the debug output window
+	std::lock_guard<std::mutex> lock_guard{ MessageListMutex };
+	MessageListCopy = message_list_receive;
+	MessageDeltaTime = delta_time;
 }
 
 void DebugOutput_WindowOpen()
 {
-  Global_DebugOutput_Thread = std::thread( DebugOutput_CreateWindow, global_hDLLinstance );
+	Global_DebugOutput_Thread = std::thread(DebugOutput_CreateWindow, global_hDLLinstance);
 }
 
 void DebugOutput_WindowClose()
 {
-  if ( Global_DebugOutput_Window != NULL )
-  {
-    PostMessage( Global_DebugOutput_Window, WM_QUIT, 0, 0 );
-  }
-  Global_DebugOutput_Thread.join();
+	if (Global_DebugOutput_Window != NULL)
+	{
+		PostMessage(Global_DebugOutput_Window, WM_QUIT, 0, 0);
+	}
+	Global_DebugOutput_Thread.join();
 }
 
 
@@ -559,22 +536,22 @@ void DebugOutput_WindowClose()
 // the main entry point for the DLL
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-BOOL WINAPI DllMain( HANDLE hdll, DWORD reason, LPVOID reserved )
+BOOL WINAPI DllMain(HANDLE hdll, DWORD reason, LPVOID reserved)
 {
-  switch ( reason )
-  {
-    case DLL_THREAD_ATTACH:
-      break;
-    case DLL_THREAD_DETACH:
-      break;
-    case DLL_PROCESS_ATTACH:
-      global_hDLLinstance = (HINSTANCE) hdll;
-      break;
-    case DLL_PROCESS_DETACH:
-      break;
-  }
+	switch (reason)
+	{
+	case DLL_THREAD_ATTACH:
+		break;
+	case DLL_THREAD_DETACH:
+		break;
+	case DLL_PROCESS_ATTACH:
+		global_hDLLinstance = (HINSTANCE)hdll;
+		break;
+	case DLL_PROCESS_DETACH:
+		break;
+	}
 
-  return TRUE;
+	return TRUE;
 }
 
 
@@ -585,194 +562,223 @@ BOOL WINAPI DllMain( HANDLE hdll, DWORD reason, LPVOID reserved )
 // interface functions to Aerofly FS 2
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-extern "C" 
+extern "C"
 {
-  __declspec( dllexport ) int Aerofly_FS_2_External_DLL_GetInterfaceVersion()
-  {
-    return TM_DLL_INTERFACE_VERSION;
-  }
+	__declspec(dllexport) int Aerofly_FS_2_External_DLL_GetInterfaceVersion()
+	{
+		return TM_DLL_INTERFACE_VERSION;
+	}
 
-  __declspec( dllexport ) bool Aerofly_FS_2_External_DLL_Init( const HINSTANCE Aerofly_FS_2_hInstance )
-  {
-    DebugOutput_WindowOpen();
-    return true;
-  }
-  
-  __declspec( dllexport ) void Aerofly_FS_2_External_DLL_Shutdown()
-  {
-    DebugOutput_WindowClose();
-  }
-  
-  __declspec( dllexport ) void Aerofly_FS_2_External_DLL_Update( const tm_double         delta_time,
-                                                                 const tm_uint8 * const  message_list_received_byte_stream,
-                                                                 const tm_uint32         message_list_received_byte_stream_size,
-                                                                 const tm_uint32         message_list_received_num_messages,
-                                                                 tm_uint8               *message_list_sent_byte_stream,
-                                                                 tm_uint32              &message_list_sent_byte_stream_size,
-                                                                 tm_uint32              &message_list_sent_num_messages,
-                                                                 const tm_uint32         message_list_sent_byte_stream_size_max )
-  {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // build a list of messages that the simulation is sending
-    //
-    MessageListReceive.clear();
+	__declspec(dllexport) bool Aerofly_FS_2_External_DLL_Init(const HINSTANCE Aerofly_FS_2_hInstance)
+	{
+		DebugOutput_WindowOpen();
+		return true;
+	}
 
-    tm_uint32 message_list_received_byte_stream_pos = 0;
-    for ( tm_uint32 i = 0; i < message_list_received_num_messages; ++i )
-    {
-      auto edm = tm_external_message::GetFromByteStream( message_list_received_byte_stream, message_list_received_byte_stream_pos );
-      MessageListReceive.emplace_back( edm );
-    }
+	__declspec(dllexport) void Aerofly_FS_2_External_DLL_Shutdown()
+	{
+		DebugOutput_WindowClose();
+	}
 
+	__declspec(dllexport) void Aerofly_FS_2_External_DLL_Update(const tm_double         delta_time,
+		const tm_uint8* const  message_list_received_byte_stream,
+		const tm_uint32         message_list_received_byte_stream_size,
+		const tm_uint32         message_list_received_num_messages,
+		tm_uint8* message_list_sent_byte_stream,
+		tm_uint32& message_list_sent_byte_stream_size,
+		tm_uint32& message_list_sent_num_messages,
+		const tm_uint32         message_list_sent_byte_stream_size_max)
+	{
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// build a list of messages that the simulation is sending
+		//
+		MessageListReceive.clear();
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // this is just for the debug output window
-    //
-    DebugOutput_WindowUpdate( delta_time, MessageListReceive );
+		tm_uint32 message_list_received_byte_stream_pos = 0;
+		for (tm_uint32 i = 0; i < message_list_received_num_messages; ++i)
+		{
+			auto edm = tm_external_message::GetFromByteStream(message_list_received_byte_stream, message_list_received_byte_stream_pos);
+			MessageListReceive.emplace_back(edm);
+		}
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // parse the message list
-    //
-    tm_vector3d aircraft_position;
-    for ( const auto &message : MessageListReceive )
-    {
-      const auto sh = message.GetStringHash().GetHash();
-
-      if ( sh == MessageAircraftPosition.GetID() )
-      {
-        aircraft_position = message.GetVector3d();
-      }
-      else if ( sh == MessageAircraftAltitude.GetID() )  // alternatively you can write -> if( message.GetStringHash() == "Aircraft.Altitude" )
-      {
-        tm_double altitude = message.GetDouble();
-      }
-      // and so on....
-    }
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// this is just for the debug output window
+		//
+		DebugOutput_WindowUpdate(delta_time, MessageListReceive);
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // build a list of message that will be sent back to the simulation
-    //
-    message_list_sent_byte_stream_size = 0;
-    message_list_sent_num_messages     = 0;
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// parse the message list
+		//
+		tm_vector3d aircraft_position;
+		tm_double aircraft_latitude;
+		tm_double aircraft_longitude;
+		tm_double aircraft_heigth;
+
+		for (const auto& message : MessageListReceive)
+		{
+			const auto sh = message.GetStringHash().GetHash();
+
+			if (sh == MessageAircraftPosition.GetID())
+			{
+				aircraft_position = message.GetVector3d();
+			}
+			else if (sh == MessageAircraftAltitude.GetID())  // alternatively you can write -> if( message.GetStringHash() == "Aircraft.Altitude" )
+			{
+				tm_double altitude = message.GetDouble();
+			}
+			else if (message.GetStringHash() == "Aircraft.Latitude")
+			{
+				aircraft_latitude = message.GetDouble();
+			}
+			else if (message.GetStringHash() == "Aircraft.Longitude")
+			{
+				aircraft_longitude = message.GetDouble();
+			}
+			else if (message.GetStringHash() == "Aircraft.Height")
+			{
+				aircraft_heigth = message.GetDouble();
+			}
+			// and so on....
+		}
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 1: change time of day continously
-    //
-    //MessageSimulationTimeChange.SetValue( 1.0 );
-    //MessageSimulationTimeChange.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// build a list of message that will be sent back to the simulation
+		//
+		message_list_sent_byte_stream_size = 0;
+		message_list_sent_num_messages = 0;
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 0: Get WGS84 position, ping every 30 sec
+	//    static double extime = 0.0; 
+	//    extime += delta_time;
+	//
+	//    if( extime > 30.0 )
+	//    {
+	//      extime = 0.0;
+	//      // log aircraft_latitude; aircraft_longitude; aircraft_heigth; timecode
+	//    }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 2: implement a free view. in this example the camera just rotates around the aircraft
-    //
-//    static double time = 0;
-//    time += delta_time;
-//
-//    const auto world_east  = tmcoordinates_GetEastAt( aircraft_position );
-//    const auto world_north = tmcoordinates_GetNorthAt( aircraft_position );
-//    const auto world_up    = tmcoordinates_GetUpAt( aircraft_position );
-//    
-//    const auto view_up             = world_up;
-//    const auto view_position       = aircraft_position + 15.0 *( sin( time )*world_east + cos( time )*world_north ) + ( 1.0 + cos( time )*cos( time ) )*world_up;
-//    const auto view_look_direction = Normalized( aircraft_position - view_position );
-//
-//    MessageViewFreePosition.SetValue( view_position );
-//    MessageViewFreePosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//
-//    MessageViewFreeLookDirection.SetValue( view_look_direction );
-//    MessageViewFreeLookDirection.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//
-//    MessageViewFreeUp.SetValue( view_up );
-//    MessageViewFreeUp.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//
-//    MessageViewFreeFieldOfView.SetValue( tm_helper_deg_to_rad( 100.0 ) );
-//    MessageViewFreeFieldOfView.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 1: change time of day continously
+		//
+		//MessageSimulationTimeChange.SetValue( 1.0 );
+		//MessageSimulationTimeChange.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 3: set aileron input
-    //
-//    MessageControlsRollInput.SetValue( sin( time ) );
-//    MessageControlsRollInput.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 2: implement a free view. in this example the camera just rotates around the aircraft
+		//
+	//    static double time = 0;
+	//    time += delta_time;
+	//
+	//    const auto world_east  = tmcoordinates_GetEastAt( aircraft_position );
+	//    const auto world_north = tmcoordinates_GetNorthAt( aircraft_position );
+	//    const auto world_up    = tmcoordinates_GetUpAt( aircraft_position );
+	//    
+	//    const auto view_up             = world_up;
+	//    const auto view_position       = aircraft_position + 15.0 *( sin( time )*world_east + cos( time )*world_north ) + ( 1.0 + cos( time )*cos( time ) )*world_up;
+	//    const auto view_look_direction = Normalized( aircraft_position - view_position );
+	//
+	//    MessageViewFreePosition.SetValue( view_position );
+	//    MessageViewFreePosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//
+	//    MessageViewFreeLookDirection.SetValue( view_look_direction );
+	//    MessageViewFreeLookDirection.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//
+	//    MessageViewFreeUp.SetValue( view_up );
+	//    MessageViewFreeUp.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//
+	//    MessageViewFreeFieldOfView.SetValue( tm_helper_deg_to_rad( 100.0 ) );
+	//    MessageViewFreeFieldOfView.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 4: reposition the aircraft every 20 seconds to a position near birrfeld
-    //
-//    static double extime = 0.0; 
-//    extime += delta_time;
-//
-//    if( extime > 20.0 )
-//    {
-//      extime = 0.0;
-//
-//      MessageSimulationSettingPosition.SetValue( tm_vector3d( 4264642.1 + 500.0, 616894.2 + 500.0, 4693293.4 + 500.0 ) );
-//      
-//      tm_matrix3d orientation = tm_matrix3d( -0.213045, -0.691774,  0.689970,
-//                                              0.957133, -0.289600,  0.005181,
-//                                              0.196231,  0.661497,  0.723818  );
-//
-//      tm_vector3d velocity = 100.0 * ( orientation * tm_vector3d( 1.0, 0.0, 0.0 ) );
-//
-//      tm_quaterniond q = tm_MatrixToQuaternion<tm_matrix3d,double>( orientation );
-//
-//      MessageSimulationSettingOrientation.SetValue( tm_vector4d( q.r, q.x, q.y, q.z ) );
-//      MessageSimulationSettingVelocity.SetValue( velocity );
-//
-//      MessageSimulationSettingPosition.AddToByteStream(    message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//      MessageSimulationSettingOrientation.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//      MessageSimulationSettingVelocity.AddToByteStream(    message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//      MessageSimulationSettingSet.AddToByteStream(         message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//    }
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 3: set aileron input
+		//
+	//    MessageControlsRollInput.SetValue( sin( time ) );
+	//    MessageControlsRollInput.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // example 5: pause the simulation after 10 seconds, set playback position and start playback 
-    //
-//    static double time = 0;
-//
-//    if( time < 10 && time + delta_time >= 10 )
-//    {
-//      MessageSimulationPause.SetValue( 1.0 );
-//      MessageSimulationPause.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//    }
-//    
-//    if( time < 11 && time + delta_time >= 11 )
-//    {
-//      MessageSimulationPlaybackSetPosition.SetValue( 0.5 );
-//      MessageSimulationPlaybackSetPosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//    }
-//    
-//    if( time < 12 && time + delta_time >= 12 )
-//    {
-//      MessageSimulationPlaybackStart.SetValue( 1.0 );
-//      MessageSimulationPlaybackStart.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//    }
-//
-//    time += delta_time;
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 4: reposition the aircraft every 20 seconds to a position near birrfeld
+		//
+	//    static double extime = 0.0; 
+	//    extime += delta_time;
+	//
+	//    if( extime > 20.0 )
+	//    {
+	//      extime = 0.0;
+	//
+	//      MessageSimulationSettingPosition.SetValue( tm_vector3d( 4264642.1 + 500.0, 616894.2 + 500.0, 4693293.4 + 500.0 ) );
+	//      
+	//      tm_matrix3d orientation = tm_matrix3d( -0.213045, -0.691774,  0.689970,
+	//                                              0.957133, -0.289600,  0.005181,
+	//                                              0.196231,  0.661497,  0.723818  );
+	//
+	//      tm_vector3d velocity = 100.0 * ( orientation * tm_vector3d( 1.0, 0.0, 0.0 ) );
+	//
+	//      tm_quaterniond q = tm_MatrixToQuaternion<tm_matrix3d,double>( orientation );
+	//
+	//      MessageSimulationSettingOrientation.SetValue( tm_vector4d( q.r, q.x, q.y, q.z ) );
+	//      MessageSimulationSettingVelocity.SetValue( velocity );
+	//
+	//      MessageSimulationSettingPosition.AddToByteStream(    message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//      MessageSimulationSettingOrientation.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//      MessageSimulationSettingVelocity.AddToByteStream(    message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//      MessageSimulationSettingSet.AddToByteStream(         message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//    }
 
 
-//
-//    //
-//    // send messages
-//    //
-//    MessageSimulationExternalPosition.SetValue( position );
-//    MessageSimulationExternalPosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-//    MessageSimulationExternalOrientation.SetValue( tm_vector4d( q.r, q.x, q.y, q.z ) );
-//    MessageSimulationExternalOrientation.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
-  }
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// example 5: pause the simulation after 10 seconds, set playback position and start playback 
+		//
+	//    static double time = 0;
+	//
+	//    if( time < 10 && time + delta_time >= 10 )
+	//    {
+	//      MessageSimulationPause.SetValue( 1.0 );
+	//      MessageSimulationPause.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//    }
+	//    
+	//    if( time < 11 && time + delta_time >= 11 )
+	//    {
+	//      MessageSimulationPlaybackSetPosition.SetValue( 0.5 );
+	//      MessageSimulationPlaybackSetPosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//    }
+	//    
+	//    if( time < 12 && time + delta_time >= 12 )
+	//    {
+	//      MessageSimulationPlaybackStart.SetValue( 1.0 );
+	//      MessageSimulationPlaybackStart.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//    }
+	//
+	//    time += delta_time;
+
+
+	//
+	//    //
+	//    // send messages
+	//    //
+	//    MessageSimulationExternalPosition.SetValue( position );
+	//    MessageSimulationExternalPosition.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	//    MessageSimulationExternalOrientation.SetValue( tm_vector4d( q.r, q.x, q.y, q.z ) );
+	//    MessageSimulationExternalOrientation.AddToByteStream( message_list_sent_byte_stream, message_list_sent_byte_stream_size, message_list_sent_num_messages );
+	}
 }
 
 
