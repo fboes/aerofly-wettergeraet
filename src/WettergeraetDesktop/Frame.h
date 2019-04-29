@@ -8,6 +8,7 @@
 #include "WettergeraetDesktop.h"
 #include "Argumentor.h"
 #include "AeroflyConfigFile.h"
+#include <map>
 
 class Frame : public wxFrame
 {
@@ -38,6 +39,11 @@ private:
 
 	static const char* EL_BUTTON_SAVE_LABEL;
 	static const char* EL_BUTTON_SAVE_LABEL_DIRTY;
+
+	std::map<std::string, int> icaoChoices;
+
+	// Add ICAO code to ICAO code combobox choices
+	void addIcaoChoice(char const icaoCode[8]);
 
 	DECLARE_EVENT_TABLE()
 

@@ -7,12 +7,24 @@
 #include <wx/icon.h>
 #include <wx/event.h>
 #include <math.h>
+#include <tuple>
 #include "Frame.h"
 #include "Argumentor.h"
 #include "AeroflyConfigFile.h"
 
 const char* Frame::EL_BUTTON_SAVE_LABEL = "Save main.mcf";
 const char* Frame::EL_BUTTON_SAVE_LABEL_DIRTY = "Save main.mcf \u2022";
+
+void Frame::addIcaoChoice(char const icaoCode[8])
+{
+	if (strlen(icaoCode) == 0) {
+		return;
+	}
+	auto ret = this->icaoChoices.insert(std::make_pair(icaoCode, 1));
+	if (ret.second != false) {
+		this->icaoInput->Append(icaoCode);
+	}
+}
 
 Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 480))
 {
@@ -198,6 +210,13 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	// ----------------------------------------------------
 
 	this->loadMainMcf();
+	this->addIcaoChoice("KDEN"); // Denver
+	this->addIcaoChoice("KJFK"); // New York - JFK
+	this->addIcaoChoice("KLAS"); // Las Vegas
+	this->addIcaoChoice("KLAX"); // Los Angeles
+	this->addIcaoChoice("KMIA"); // Miami
+	this->addIcaoChoice("KORD"); // Chicago
+	this->addIcaoChoice("KSFO"); // San Francisco
 }
 
 Frame::~Frame()
@@ -278,22 +297,20 @@ void Frame::loadMainMcf()
 		this->mainConfig.getToAeroflyObject(this->aerofly);
 		this->utcDateValue.SetToCurrent();
 		this->metarInput->SetValue("");
+		this->addIcaoChoice(this->argumentor.icaoCode);
 		std::string origin;
 		std::string destination;
 		std::tie(origin, destination) = this->mainConfig.getFlightplan();
-		wxArrayString icaoChoices;
 		if (origin != "") {
 			strcpy(this->aerofly.nearestAirport, origin.c_str());
-			icaoChoices.Add(wxString(origin.c_str()));
+			this->addIcaoChoice(origin.c_str());
 		}
 		else {
 			strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
 		}
 		if (destination != "" && origin != destination) {
-			icaoChoices.Add(wxString(destination.c_str()));
+			this->addIcaoChoice(destination.c_str());
 		}
-		this->icaoInput->Set(icaoChoices);
-
 		this->fromObjectToInput();
 		this->markAsClean();
 	}

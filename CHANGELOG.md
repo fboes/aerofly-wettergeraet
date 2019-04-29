@@ -1,7 +1,12 @@
 Change log
 ==========
 
-* 🎁 Add ICAO code combobox with codes from current flightplan
+* 🎁 Add sample ICAO airport codes to combobox
+
+1.2.2
+-----
+
+* 🎁 Add ICAO airport code combobox with codes from current flightplan
 
 1.2.1
 -----
