@@ -6,6 +6,8 @@
 #include <wx/aboutdlg.h>
 #include <wx/icon.h>
 #include <wx/event.h>
+#include <wx/filedlg.h>
+#include <wx/textfile.h>
 #include <math.h>
 #include <tuple>
 #include "Frame.h"
@@ -35,7 +37,8 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	wxMenuBar *menubar = new wxMenuBar;
 	{
 		wxMenu *file = new wxMenu;
-		file->Append(wxID_OPEN, wxT("&Load 'main.mcf'"));
+		file->Append(wxID_OPEN, wxT("&Open METAR file..."));
+		file->Append(EL_MENU_RELOAD, wxT("&Load 'main.mcf'"));
 		file->AppendSeparator();
 		file->Append(wxID_EXIT, wxT("&Exit"));
 		menubar->Append(file, wxT("&File"));
@@ -397,6 +400,25 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 	wxAboutBox(aboutInfo);
 }
 
+void Frame::actionOpenMetarFile(wxCommandEvent& WXUNUSED(event))
+{
+	wxFileDialog  openFileDialog(this, _("Open METAR file"), "", "", "Text files (*.txt, *.rwx)|*.txt;*.rwx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (openFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+
+	wxTextFile tfile;
+	tfile.Open(openFileDialog.GetPath());
+
+	auto metarString = tfile.GetFirstLine();
+	if (!tfile.Eof()) {
+		metarString += "\n" + tfile.GetNextLine();
+	}
+	this->metarInput->SetValue(metarString);
+	this->saveButton->SetFocus();
+	this->markAsDirty();
+}
+
 void Frame::actionLoadMainMcf(wxCommandEvent& WXUNUSED(event))
 {
 	this->loadMainMcf();
@@ -430,7 +452,8 @@ EVT_MENU(Frame::EL_MENU_UPDATE, Frame::actionUpdate)
 EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
-EVT_MENU(wxID_OPEN, Frame::actionLoadMainMcf)
+EVT_MENU(wxID_OPEN, Frame::actionOpenMetarFile)
+EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionLoadMainMcf)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
 EVT_SLIDER(Frame::EL_CTRL_SLIDER, Frame::actionMarkAsDirty)
 //EVT_DATE_CHANGED(Frame::EL_CTRL_DATETIME, Frame::actionMarkAsDirty)

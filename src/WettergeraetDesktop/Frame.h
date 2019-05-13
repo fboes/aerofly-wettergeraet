@@ -55,6 +55,7 @@ public:
 	static const unsigned short EL_CTRL_SLIDER = 6;
 	static const unsigned short EL_MENU_UPDATE = 7;
 	static const unsigned short EL_MENU_FIND_ICAO = 8;
+	static const unsigned short EL_MENU_RELOAD = 9;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -86,6 +87,10 @@ public:
 
 	virtual void actionAbout(wxCommandEvent&);
 
+	// Show file dialogue, copy METAR information from file to METAR input field
+	virtual void actionOpenMetarFile(wxCommandEvent&);
+
+	// Reload main.mcf and copy values to main windows
 	virtual void actionLoadMainMcf(wxCommandEvent&);
 
 	virtual void actionUpdate(wxCommandEvent&);
