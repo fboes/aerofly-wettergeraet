@@ -1,6 +1,9 @@
 Change log
 ==========
 
+1.2.3
+-----
+
 * 🎁 Add sample ICAO airport codes to combobox
 * 🎁 Interpret date `YYYY/MM/DD` prepended to METAR string
 * 🎁 Read METAR information from file
