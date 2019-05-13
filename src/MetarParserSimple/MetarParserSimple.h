@@ -18,6 +18,9 @@
 class METARPARSERSIMPLE_API MetarParserSimple
 {
 private:
+	// Set date to current date
+	void initializeDate();
+
 	// Keep time and date in bounds
 	void fixTimeDate();
 
@@ -113,8 +116,11 @@ public:
 	// Get humidity in percent 0..1
 	double getHumidity();
 
-	// Set date / time to current UTC time, but allow for modification.
+	// Set date / time, but allow for modification.
 	void setDate(short day = -1, short hours = -1, short minutes = -1);
+
+	// Set date, but allow for modification.
+	void setDate2(int year, short month, short day);
 
 	// Change parsed time by hoursOffset.
 	void addHours(int hoursOffset);

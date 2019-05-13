@@ -6,6 +6,25 @@
 #include <iterator>
 #include <regex>
 
+void MetarParserSimple::initializeDate()
+{
+	if (this->observed.year != 1970) {
+		return;
+	}
+
+	time_t rawtime;
+	struct tm ptm;
+
+	time(&rawtime);
+
+	gmtime_s(&ptm, &rawtime);
+	this->observed.year = ptm.tm_year + 1900;
+	this->observed.month = ptm.tm_mon + 1;
+	this->observed.day = ptm.tm_mday;
+	this->observed.hours = ptm.tm_hour;
+	this->observed.minutes = ptm.tm_min;
+}
+
 void MetarParserSimple::fixTimeDate()
 {
 	// This is a naive approach, but it does the job
@@ -123,6 +142,14 @@ bool MetarParserSimple::convert(std::string metarString)
 			if (metarPart != "METAR" && std::regex_match(metarPart, match, std::regex("([A-Za-z0-9]+)"))) {
 				strcpy_s(this->icao, 8, metarPart.c_str());
 				parsingMode = 1;
+			}
+			// Non-standard date prepended, parsing it anyway
+			else if (std::regex_match(metarPart, match, std::regex("([1-2]\\d{3})\\D([0-1]\\d)\\D([0-3]\\d)"))) {
+				this->setDate2(
+					std::stoi(match[1].str()),
+					std::stoi(match[2].str()),
+					std::stoi(match[3].str())
+				);
 			}
 			break;
 		case 1:
@@ -309,17 +336,24 @@ double MetarParserSimple::getHumidity()
 
 void MetarParserSimple::setDate(short day, short hours, short minutes)
 {
-	time_t rawtime;
-	struct tm ptm;
+	this->initializeDate();
 
-	time(&rawtime);
+	// Day may be in preceeding month
+	if (day > this->observed.day) {
+		this->observed.month -= 1;
+	}
+	this->observed.day = day;
+	this->observed.hours = hours;
+	this->observed.minutes = minutes;
+	this->fixTimeDate();
+}
 
-	gmtime_s(&ptm, &rawtime);
-	this->observed.year = ptm.tm_year + 1900;
-	this->observed.month = ptm.tm_mon + 1;
-	this->observed.day = (day >= 0) ? day : ptm.tm_mday;
-	this->observed.hours = (hours >= 0) ? hours : ptm.tm_hour;
-	this->observed.minutes = (minutes >= 0) ? minutes : ptm.tm_min;
+void MetarParserSimple::setDate2(int year, short month, short day)
+{
+	this->initializeDate();
+	this->observed.year = year;
+	this->observed.month = month;
+	this->observed.day = day;
 	this->fixTimeDate();
 }
 
