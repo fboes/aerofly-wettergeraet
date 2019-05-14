@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.2.4
+-----
+
+* 🎁 Save METAR information to file
+
 1.2.3
 -----
 

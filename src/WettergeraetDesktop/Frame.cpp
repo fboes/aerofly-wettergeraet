@@ -36,8 +36,9 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 
 	wxMenuBar *menubar = new wxMenuBar;
 	{
-		wxMenu *file = new wxMenu;
+		wxMenu* file = new wxMenu;
 		file->Append(wxID_OPEN, wxT("&Open METAR file..."));
+		file->Append(wxID_SAVEAS, wxT("&Save METAR file..."));
 		file->Append(EL_MENU_RELOAD, wxT("&Load 'main.mcf'"));
 		file->AppendSeparator();
 		file->Append(wxID_EXIT, wxT("&Exit"));
@@ -419,6 +420,44 @@ void Frame::actionOpenMetarFile(wxCommandEvent& WXUNUSED(event))
 	this->markAsDirty();
 }
 
+void Frame::actionSaveMetarFile(wxCommandEvent& WXUNUSED(event))
+{
+	auto date = this->utcDateInput->GetValue();
+	auto year = date.GetYear();
+	auto month = date.GetMonth() + 1;
+	auto day = date.GetDay();
+
+	auto time = this->utcTimeInput->GetValue();
+	auto hour = time.GetHour();
+	auto minute = time.GetMinute();
+
+	char timestamp[25];
+	sprintf(timestamp, "%04d-%02d-%02d_%02d%02dZ", year, month, day, hour, minute);
+	wxString defaultFilename = this->icaoInput->GetValue() + "_" + timestamp + ".rwx";
+
+	wxFileDialog saveFileDialog(this, _("Save METAR file"), "", defaultFilename, "Text files (*.txt, *.rwx)|*.txt;*.rwx", wxFD_SAVE);
+	if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+
+	sprintf(timestamp, "%04d/%02d/%02d %02d:%02d", year, month, day, hour, minute);
+	auto metarInput = this->metarInput->GetValue();
+	wxTextFile tfile(saveFileDialog.GetPath());
+	if (!tfile.Exists()) {
+		tfile.Create();
+	}
+	else {
+		tfile.Open();
+		tfile.Clear();
+	}
+
+	tfile.AddLine(timestamp);
+	tfile.AddLine(metarInput);
+
+	tfile.Write();
+	tfile.Close();
+}
+
 void Frame::actionLoadMainMcf(wxCommandEvent& WXUNUSED(event))
 {
 	this->loadMainMcf();
@@ -453,6 +492,7 @@ EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionOpenMetarFile)
+EVT_MENU(wxID_SAVEAS, Frame::actionSaveMetarFile)
 EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionLoadMainMcf)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
 EVT_SLIDER(Frame::EL_CTRL_SLIDER, Frame::actionMarkAsDirty)

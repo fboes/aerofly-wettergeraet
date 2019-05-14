@@ -90,6 +90,9 @@ public:
 	// Show file dialogue, copy METAR information from file to METAR input field
 	virtual void actionOpenMetarFile(wxCommandEvent&);
 
+	// Show file dialogue, copy METAR informtation from METAR input field to file
+	virtual void actionSaveMetarFile(wxCommandEvent&);
+
 	// Reload main.mcf and copy values to main windows
 	virtual void actionLoadMainMcf(wxCommandEvent&);
 
