@@ -319,7 +319,7 @@ void Frame::loadMainMcf()
 		this->markAsClean();
 	}
 	catch (std::invalid_argument& e) {
-		this->metarInput->SetValue(e.what());
+		wxLogError(e.what());
 		return;
 	}
 }
@@ -330,7 +330,7 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 {
 	auto icaoCode = this->icaoInput->GetValue();
 	if (icaoCode == "") {
-		this->metarInput->SetValue("No ICAO airport code given");
+		wxLogError(_("No ICAO airport code given"));
 		return;
 	}
 	this->metarInput->SetValue("Loading...");
@@ -342,7 +342,7 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		this->markAsDirty();
 	}
 	catch (std::invalid_argument& e) {
-		this->metarInput->SetValue(e.what());
+		wxLogError(e.what());
 	}
 }
 
@@ -357,7 +357,7 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 		this->fromObjectToInput();
 	}
 	catch (std::invalid_argument& e) {
-		this->metarInput->SetValue(e.what());
+		wxLogError(e.what());
 	}
 }
 
@@ -370,7 +370,7 @@ void Frame::actionSave(wxCommandEvent& WXUNUSED(event))
 			this->mainConfig.save();
 		}
 		catch (std::invalid_argument& e) {
-			this->metarInput->SetValue(e.what());
+			wxLogError(e.what());
 			return;
 		}
 	}

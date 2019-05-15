@@ -5,6 +5,7 @@ Change log
 -----
 
 * 💊 Fix handling of `--file` parameter, as it did not work as advertised
+* 💊 Improve desktop error output, restricting application to single instance
 
 1.2.4
 -----
