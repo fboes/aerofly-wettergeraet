@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.2.5
+-----
+
+* 💊 Fix handling of `--file` parameter, as it did not work as advertised
+
 1.2.4
 -----
 

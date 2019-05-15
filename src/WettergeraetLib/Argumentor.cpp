@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-const char* Argumentor::APP_VERSION = "1.2.4";
+const char* Argumentor::APP_VERSION = "1.2.5";
 #if _WIN64
 const char* Argumentor::APP_TARGET = "64-bit";
 #else
@@ -142,7 +142,7 @@ void Argumentor::getArgs(int argc, char * argv[])
 		}
 		else if (i + 1 < argc) {
 			if (currentArg == "--file") {
-				strcpy_s(this->filename, 512, argv[i]);
+				strcpy_s(this->filename, 512, argv[++i]);
 			}
 			else if (currentArg == "--url") {
 				strcpy_s(this->url, 512, argv[++i]);
