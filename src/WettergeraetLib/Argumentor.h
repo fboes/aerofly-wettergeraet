@@ -27,6 +27,9 @@ public:
 
 	char metarString[512] = "";
 
+	// Initially loaded METAR file
+	char metarfile[512] = "";
+
 	int hours = 0;
 
 	bool isDryRun = false;

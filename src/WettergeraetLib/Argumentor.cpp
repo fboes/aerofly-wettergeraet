@@ -159,12 +159,20 @@ void Argumentor::getArgs(int argc, char * argv[])
 			else if (currentArg == "--metar") {
 				strcpy_s(this->metarString, 512, argv[++i]);
 			}
+			else if (currentArg == "--metarfile") {
+				strcpy_s(this->metarfile, 512, argv[++i]);
+			}
 			else if (currentArg == "--hours") {
 				this->hours = std::stoi(argv[++i]);
 			}
 		}
 		else {
-			strcpy_s(this->filename, 512, argv[i]);
+			if (strstr(argv[i], ".rwx") != NULL || strstr(argv[i], ".txt") != NULL) {
+				strcpy_s(this->metarfile, 512, argv[i]);
+			}
+			else {
+				strcpy_s(this->filename, 512, argv[i]);
+			}
 		}
 	}
 }

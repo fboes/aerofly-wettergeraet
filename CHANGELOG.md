@@ -6,6 +6,7 @@ Change log
 
 * 💊 Fix handling of `--file` parameter, as it did not work as advertised
 * 💊 Improve desktop error output, restricting application to single instance
+* 🎁 Open METAR file via CLI parameter (or double-click on desktop app)
 
 1.2.4
 -----

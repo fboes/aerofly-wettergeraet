@@ -214,6 +214,9 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	// ----------------------------------------------------
 
 	this->loadMainMcf();
+	if (strlen(this->argumentor.metarfile) != 0) {
+		this->loadMetarFile(this->argumentor.metarfile);
+	}
 	this->addIcaoChoice("KDEN"); // Denver
 	this->addIcaoChoice("KJFK"); // New York - JFK
 	this->addIcaoChoice("KLAS"); // Las Vegas
@@ -361,6 +364,19 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 	}
 }
 
+void Frame::loadMetarFile(wxString filename) {
+	wxTextFile tfile;
+	tfile.Open(filename);
+
+	auto metarString = tfile.GetFirstLine();
+	if (!tfile.Eof()) {
+		metarString += "\n" + tfile.GetNextLine();
+	}
+	this->metarInput->SetValue(metarString);
+	this->saveButton->SetFocus();
+	this->markAsDirty();
+}
+
 void Frame::actionSave(wxCommandEvent& WXUNUSED(event))
 {
 	if (!this->argumentor.isDryRun) {
@@ -404,21 +420,11 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 
 void Frame::actionOpenMetarFile(wxCommandEvent& WXUNUSED(event))
 {
-	wxFileDialog  openFileDialog(this, _("Open METAR file"), "", "", "Text files (*.txt, *.rwx)|*.txt;*.rwx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	wxFileDialog openFileDialog(this, _("Open METAR file"), "", "", "Text files (*.txt, *.rwx)|*.txt;*.rwx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (openFileDialog.ShowModal() == wxID_CANCEL) {
 		return;
 	}
-
-	wxTextFile tfile;
-	tfile.Open(openFileDialog.GetPath());
-
-	auto metarString = tfile.GetFirstLine();
-	if (!tfile.Eof()) {
-		metarString += "\n" + tfile.GetNextLine();
-	}
-	this->metarInput->SetValue(metarString);
-	this->saveButton->SetFocus();
-	this->markAsDirty();
+	return this->loadMetarFile(openFileDialog.GetPath());
 }
 
 void Frame::actionSaveMetarFile(wxCommandEvent& WXUNUSED(event))

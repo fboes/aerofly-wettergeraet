@@ -80,6 +80,9 @@ public:
 	// Parse METAR data into Aerofly values
 	virtual void actionParse(wxCommandEvent&);
 
+	// Copy METAR information from file to METAR input field
+	virtual void loadMetarFile(wxString filename);
+
 	// Save Aerofly values into config file
 	virtual void actionSave(wxCommandEvent&);
 
