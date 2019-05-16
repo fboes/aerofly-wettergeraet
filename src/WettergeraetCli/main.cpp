@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <stdio.h>
 #include "Argumentor.h"
@@ -79,6 +80,20 @@ std::string getIcaoFromFlightplan(std::string inIcao, std::tuple<std::string, st
 	return inIcao;
 }
 
+// Read plain file and return contents
+std::string getFile(std::string filename) {
+	std::fstream fileStream;
+	fileStream.open(filename, std::ios::in | std::ios::binary);
+	if (!fileStream.is_open())
+	{
+		throw std::invalid_argument("Could no open " + filename + " for reading");
+	}
+	std::ostringstream contents;
+	contents << fileStream.rdbuf();
+	fileStream.close();
+	return contents.str();
+}
+
 // Show error, exit with failure.
 int dieWithError(std::invalid_argument e) {
 	std::cerr << "\x1B[31m" << e.what() << "\033[0m" << endl;
@@ -124,8 +139,20 @@ int main(int argc, char* argv[])
 		return dieWithError(e);
 	}
 
-	// Fetch remote data via HTTP(S)
+	// Parse METAR data
 
+	if (strcmp(argumentor.metarfile, "?") == 0) {
+		cout << "Please enter a METAR filename: ";
+		cin.getline(argumentor.metarfile, 512);
+	}
+	if (strlen(argumentor.metarfile) != 0) {
+		try {
+			strcpy_s(argumentor.metarString, 512, getFile(argumentor.metarfile).c_str());
+		}
+		catch (std::invalid_argument & e) {
+			return dieWithError(e);
+		}
+	}
 	if (strcmp(argumentor.metarString, "?") == 0) {
 		cout << "Please enter a METAR string: ";
 		cin.getline(argumentor.metarString, 512);

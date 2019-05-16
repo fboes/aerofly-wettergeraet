@@ -9,6 +9,11 @@ To append parameters to the desktop application, right-click your desktop icon, 
 
 ![](modify-shortcut.png)
 
+Register file associations
+--------------------------
+
+You may register `.mcf` and `.rwx` file types with the desktop version of the <i>Aerofly Wettergerät</i> by double-clicking these files. This will open up the application with the corresponding file loaded.
+
 HTTP services
 -------------
 

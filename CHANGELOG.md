@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.2.6
+-----
+
+* 🎁 Open METAR file via CLI parameter
+
 1.2.5
 -----
 

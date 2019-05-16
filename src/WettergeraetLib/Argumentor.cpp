@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-const char* Argumentor::APP_VERSION = "1.2.5";
+const char* Argumentor::APP_VERSION = "1.2.6";
 #if _WIN64
 const char* Argumentor::APP_TARGET = "64-bit";
 #else
@@ -21,7 +21,7 @@ char * Argumentor::getEnv(const char * varName)
 
 std::string Argumentor::showHelpOption(std::string label, std::string description, const int indentLength, const int columnLength)
 {
-	auto labelWidth = columnLength - indentLength - 2;
+	auto labelWidth = columnLength - indentLength - 1;
 	auto columnWidth = columnLength - indentLength - (int)label.length();
 
 	label = label.substr(0, labelWidth);
@@ -76,6 +76,7 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ this->showHelpOption("--apikey <APIKEY>", "Sent HTTP header `X-API-Key` set to <APIKEY> for all HTTP API calls.")
 		+ this->showHelpOption("--response <TYPE>", "How to interpret HTTP response. `json` is default. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.")
 		+ this->showHelpOption("--metar <METAR>", "Supply a valid METAR code enclosed in `\"`. This will disable HTTP fetching. If this is set to `?` the value will be asked for.")
+		+ this->showHelpOption("--metarfile <FILE>", "Read METAR information from <FILE>. This will disable HTTP fetching. If this is set to `?` the value will be asked for.")
 		+ this->showHelpOption("--hours <HOURS>", "Offset time read from METAR code by <HOURS> hours, e.g. '-8'.")
 		;
 }
