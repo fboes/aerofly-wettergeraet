@@ -8,6 +8,7 @@
 #include <wx/event.h>
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
+#include <wx/filename.h>
 #include <math.h>
 #include <tuple>
 #include "Frame.h"
@@ -37,17 +38,20 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	wxMenuBar *menubar = new wxMenuBar;
 	{
 		wxMenu* file = new wxMenu;
-		file->Append(wxID_OPEN, wxT("&Open METAR file..."));
-		file->Append(wxID_SAVEAS, wxT("&Save METAR file..."));
-		file->Append(EL_MENU_RELOAD, wxT("&Load 'main.mcf'"));
+		file->Append(wxID_OPEN, wxT("&Open METAR File...\tCTRL+O"));
+		file->Append(wxID_SAVEAS, wxT("&Save METAR File As..."));
 		file->AppendSeparator();
-		file->Append(wxID_EXIT, wxT("&Exit"));
+		file->Append(EL_MENU_LOAD, wxT("Open &Aerofly Configuration File..."));
+		file->Append(EL_MENU_RELOAD, wxT("&Reload Aerofly Configuration File\tCTRL+R"));
+		file->Append(wxID_SAVE, wxT("Sa&ve Aerofly Configuration File\tCTRL+S"));
+		file->AppendSeparator();
+		file->Append(wxID_EXIT, wxT("E&xit"));
 		menubar->Append(file, wxT("&File"));
 
-		wxMenu *help = new wxMenu;
-		help->Append(wxID_HELP, wxT("View &help"));
-		help->Append(EL_MENU_UPDATE, wxT("Check for &updates"));
-		help->Append(EL_MENU_FIND_ICAO, wxT("Find &ICAO airport codes"));
+		wxMenu* help = new wxMenu;
+		help->Append(wxID_HELP, wxT("View &Help"));
+		help->Append(EL_MENU_UPDATE, wxT("Check for &Updates"));
+		help->Append(EL_MENU_FIND_ICAO, wxT("Find &ICAO Airport Codes"));
 		help->AppendSeparator();
 		help->Append(wxID_ABOUT, wxT("&About"));
 		menubar->Append(help, wxT("&Help"));
@@ -213,6 +217,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 
 	// ----------------------------------------------------
 
+	this->currentMcfFilename = this->argumentor.filename;
 	this->loadMainMcf();
 	if (strlen(this->argumentor.metarfile) != 0) {
 		this->loadMetarFile(this->argumentor.metarfile);
@@ -299,7 +304,7 @@ void Frame::markAsDirty()
 void Frame::loadMainMcf()
 {
 	try {
-		this->mainConfig.setFilename(this->argumentor.filename);
+		this->mainConfig.setFilename(this->currentMcfFilename);
 		this->mainConfig.load();
 		this->mainConfig.getToAeroflyObject(this->aerofly);
 		this->utcDateValue.SetToCurrent();
@@ -405,7 +410,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" ") + this->argumentor.APP_TARGET);
 	aboutInfo.SetDescription(
 		_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n")
-		+ _("\nCurrent MCF file:\n") + this->argumentor.filename
+		+ _("\nCurrent MCF file:\n") + this->currentMcfFilename
 		+ _("\nCurrent API URL:\n") + this->argumentor.url
 		+ _("\nCurrent API Key:\n") + this->argumentor.apikey
 	);
@@ -467,7 +472,28 @@ void Frame::actionSaveMetarFile(wxCommandEvent& WXUNUSED(event))
 
 void Frame::actionLoadMainMcf(wxCommandEvent& WXUNUSED(event))
 {
-	this->loadMainMcf();
+	wxFileName dingdong = wxFileName(this->currentMcfFilename);
+	auto dirname = dingdong.GetPath();
+	auto filename = dingdong.GetFullName();
+
+	wxFileDialog openFileDialog(
+		this,
+		_("Open Aerofly configuration file"),
+		dirname,
+		filename,
+		"Aerofly Configuration File (*.mcf)|*.mcf",
+		wxFD_OPEN | wxFD_FILE_MUST_EXIST
+	);
+	if (openFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+	this->currentMcfFilename = openFileDialog.GetPath();
+	return this->loadMainMcf();
+}
+
+void Frame::actionReloadMainMcf(wxCommandEvent& WXUNUSED(event))
+{
+	return this->loadMainMcf();
 }
 
 void Frame::actionUpdate(wxCommandEvent& WXUNUSED(event))
@@ -500,7 +526,9 @@ EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionOpenMetarFile)
 EVT_MENU(wxID_SAVEAS, Frame::actionSaveMetarFile)
-EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionLoadMainMcf)
+EVT_MENU(Frame::EL_MENU_LOAD, Frame::actionLoadMainMcf)
+EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionReloadMainMcf)
+EVT_MENU(wxID_SAVE, Frame::actionSave)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
 EVT_SLIDER(Frame::EL_CTRL_SLIDER, Frame::actionMarkAsDirty)
 //EVT_DATE_CHANGED(Frame::EL_CTRL_DATETIME, Frame::actionMarkAsDirty)

@@ -5,6 +5,8 @@ Change log
 -----
 
 * 🎁 Open METAR file via CLI parameter
+* 🎁 Add menu option to open, reload and save the Aerofly configuration file
+* 🎁 Add accelerator keys
 
 1.2.5
 -----

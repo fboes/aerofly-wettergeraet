@@ -17,6 +17,7 @@ private:
 	AeroflyConfigFile mainConfig;
 	AeroflyWeather aerofly;
 	wxDateTime utcDateValue;
+	wxString currentMcfFilename;
 
 	// Represents a cloud layer
 	struct cloudsInputs {
@@ -56,6 +57,7 @@ public:
 	static const unsigned short EL_MENU_UPDATE = 7;
 	static const unsigned short EL_MENU_FIND_ICAO = 8;
 	static const unsigned short EL_MENU_RELOAD = 9;
+	static const unsigned short EL_MENU_LOAD = 10;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -96,8 +98,11 @@ public:
 	// Show file dialogue, copy METAR informtation from METAR input field to file
 	virtual void actionSaveMetarFile(wxCommandEvent&);
 
-	// Reload main.mcf and copy values to main windows
+	// Change main.mcf file location
 	virtual void actionLoadMainMcf(wxCommandEvent&);
+
+	// Reload main.mcf and copy values to main windows
+	virtual void actionReloadMainMcf(wxCommandEvent&);
 
 	virtual void actionUpdate(wxCommandEvent&);
 
