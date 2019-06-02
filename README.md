@@ -17,7 +17,7 @@ The <i>Aerofly Wettergerät</i> is capable of setting weather values which you c
 Requirements
 ------------
 
-* Microsoft <i>Windows 10 - 64 bit</i> or <i>Windows 8 - 64 bit</i> has to be installed. See below for other operating systems.
+* Microsoft Windows 7 / 8 / 10 (64 bit) has to be installed. See below for other operating systems.
 * IPACS Aerofly FS 2 has to be installed.
 * A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter.
 * An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
