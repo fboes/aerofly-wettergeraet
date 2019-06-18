@@ -7,7 +7,6 @@ Change log
 * 🎁 Switch ICAO airport code finder to https://opennav.com/search because of approach plates
 * 🎁 Starting airport finder will open currently active airport code
 
-
 1.2.7
 -----
 
