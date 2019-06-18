@@ -407,7 +407,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 {
 	wxAboutDialogInfo aboutInfo;
 	aboutInfo.SetName("Aerofly Wetterger\u00E4t");
-	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" ") + this->argumentor.APP_TARGET);
+	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" (") + this->argumentor.APP_TARGET + std::string(")"));
 	aboutInfo.SetDescription(
 		_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n")
 		+ _("\nCurrent MCF file:\n") + this->currentMcfFilename
@@ -508,7 +508,12 @@ void Frame::actionHelp(wxCommandEvent& WXUNUSED(event))
 
 void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
 {
-	wxLaunchDefaultBrowser("https://www.world-airport-codes.com/");
+	wxString url = "https://opennav.com/";
+	auto icaoCode = this->icaoInput->GetValue();
+	if (icaoCode != "") {
+		url += "airport/" + icaoCode;
+	}
+	wxLaunchDefaultBrowser(url);
 }
 
 void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
