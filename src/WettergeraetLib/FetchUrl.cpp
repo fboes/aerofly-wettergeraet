@@ -66,6 +66,7 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, httpHeaders);
 		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L); //s
 
 		// Do request
 		res = curl_easy_perform(curl);
@@ -75,10 +76,21 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		if (res == CURLE_HTTP_RETURNED_ERROR) {
 			throw std::invalid_argument("Invalid HTTP status code returned for " + url);
 		}
-
-		if (buffer != "") {
-			return (fetchMode == FetchUrl::MODE_JSON) ? this->parseJson(buffer) : buffer;
+		else if (res == CURLE_OPERATION_TIMEDOUT) {
+			throw std::invalid_argument("Timeout for " + url);
 		}
+		else if (res != CURLE_OK) {
+			throw std::invalid_argument(curl_easy_strerror(res));
+		}
+
+		if (fetchMode == FetchUrl::MODE_JSON) {
+			buffer = this->parseJson(buffer);
+		}
+		if (buffer == "") {
+			throw std::invalid_argument("Empty or invalid response returned for " + url);
+		}
+
+		return buffer;
 	}
 
 	throw std::invalid_argument("Could no initiate CURL");

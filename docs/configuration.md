@@ -3,7 +3,7 @@
 
 For more information about command line options, call the command line variant of this tool with `--help` appended to it. 
 
-There is also a [source code documentation on command-line parameters](https://github.com/fboes/aerofly-wettergeraet/blob/master/src/WettergeraetLib/Argumentor.cpp#L20) applicable for the command-line as well as the desktop variant of this tool.
+There is also a [source code documentation on command-line parameters](https://github.com/fboes/aerofly-wettergeraet/blob/master/src/WettergeraetLib/Argumentor.cpp#L65) applicable for the command-line as well as the desktop variant of this tool.
 
 To append parameters to the desktop application, right-click your desktop icon, select "Properties" and append the parameter(s) to the shortcut's target.
 

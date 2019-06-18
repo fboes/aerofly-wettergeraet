@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.2.7
+-----
+
+* 💊 Fix error handling of HTTP requests
+
 1.2.6
 -----
 
