@@ -58,6 +58,8 @@ public:
 	static const unsigned short EL_MENU_FIND_ICAO = 8;
 	static const unsigned short EL_MENU_RELOAD = 9;
 	static const unsigned short EL_MENU_LOAD = 10;
+	static const unsigned short EL_MENU_GET_PLATES = 11;
+	static const unsigned short EL_MENU_OPEN_WORLDCLOCK = 12;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -109,6 +111,10 @@ public:
 	virtual void actionHelp(wxCommandEvent&);
 
 	virtual void actionFindIcao(wxCommandEvent&);
+
+	virtual void actionGetAirportPlates(wxCommandEvent&);
+
+	virtual void actionOpenWorldClockLink(wxCommandEvent&);
 
 	virtual void actionMarkAsDirty(wxCommandEvent&);
 

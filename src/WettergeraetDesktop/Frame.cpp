@@ -48,10 +48,15 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		file->Append(wxID_EXIT, wxT("E&xit"));
 		menubar->Append(file, wxT("&File"));
 
+		wxMenu* airports = new wxMenu;
+		airports->Append(EL_MENU_FIND_ICAO, wxT("&Find Airport\tCTRL+F"));
+		airports->Append(EL_MENU_GET_PLATES, wxT("Get Airport &Procedures\tCTRL+P"));
+		airports->Append(EL_MENU_OPEN_WORLDCLOCK, wxT("Show World &Clock"));
+		menubar->Append(airports, wxT("&Airports"));
+
 		wxMenu* help = new wxMenu;
-		help->Append(wxID_HELP, wxT("View &Help"));
+		help->Append(wxID_HELP, wxT("View &Help\tF1"));
 		help->Append(EL_MENU_UPDATE, wxT("Check for &Updates"));
-		help->Append(EL_MENU_FIND_ICAO, wxT("Find &ICAO Airport Codes"));
 		help->AppendSeparator();
 		help->Append(wxID_ABOUT, wxT("&About"));
 		menubar->Append(help, wxT("&Help"));
@@ -321,6 +326,7 @@ void Frame::loadMainMcf()
 			strcpy(this->aerofly.nearestAirport, this->argumentor.icaoCode);
 		}
 		if (destination != "" && origin != destination) {
+			strcpy(this->aerofly.nearestAirport, destination.c_str());
 			this->addIcaoChoice(destination.c_str());
 		}
 		this->fromObjectToInput();
@@ -351,6 +357,7 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 	}
 	catch (std::invalid_argument& e) {
 		wxLogError(e.what());
+		this->metarInput->SetValue("");
 	}
 }
 
@@ -516,6 +523,21 @@ void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
 	wxLaunchDefaultBrowser(url);
 }
 
+void Frame::actionGetAirportPlates(wxCommandEvent& WXUNUSED(event))
+{
+	wxString url = "https://flightaware.com/";
+	auto icaoCode = this->icaoInput->GetValue();
+	if (icaoCode != "") {
+		url += "resources/airport/" + icaoCode + "/procedures";
+	}
+	wxLaunchDefaultBrowser(url);
+}
+
+void Frame::actionOpenWorldClockLink(wxCommandEvent& WXUNUSED(event))
+{
+	wxLaunchDefaultBrowser("https://www.timeanddate.com/worldclock/");
+}
+
 void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
 {
 	this->markAsDirty();
@@ -524,9 +546,11 @@ void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
+EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
+EVT_MENU(Frame::EL_MENU_GET_PLATES, Frame::actionGetAirportPlates)
+EVT_MENU(Frame::EL_MENU_OPEN_WORLDCLOCK, Frame::actionOpenWorldClockLink)
 EVT_MENU(wxID_HELP, Frame::actionHelp)
 EVT_MENU(Frame::EL_MENU_UPDATE, Frame::actionUpdate)
-EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionOpenMetarFile)
