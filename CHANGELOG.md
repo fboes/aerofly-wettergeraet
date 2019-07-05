@@ -4,6 +4,7 @@ Change log
 1.2.9
 -----
 
+* 🎁 Add link to airport approach procedures and other useful information
 * 🎁 Set default airport to flightplan _destination_
 * 🎁 Add link to world clock
 
