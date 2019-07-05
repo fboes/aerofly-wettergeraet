@@ -13,4 +13,4 @@ git tag -a "v${VERSION}" -m "${VERSION}"
 git push && git push --tag
 git checkout develop
 start "https://github.com/fboes/aerofly-wettergeraet/releases"
-start "https://flight-sim.org/filebase/index.php?file/439-aerofly-wetterger%C3%A4t/"
+start "https://flight-sim.org/filebase/index.php?file/439-aerofly-wettergerät/#fileButtonContainer"
