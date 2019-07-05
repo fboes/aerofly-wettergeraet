@@ -4,7 +4,7 @@ Change log
 1.2.9
 -----
 
-* 🎁 Set default aiport to flightplan _destination_
+* 🎁 Set default airport to flightplan _destination_
 * 🎁 Add link to world clock
 
 1.2.8
