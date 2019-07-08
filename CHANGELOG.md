@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.2.10
+------
+
+* 💊 Limit variable wind bearing impact relative to wind force
+
 1.2.9
 -----
 

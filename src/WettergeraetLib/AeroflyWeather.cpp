@@ -10,7 +10,8 @@ double AeroflyWeather::makeGust(double windSpeed, char const conditions[4][6])
 	auto gustSpeed = windSpeed;
 
 	// Get gusts from weather
-	for (unsigned int i = 0; i <= sizeof(conditions) / sizeof(conditions[0]); i++) {
+	auto sizeOfConditions = 6;
+	for (unsigned int i = 0; i <= sizeOfConditions; i++) {
 			if (strcmp(conditions[i], "WS") == 0) {
 				// Wind Shear
 				gustSpeed = std::max(windSpeed + 10.0, 45.0);
@@ -68,7 +69,12 @@ void AeroflyWeather::setWind(double kts, unsigned int degrees)
 
 void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6])
 {
-	const double degreesRange = std::abs((degreesTo - degreesFrom) / 360.0);
+	double degreesRange = std::abs((degreesTo - degreesFrom) / 360.0);
+
+	// Limit variable wind bearing impact relative to wind force
+	if (windSpeed / 10 < degreesRange) {
+		degreesRange = windSpeed / 10;
+	}
 
 	if (gustSpeed == windSpeed) {
 		// Spice up gust winds
