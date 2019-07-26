@@ -60,6 +60,7 @@ public:
 	static const unsigned short EL_MENU_LOAD = 10;
 	static const unsigned short EL_MENU_GET_PLATES = 11;
 	static const unsigned short EL_MENU_OPEN_WORLDCLOCK = 12;
+	static const unsigned short EL_MENU_SAVECLIP = 13;
 
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
@@ -97,8 +98,11 @@ public:
 	// Show file dialogue, copy METAR information from file to METAR input field
 	virtual void actionOpenMetarFile(wxCommandEvent&);
 
-	// Show file dialogue, copy METAR informtation from METAR input field to file
+	// Show file dialogue, copy METAR information from METAR input field to file
 	virtual void actionSaveMetarFile(wxCommandEvent&);
+
+	// Show file dialogue, _append_ METAR information to from METAR input field to file
+	virtual void  actionSaveClipFile(wxCommandEvent&);
 
 	// Change main.mcf file location
 	virtual void actionLoadMainMcf(wxCommandEvent&);

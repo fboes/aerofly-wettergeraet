@@ -40,6 +40,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		wxMenu* file = new wxMenu;
 		file->Append(wxID_OPEN, wxT("&Open METAR File...\tCTRL+O"));
 		file->Append(wxID_SAVEAS, wxT("&Save METAR File As..."));
+		file->Append(Frame::EL_MENU_SAVECLIP, wxT("Save &Clipboard File..."));
 		file->AppendSeparator();
 		file->Append(EL_MENU_LOAD, wxT("Open &Aerofly Configuration File..."));
 		file->Append(EL_MENU_RELOAD, wxT("&Reload Aerofly Configuration File\tCTRL+R"));
@@ -477,6 +478,47 @@ void Frame::actionSaveMetarFile(wxCommandEvent& WXUNUSED(event))
 	tfile.Close();
 }
 
+void Frame::actionSaveClipFile(wxCommandEvent& WXUNUSED(event))
+{
+	wxString defaultFilename = "clip.txt";
+
+	wxFileDialog saveFileDialog(this, _("Save Clipboard File"), "", defaultFilename, "Text files (*.txt)|*.txt", wxFD_SAVE);
+	if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+
+	wxString header = "METAR: ";
+	auto headerLength = header.length();
+	auto metarInput = header + this->metarInput->GetValue();
+	bool replace = false;
+
+	wxTextFile tfile(saveFileDialog.GetPath());
+	if (!tfile.Exists()) {
+		tfile.Create();
+		tfile.AddLine(metarInput);
+	}
+	else {
+		tfile.Open();
+
+		for (size_t n = 0; n < tfile.GetLineCount(); ++n)
+		{
+			wxString line = tfile.GetLine(n);
+			if (line.Left(headerLength) == header) {
+				tfile.RemoveLine(n);
+				tfile.InsertLine(metarInput, n);
+				replace = true;
+			}
+		}
+		if (!replace) {
+			tfile.AddLine("");
+			tfile.AddLine(metarInput);
+		}
+	}
+
+	tfile.Write();
+	tfile.Close();
+}
+
 void Frame::actionLoadMainMcf(wxCommandEvent& WXUNUSED(event))
 {
 	wxFileName dingdong = wxFileName(this->currentMcfFilename);
@@ -555,6 +597,7 @@ EVT_MENU(wxID_ABOUT, Frame::actionAbout)
 EVT_MENU(wxID_EXIT, Frame::actionExit)
 EVT_MENU(wxID_OPEN, Frame::actionOpenMetarFile)
 EVT_MENU(wxID_SAVEAS, Frame::actionSaveMetarFile)
+EVT_MENU(Frame::EL_MENU_SAVECLIP, Frame::actionSaveClipFile)
 EVT_MENU(Frame::EL_MENU_LOAD, Frame::actionLoadMainMcf)
 EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionReloadMainMcf)
 EVT_MENU(wxID_SAVE, Frame::actionSave)
