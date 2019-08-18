@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.3.0
+-----
+
+* 🎁 Switch GUI to feet and kts values
+
 1.2.10
 ------
 

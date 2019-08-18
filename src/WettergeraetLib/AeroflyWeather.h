@@ -60,6 +60,17 @@ public:
 	// Set cloud with index 0..2. Density is between 0..8.
 	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);
 
+	// Set cloud with index 0..2. Density is between 0.0..1.0.
+	void setCloudPercent(unsigned short index, double baseFeetAgl, double percent);
+
+	// Convert wind percent into kts
+	double getWindKts();
+
+	// Get cloud height in ft
+	double getCloudHeightFt(unsigned short index);
+
+	double getVisbilityMeters();
+
 	// Populate all values from a MetarParser object
 	void setFromMetar(const MetarParserSimple& metar);
 

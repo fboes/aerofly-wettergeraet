@@ -141,16 +141,16 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			}
 			wxBoxSizer *hbox8 = new wxBoxSizer(wxHORIZONTAL);
 			{
-				wxStaticText *clouds0HeightLabel = new wxStaticText(panel, wxID_ANY, cloudName + " height (%)");
-				hbox8->Add(clouds0HeightLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
+				wxStaticText *cloudsHeightLabel = new wxStaticText(panel, wxID_ANY, cloudName + " height (ft)");
+				hbox8->Add(cloudsHeightLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-				this->clouds[i].heightInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+				this->clouds[i].heightInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 20000, 0, 40000, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 				hbox8->Add(this->clouds[i].heightInput, 1, wxALIGN_CENTER_VERTICAL);
 
 				hbox8->Add(10, -1);
 
-				wxStaticText *clouds0DensityLabel = new wxStaticText(panel, wxID_ANY, cloudName + " density (%)");
-				hbox8->Add(clouds0DensityLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
+				wxStaticText *cloudsDensityLabel = new wxStaticText(panel, wxID_ANY, cloudName + " density (%)");
+				hbox8->Add(cloudsDensityLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
 				this->clouds[i].densityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 				hbox8->Add(this->clouds[i].densityInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
@@ -170,10 +170,10 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 
 			hbox5->Add(10, -1);
 
-			wxStaticText *windStrengthLabel = new wxStaticText(panel, wxID_ANY, wxT("Wind strength (%)"));
+			wxStaticText *windStrengthLabel = new wxStaticText(panel, wxID_ANY, wxT("Wind strength (kts)"));
 			hbox5->Add(windStrengthLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->windStrengthInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 200, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->windStrengthInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 4, 0, 48, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 			hbox5->Add(this->windStrengthInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox5, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -202,10 +202,11 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		// build hbox7
 		wxBoxSizer *hbox7 = new wxBoxSizer(wxHORIZONTAL);
 		{
-			wxStaticText *visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (%)"));
+			wxStaticText *visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (m)"));
 			hbox7->Add(visbilityLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->visbilityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->visbilityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 10000, 0, 20000, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->visbilityInput->SetTickFreq(20);
 			hbox7->Add(this->visbilityInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox7->Add(10, -1);
@@ -260,15 +261,15 @@ void Frame::fromObjectToInput()
 	this->utcDateInput->SetValue(this->utcDateValue);
 
 	this->windDirectionInput->SetValue(this->aerofly.windDirection);
-	this->windStrengthInput->SetValue(ceil(this->aerofly.windStrength * 100));
+	this->windStrengthInput->SetValue(ceil(this->aerofly.getWindKts()));
 
 	this->windTurbulenceInput->SetValue(ceil(this->aerofly.windTurbulence * 100));
 	this->thermalActivityInput->SetValue(ceil(this->aerofly.thermalActivity * 100));
 
-	this->visbilityInput->SetValue(ceil(this->aerofly.visibility * 100));
+	this->visbilityInput->SetValue(floor(this->aerofly.getVisbilityMeters()));
 
 	for (int i = 0; i < 3; ++i) {
-		this->clouds[i].heightInput->SetValue(ceil(this->aerofly.clouds[i].height * 100));
+		this->clouds[i].heightInput->SetValue(floor(this->aerofly.getCloudHeightFt(i)));
 		this->clouds[i].densityInput->SetValue(ceil(this->aerofly.clouds[i].density * 100));
 	}
 }
@@ -283,17 +284,15 @@ void Frame::fromInputToObject()
 	auto time = this->utcTimeInput->GetValue();
 	this->aerofly.hours = time.GetHour() + time.GetMinute() / 60.0 + time.GetSecond() / (60.0 * 60.0);
 
-	this->aerofly.windDirection = this->windDirectionInput->GetValue();
-	this->aerofly.windStrength = this->windStrengthInput->GetValue() / 100.0;
+	this->aerofly.setWind(this->windStrengthInput->GetValue(), this->windDirectionInput->GetValue());
 
 	this->aerofly.windTurbulence = this->windTurbulenceInput->GetValue() / 100.0;
 	this->aerofly.thermalActivity = this->thermalActivityInput->GetValue() / 100.0;
 
-	this->aerofly.visibility = this->visbilityInput->GetValue() / 100.0;
+	this->aerofly.setVisibility(this->visbilityInput->GetValue());
 
 	for (int i = 0; i < 3; ++i) {
-		this->aerofly.clouds[i].height = this->clouds[i].heightInput->GetValue() / 100.0;
-		this->aerofly.clouds[i].density = this->clouds[i].densityInput->GetValue() / 100.0;
+		this->aerofly.setCloudPercent(i, this->clouds[i].heightInput->GetValue(), this->clouds[i].densityInput->GetValue() / 100.0);
 	}
 }
 

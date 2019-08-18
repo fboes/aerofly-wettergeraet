@@ -66,7 +66,6 @@ void AeroflyWeather::setWind(double kts, unsigned int degrees)
 	this->windDirection = BoShed::rotatingValue(degrees, 359);
 	this->windStrength = BoShed::percent(combinedWindForce);
 }
-
 void AeroflyWeather::setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6])
 {
 	double degreesRange = std::abs((degreesTo - degreesFrom) / 360.0);
@@ -128,10 +127,32 @@ void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned
 		densityMinimum--;
 	}
 
-	this->clouds[index].density = (densityMinimum + (
+	auto density = (densityMinimum + (
 		(rand() % 100 / 100.0) * (densityMaximum - densityMinimum)
 		)) / this->maxCloudsDensity;
+	this->setCloudPercent(index, baseFeetAgl, density);
+}
+
+void AeroflyWeather::setCloudPercent(unsigned short index, double baseFeetAgl, double percent)
+{
+	this->clouds[index].density = percent;
 	this->clouds[index].height = baseFeetAgl / this->maxCloudsHeight;
+}
+
+double AeroflyWeather::getWindKts()
+{
+	// f(x) = 8 * (x + x^2)
+	return 8 * (this->windStrength + this->windStrength * this->windStrength);
+}
+
+double AeroflyWeather::getCloudHeightFt(unsigned short index)
+{
+	return this->clouds[index].height * this->maxCloudsHeight;
+}
+
+double AeroflyWeather::getVisbilityMeters()
+{
+	return this->visibility * this->maxVisibility;
 }
 
 void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
