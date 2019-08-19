@@ -206,7 +206,6 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			hbox7->Add(visbilityLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			this->visbilityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 10000, 0, 20000, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
-			this->visbilityInput->SetTickFreq(20);
 			hbox7->Add(this->visbilityInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox7->Add(10, -1);
@@ -303,6 +302,18 @@ void Frame::markAsClean()
 
 void Frame::markAsDirty()
 {
+	for (int i = 0; i < 3; ++i) {
+		if (this->clouds[i].heightInput->GetValue() % 100) {
+			this->clouds[i].heightInput->SetValue(
+				round(this->clouds[i].heightInput->GetValue() / 100.0) * 100.0
+			);
+		}
+	}
+	if (this->visbilityInput->GetValue() % 100) {
+		this->visbilityInput->SetValue(
+			round(this->visbilityInput->GetValue() / 100.0) * 100.0
+		);
+	}
 	this->saveButton->SetLabel(this->EL_BUTTON_SAVE_LABEL_DIRTY);
 }
 
