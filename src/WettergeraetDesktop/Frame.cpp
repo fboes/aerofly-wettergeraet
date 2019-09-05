@@ -144,7 +144,13 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 				wxStaticText *cloudsHeightLabel = new wxStaticText(panel, wxID_ANY, cloudName + " height (ft)");
 				hbox8->Add(cloudsHeightLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-				this->clouds[i].heightInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 20000, 0, 40000, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+				this->clouds[i].heightInput = new wxSlider(
+					panel, Frame::EL_CTRL_SLIDER,
+					this->aerofly.maxCloudsHeight / 4.0 * (i + 1),
+					0, this->aerofly.maxCloudsHeight,
+					wxDefaultPosition, wxDefaultSize,
+					wxSL_HORIZONTAL | wxSL_VALUE_LABEL
+				);
 				hbox8->Add(this->clouds[i].heightInput, 1, wxALIGN_CENTER_VERTICAL);
 
 				hbox8->Add(10, -1);
@@ -205,7 +211,13 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (m)"));
 			hbox7->Add(visbilityLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->visbilityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 10000, 0, 20000, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
+			this->visbilityInput = new wxSlider(
+				panel, Frame::EL_CTRL_SLIDER,
+				this->aerofly.maxVisibility,
+				0, this->aerofly.maxVisibility,
+				wxDefaultPosition, wxDefaultSize,
+				wxSL_HORIZONTAL | wxSL_VALUE_LABEL
+			);
 			hbox7->Add(this->visbilityInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox7->Add(10, -1);

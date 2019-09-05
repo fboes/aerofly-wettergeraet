@@ -12,6 +12,9 @@
 class AeroflyWeather
 {
 private:
+	double makeGust(double gustSpeed, char const conditions[4][6]);
+
+public:
 	unsigned short maxCloudsDensity = 8; // as given in METAR cloud density
 	unsigned long maxCloudsHeight = 40000; // ft = 100% Aerofly
 	double maxWindSpeed = 16;   // kt = 100% Aerofly
@@ -22,9 +25,6 @@ private:
 	double hourOffset = 0.0;
 	bool noRandom = false;
 
-	double makeGust(double gustSpeed, char const conditions[4][6]);
-
-public:
 	// Represents a cloud layer
 	struct AeroflyCloud {
 		double density = 0; // 0.0..1.0

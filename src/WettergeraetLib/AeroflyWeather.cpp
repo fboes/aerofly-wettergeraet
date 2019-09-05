@@ -10,7 +10,7 @@ double AeroflyWeather::makeGust(double windSpeed, char const conditions[4][6])
 	auto gustSpeed = windSpeed;
 
 	// Get gusts from weather
-	auto sizeOfConditions = 6;
+	unsigned int sizeOfConditions = 6;
 	for (unsigned int i = 0; i <= sizeOfConditions; i++) {
 			if (strcmp(conditions[i], "WS") == 0) {
 				// Wind Shear
