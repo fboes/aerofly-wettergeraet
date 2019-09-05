@@ -5,6 +5,7 @@ Change log
 -----
 
 * 🎁 Make GUI sliders snap to next readable value
+* 🎁 Add URLs for European approach plates
 
 1.3.0
 -----
