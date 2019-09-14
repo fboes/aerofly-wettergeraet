@@ -592,12 +592,7 @@ void Frame::actionGetAirportPlates(wxCommandEvent& WXUNUSED(event))
 	wxString url = "https://flightaware.com/";
 	auto icaoCode = this->icaoInput->GetValue();
 	if (icaoCode != "") {
-		if (icaoCode[0] == wxString("E")) {
-			url = "http://www.pilotnav.com/airport/" + icaoCode;
-		}
-		else {
-			url += "resources/airport/" + icaoCode + "/procedures";
-		}
+		url += "resources/airport/" + icaoCode + "/procedures";
 	}
 	wxLaunchDefaultBrowser(url);
 }
