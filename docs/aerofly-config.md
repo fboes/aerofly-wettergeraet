@@ -30,7 +30,14 @@ This tool modifies the following settings in Aerofly's `main.mcf`:
 Visibility
 ----------
 
-Visibility tests set maximum visibility in Aerofly FS 2 to 20,000 meters.
+Visibility tests with METAR data, webcams and comparison with Aerofly FS2 visbility show this pattern:
+
+| Visibility Real Life | Visibility Aerofly FS 2 | 
+| -------------------- | ----------------------- |
+| 6,000 meters         | ~40%                    |
+| 7,500 meters         | ~50%                    |
+
+This in turn sets 100% visibility in Aerolfy FS 2 to a real life visibility of 15,000 meters.
 
 Wind
 ----

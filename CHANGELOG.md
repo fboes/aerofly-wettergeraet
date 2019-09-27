@@ -6,6 +6,7 @@ Change log
 
 * 🎁 Add airport names to labels, ignoring extra information while calling APIs
 * 🎁 Make GUI sliders snap to next readable value
+* 💊 Set maximum visibility to 15,000 meters, thus decreasing effects of low visibility
 
 1.3.0
 -----
