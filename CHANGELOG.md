@@ -4,6 +4,7 @@ Change log
 1.3.1
 -----
 
+* 🎁 Add airport names to labels, ignoring extra information while calling APIs
 * 🎁 Make GUI sliders snap to next readable value
 
 1.3.0

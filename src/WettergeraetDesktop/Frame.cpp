@@ -240,18 +240,24 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	if (strlen(this->argumentor.metarfile) != 0) {
 		this->loadMetarFile(this->argumentor.metarfile);
 	}
-	this->addIcaoChoice("KDEN"); // Denver
-	this->addIcaoChoice("KJFK"); // New York - JFK
-	this->addIcaoChoice("KLAS"); // Las Vegas
-	this->addIcaoChoice("KLAX"); // Los Angeles
-	this->addIcaoChoice("KMIA"); // Miami
-	this->addIcaoChoice("KORD"); // Chicago
-	this->addIcaoChoice("KSFO"); // San Francisco
+	this->addIcaoChoice("KDEN (Denver International, USA)");
+	this->addIcaoChoice("KJFK (New York/John F Kennedy International, USA)");
+	this->addIcaoChoice("KLAS (Las Vegas/McCarran International, USA)");
+	this->addIcaoChoice("KLAX (Los Angeles International, USA)");
+	this->addIcaoChoice("KMIA (Miami International, USA)");
+	this->addIcaoChoice("KORD (Chicago O'Hare International, USA)");
+	this->addIcaoChoice("KSFO (San Francisco International, USA)");
 }
 
 Frame::~Frame()
 {
 
+}
+
+wxString Frame::getIcaoFromInput()
+{
+	wxString icao = this->icaoInput->GetValue();
+	return icao.BeforeFirst(' ');
 }
 
 // --------------------------------------------------------------------------------------
@@ -365,7 +371,7 @@ void Frame::loadMainMcf()
 
 void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 {
-	auto icaoCode = this->icaoInput->GetValue();
+	auto icaoCode = this->getIcaoFromInput();
 	if (icaoCode == "") {
 		wxLogError(_("No ICAO airport code given"));
 		return;
@@ -475,7 +481,7 @@ void Frame::actionSaveMetarFile(wxCommandEvent& WXUNUSED(event))
 
 	char timestamp[25];
 	sprintf(timestamp, "%04d-%02d-%02d_%02d%02dZ", year, month, day, hour, minute);
-	wxString defaultFilename = this->icaoInput->GetValue() + "_" + timestamp + ".rwx";
+	wxString defaultFilename = this->getIcaoFromInput() + "_" + timestamp + ".rwx";
 
 	wxFileDialog saveFileDialog(this, _("Save METAR file"), "", defaultFilename, "Text files (*.txt, *.rwx)|*.txt;*.rwx", wxFD_SAVE);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL) {
@@ -580,7 +586,7 @@ void Frame::actionHelp(wxCommandEvent& WXUNUSED(event))
 void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
 {
 	wxString url = "https://opennav.com/";
-	auto icaoCode = this->icaoInput->GetValue();
+	auto icaoCode = this->getIcaoFromInput();
 	if (icaoCode != "") {
 		url += "airport/" + icaoCode;
 	}
@@ -590,7 +596,7 @@ void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
 void Frame::actionGetAirportPlates(wxCommandEvent& WXUNUSED(event))
 {
 	wxString url = "https://flightaware.com/";
-	auto icaoCode = this->icaoInput->GetValue();
+	auto icaoCode = this->getIcaoFromInput();
 	if (icaoCode != "") {
 		url += "resources/airport/" + icaoCode + "/procedures";
 	}

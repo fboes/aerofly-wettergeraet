@@ -65,6 +65,9 @@ public:
 	Frame(const wxString& title, int argc, char * argv[]);
 	virtual ~Frame();
 
+	// Get the _parsed_ version from input field, ignoring extra information
+	virtual wxString getIcaoFromInput();
+
 	// Copy state of objects to form
 	virtual void fromObjectToInput();
 
