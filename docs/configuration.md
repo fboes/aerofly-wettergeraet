@@ -5,40 +5,22 @@ For more information about command line options, call the command line variant o
 
 There is also a [source code documentation on command-line parameters](https://github.com/fboes/aerofly-wettergeraet/blob/master/src/WettergeraetLib/Argumentor.cpp#L65) applicable for the command-line as well as the desktop variant of this tool.
 
-To append parameters to the desktop application, right-click your desktop icon, select "Properties" and append the parameter(s) to the shortcut's target.
+Supplying parameters to the desktop application
+-----------------------------------------------
+
+To supply parameters to the desktop application, right-click your desktop icon, select "Properties" and append the parameter(s) to the shortcut's target, like `--PARAMETER_NAME "PARAMETER_VALUE"`, e.g. `--apikey "ABCDEF"` to supply an API key.
 
 ![](modify-shortcut.png)
 
-Register file associations
---------------------------
+These parameters are available:
 
-You may register `.mcf` and `.rwx` file types with the desktop version of the <i>Aerofly Wettergerät</i> by double-clicking these files. This will open up the application with the corresponding file loaded.
-
-HTTP services
--------------
-
-This tool has been tested with multiple METAR services. To change the METAR service for the command line variant `aerofly-wettergeraet.exe` append additional parameters:
-
-```batch
-: Supply METAR manually
-aerofly-wettergeraet.exe --metar ?
-
-: AVWX - this is the default HTTP service
-aerofly-wettergeraet.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
-
-: CheckWX - you will need to get an API key
-aerofly-wettergeraet.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
-```
-
-To change the METAR service for the desktop variant `aerofly-wettergeraet-desktop.exe` change the target of your desktop shortcut:
-
-```batch
-: AVWX - this is the default HTTP service
-aerofly-wettergeraet-desktop.exe --url "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"
-
-: CheckWX - you will need to get an API key
-aerofly-wettergeraet-desktop.exe --url "https://api.checkwx.com/metar/XXXX/decoded" --apikey "INSERT API KEY HERE"
-```
+| Parameter    | Example value           | Description                                |
+| ------------- | ----------------------- | ------------------------------------------ |
+| `--file`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
+| `--url`      | `http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
+| `--apikey`   | `12345abcd`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
+| `--response` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
+| `--hours`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |
 
 Change default values
 ---------------------
@@ -51,7 +33,7 @@ These variables are available:
 | -------------------- | ----------------------- | ------------------------------------------ |
 | `AEROFLYWX_FILE`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
 | `AEROFLYWX_URL`      | `http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
-| `AEROFLYWX_APIKEY`   | `12345abcd`             | Sent HTTP header `X-API-Key` set to this value for all HTTP API calls. |
+| `AEROFLYWX_APIKEY`   | `12345abcd`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
 | `AEROFLYWX_RESPONSE` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
 | `AEROFLYWX_HOURS`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |
 
@@ -75,6 +57,11 @@ For Mac OSX / Linux open up a terminal and enter the following lines:
 ```bash
 VARIABLE="VALUE"
 ```
+
+Register file associations
+--------------------------
+
+You may register `.mcf` and `.rwx` file types with the desktop version of the <i>Aerofly Wettergerät</i> by double-clicking these files. This will open up the application with the corresponding file loaded.
 
 ---
 

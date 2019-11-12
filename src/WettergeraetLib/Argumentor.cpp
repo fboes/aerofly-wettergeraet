@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-const char* Argumentor::APP_VERSION = "1.3.1";
+const char* Argumentor::APP_VERSION = "1.4.0";
 #if _WIN64
 const char* Argumentor::APP_TARGET = "64-bit";
 #else

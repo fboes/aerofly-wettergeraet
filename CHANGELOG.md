@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.4.0
+-----
+
+* 🎁 Add extra header `Authorization` for API calls, improve documentation for API keys
+
 1.3.1
 -----
 

@@ -58,6 +58,8 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		if (apiKey != "") {
 			apiKey = "X-API-Key: " + apiKey;
 			httpHeaders = curl_slist_append(httpHeaders, apiKey.c_str());
+			apiKey = "Authorization: " + apiKey;
+			httpHeaders = curl_slist_append(httpHeaders, apiKey.c_str());
 		}
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
