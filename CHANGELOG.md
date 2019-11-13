@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.4.1
+-----
+
+* 🎁 Improve error output while encountering API errors
+
 1.4.0
 -----
 

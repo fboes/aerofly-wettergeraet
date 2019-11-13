@@ -29,7 +29,7 @@ void Frame::addIcaoChoice(char const icaoCode[8])
 	}
 }
 
-Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 480))
+Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 520))
 {
 	this->utcDateValue.SetToCurrent();
 	this->SetIcon(wxICON(APPICON));
@@ -64,6 +64,8 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 	}
 	SetMenuBar(menubar);
 
+	CreateStatusBar(3);
+	SetStatusText((this->argumentor.apikey) ? "API key present" : "No API key loaded", 0);
 
 	const int labelBorder = 8;
 
@@ -316,6 +318,7 @@ void Frame::fromInputToObject()
 void Frame::markAsClean()
 {
 	this->saveButton->SetLabel(this->EL_BUTTON_SAVE_LABEL);
+	SetStatusText(wxT("Saved"), 2);
 }
 
 void Frame::markAsDirty()
@@ -333,6 +336,7 @@ void Frame::markAsDirty()
 		);
 	}
 	this->saveButton->SetLabel(this->EL_BUTTON_SAVE_LABEL_DIRTY);
+	SetStatusText(wxT("Unsaved changes"), 2);
 }
 
 void Frame::loadMainMcf()

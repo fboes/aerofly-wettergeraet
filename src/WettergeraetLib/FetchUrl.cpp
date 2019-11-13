@@ -56,10 +56,10 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			httpHeaders = curl_slist_append(httpHeaders, "Accept: application/json");
 		}
 		if (apiKey != "") {
-			apiKey = "X-API-Key: " + apiKey;
-			httpHeaders = curl_slist_append(httpHeaders, apiKey.c_str());
-			apiKey = "Authorization: " + apiKey;
-			httpHeaders = curl_slist_append(httpHeaders, apiKey.c_str());
+			auto apiKeyX = "X-API-Key: " + apiKey;
+			httpHeaders = curl_slist_append(httpHeaders, apiKeyX.c_str());
+			auto apiKeyA = "Authorization: " + apiKey;
+			httpHeaders = curl_slist_append(httpHeaders, apiKeyA.c_str());
 		}
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -76,7 +76,22 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		curl_easy_cleanup(curl);
 
 		if (res == CURLE_HTTP_RETURNED_ERROR) {
-			throw std::invalid_argument("Invalid HTTP status code returned for " + url);
+			long response_code;
+			curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+
+			if (response_code == 403) {
+				throw std::invalid_argument("Missing or invalid API key supplied for " + url);
+			}
+			else if (response_code == 404) {
+				throw std::invalid_argument("API is missing for " + url);
+			}
+			else if (response_code >= 500) {
+				throw std::invalid_argument("Server error encountered while calling " + url);
+			}
+			else {
+				throw std::invalid_argument("Invalid HTTP status code " + std::to_string(response_code) + " returned for " + url);
+			}
+
 		}
 		else if (res == CURLE_OPERATION_TIMEDOUT) {
 			throw std::invalid_argument("Timeout for " + url);
