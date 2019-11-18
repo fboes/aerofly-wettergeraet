@@ -8,19 +8,25 @@ There is also a [source code documentation on command-line parameters](https://g
 Supplying parameters to the desktop application
 -----------------------------------------------
 
-To supply parameters to the desktop application, right-click your desktop icon, select "Properties" and append the parameter(s) to the shortcut's target, like `--PARAMETER_NAME "PARAMETER_VALUE"`, e.g. `--apikey "ABCDEF"` to supply an API key.
+To supply parameters to the desktop application, you will have to modify the desktop link:
+
+1. Right-click your desktop icon, select "Properties" and search for the "target" of your link.
+1. Enclose the path in your target in quotes, e.g. converting `C:\...\aerofly-wettergeraet.desktop.exe` to `"C:\...\aerofly-wettergeraet.desktop.exe"`.
+1. Append a parameter to the shortcut's target by adding a whitespace at the end of target, add the parameter name, another whitespace and the parameter value enclosed in quotes. This looks like `--PARAMETER_NAME "PARAMETER_VALUE"`, e.g. `--apikey "ABCDEF"` to supply an API key.
+1. Repeat this last step for every extra parameter you want to add.
 
 ![](modify-shortcut.png)
 
 These parameters are available:
 
-| Parameter    | Example value           | Description                                |
-| ------------- | ----------------------- | ------------------------------------------ |
-| `--file`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
-| `--url`      | `http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
-| `--apikey`   | `12345abcd`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
-| `--response` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
-| `--hours`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |
+| Parameter    | Example value             | Description                                |
+| ------------ | ------------------------- | ------------------------------------------ |
+| `--file`     | `"C:\Users\...\main.mcf"` | Absolute file location of your `main.mcf`. |
+| `--url`      | `"http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
+| `--apikey`   | `"12345abcd"`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
+| `--response` | `"raw"`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
+| `--hours`    | `"-8"`                    | Offset time read from METAR code by this value, given in hours. |
+
 
 Change default values
 ---------------------
