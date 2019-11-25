@@ -79,7 +79,10 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			long response_code;
 			curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
 
-			if (response_code == 403) {
+			if (response_code == 400) {
+				throw std::invalid_argument("Wrong request (e.g. unrecognized airport) encountered while calling " + url);
+			}
+			else if (response_code == 401 || response_code == 402 || response_code == 403) {
 				throw std::invalid_argument("Missing or invalid API key supplied for " + url);
 			}
 			else if (response_code == 404) {
