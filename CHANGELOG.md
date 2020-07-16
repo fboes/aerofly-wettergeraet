@@ -1,6 +1,12 @@
 Change log
 ==========
 
+1.4.2
+-----
+
+* 🎁 Improve error output while encountering API errors
+* 💊 Switch default API to HTTPS
+
 1.4.1
 -----
 

@@ -12,7 +12,7 @@ Submitting issues
 Building
 --------
 
-This project was built with Microsoft Visual Studio 2017.
+This project was built with Microsoft Visual Studio 2019.
 
 Dependencies:
 

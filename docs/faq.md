@@ -7,7 +7,7 @@ Why does the application crash on start-up?
 Make sure to check these settings:
 
 * A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter, e.g. `aerofly-wettergeraet-desktop.exe --file "C:\…\main.mcf"`.
-* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API, e.g. `aerofly-wettergeraet-desktop.exe --url "https://www.example.com/"`.
+* An internet connection to the [AVWX REST API](https://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API, e.g. `aerofly-wettergeraet-desktop.exe --url "https://www.example.com/"`.
 
 See [the <i>Wettergerät</i>'s configuration guide](configuration.md) on how to set parameters.
 

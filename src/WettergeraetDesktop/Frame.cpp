@@ -454,7 +454,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 		+ _("\nCurrent API URL:\n") + this->argumentor.url
 		+ _("\nCurrent API Key:\n") + this->argumentor.apikey
 	);
-	aboutInfo.SetCopyright("\u00A9 2019");
+	aboutInfo.SetCopyright("\u00A9 2019-2020");
 	aboutInfo.SetWebSite("https://github.com/fboes/aerofly-wettergeraet");
 	aboutInfo.AddDeveloper("Frank Bo\u00EBs");
 	aboutInfo.SetIcon(wxICON(APPICON));

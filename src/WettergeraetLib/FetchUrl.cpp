@@ -107,7 +107,7 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			buffer = this->parseJson(buffer);
 		}
 		if (buffer == "") {
-			throw std::invalid_argument("Empty or invalid response returned for " + url);
+			throw std::invalid_argument("Empty or invalid response returned for " + url + " - possibily unkonw ICAO code");
 		}
 
 		return buffer;

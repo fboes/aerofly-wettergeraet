@@ -19,7 +19,7 @@ public:
 
 	char icaoCode[8] = "";
 
-	char url[512] = "http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
+	char url[512] = "https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
 
 	unsigned short response = FetchUrl::MODE_JSON;
 

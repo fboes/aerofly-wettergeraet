@@ -22,7 +22,7 @@ These parameters are available:
 | Parameter    | Example value             | Description                                |
 | ------------ | ------------------------- | ------------------------------------------ |
 | `--file`     | `"C:\Users\...\main.mcf"` | Absolute file location of your `main.mcf`. |
-| `--url`      | `"http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
+| `--url`      | `"https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
 | `--apikey`   | `"12345abcd"`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
 | `--response` | `"raw"`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
 | `--hours`    | `"-8"`                    | Offset time read from METAR code by this value, given in hours. |
@@ -38,7 +38,7 @@ These variables are available:
 | Variable             | Example value           | Description                                |
 | -------------------- | ----------------------- | ------------------------------------------ |
 | `AEROFLYWX_FILE`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
-| `AEROFLYWX_URL`      | `http://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
+| `AEROFLYWX_URL`      | `https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
 | `AEROFLYWX_APIKEY`   | `12345abcd`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
 | `AEROFLYWX_RESPONSE` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
 | `AEROFLYWX_HOURS`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |

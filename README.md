@@ -20,14 +20,14 @@ Requirements
 * Microsoft Windows 7 / 8 / 10 (64 bit) has to be installed. See below for other operating systems.
 * IPACS Aerofly FS 2 has to be installed.
 * A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS2\main.mcf`. If this is not the case point the tool to the file location by setting the `--file <FILE>` parameter.
-* An internet connection to the [AVWX REST API](http://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+* An internet connection to the [AVWX REST API](https://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
 
 Installation
 ------------
 
 1. Download the latest release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
 2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet-x64\`.
-3. You will also need an API key for the [AVWX REST API](http://avwx.rest/), which can be acquired at https://account.avwx.rest
+3. You will also need an API key for the [AVWX REST API](https://avwx.rest/), which can be acquired at https://account.avwx.rest
 3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".  
    You might want to re-label the shortcut to "Aerofly Wettergerät".
 3. Supply your API key, see [the configuration guide](docs/configuration.md)
@@ -67,7 +67,7 @@ HTTP services
 
 This tool is compatible with the following METAR services:
 
-* [AVWX](http://avwx.rest/): This is the default HTTP service. You will need to get an API key to use this service.
+* [AVWX](https://avwx.rest/): This is the default HTTP service. You will need to get an API key to use this service.
 * [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
 
 You may also try any other HTTP service which offers METAR information as raw text or JSON. See the [configuration guide on how to set different METAR services](docs/configuration.md).
