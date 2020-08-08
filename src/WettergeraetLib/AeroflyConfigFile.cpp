@@ -212,11 +212,32 @@ std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
 	};
 }
 
+/**
+ * Old way:
+ * <[tmnav_route_airport][Origin][]
+ *                   <[string8][Identifier][KMTH]>
+ * <[tmnav_route_airport][Destination][]
+ *                  <[string8][Identifier][KMTH]>
+ * New way:
+ * <[tmnav_route_origin][EHAM][0]
+ *                      <[string8][Identifier][EHAM]>
+ * <[tmnav_route_destination][EHRD][4]
+ *                      <[string8][Identifier][EHRD]>
+ **/
 std::tuple<std::string, std::string> AeroflyConfigFile::getFlightplan()
 {
+	auto origin = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_origin\\]").c_str();
+	if (!origin) {
+		origin = this->getValue(this->fileBuffer, "Identifier", "Origin").c_str();
+	}
+	auto destination = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_destination\\]").c_str();
+	if (!destination) {
+		destination = this->getValue(this->fileBuffer, "Identifier", "Destination").c_str();
+	}
+
 	return {
-		this->getValue(this->fileBuffer, "Identifier", "Origin").c_str(),
-		this->getValue(this->fileBuffer, "Identifier", "Destination").c_str()
+		origin,
+		destination
 	};
 }
 

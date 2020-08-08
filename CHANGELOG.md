@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.5.0
+-----
+
+* 💊 Now also reads new MCF files
+
 1.4.3
 -----
 
