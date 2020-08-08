@@ -226,12 +226,15 @@ std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
  **/
 std::tuple<std::string, std::string> AeroflyConfigFile::getFlightplan()
 {
-	auto origin = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_origin\\]").c_str();
-	if (!origin) {
+	std::string origin = "";
+	origin = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_origin\\]").c_str();
+	if (origin.empty()) {
 		origin = this->getValue(this->fileBuffer, "Identifier", "Origin").c_str();
 	}
-	auto destination = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_destination\\]").c_str();
-	if (!destination) {
+
+	std::string destination = "";
+	destination = this->getValue(this->fileBuffer, "Identifier", "tmnav_route_destination\\]").c_str();
+	if (destination.empty()) {
 		destination = this->getValue(this->fileBuffer, "Identifier", "Destination").c_str();
 	}
 
