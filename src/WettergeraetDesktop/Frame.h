@@ -74,6 +74,8 @@ public:
 	// Copy state of form to objects
 	virtual void fromInputToObject();
 
+	virtual void updateFlightCategory();
+
 	// Show user that current state has been saved.
 	virtual void markAsClean();
 

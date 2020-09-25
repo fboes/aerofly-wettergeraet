@@ -291,6 +291,8 @@ void Frame::fromObjectToInput()
 		this->clouds[i].heightInput->SetValue(floor(this->aerofly.getCloudHeightFt(i)));
 		this->clouds[i].densityInput->SetValue(ceil(this->aerofly.clouds[i].density * 100));
 	}
+
+	this->updateFlightCategory();
 }
 
 void Frame::fromInputToObject()
@@ -313,6 +315,32 @@ void Frame::fromInputToObject()
 	for (int i = 0; i < 3; ++i) {
 		this->aerofly.setCloudPercent(i, this->clouds[i].heightInput->GetValue(), this->clouds[i].densityInput->GetValue() / 100.0);
 	}
+}
+
+void Frame::updateFlightCategory()
+{
+	std::string flightCategory = "LIFR";
+	double visibilityStatuteMiles = this->visbilityInput->GetValue() / 1609.344;
+	double ceilingFeet = 9999.99;
+
+	for (int i = 0; i < 3; ++i) {
+		auto cloudHeightFeet = this->clouds[i].heightInput->GetValue();
+		if (cloudHeightFeet > 0 && cloudHeightFeet < ceilingFeet) {
+			ceilingFeet = cloudHeightFeet;
+		}
+	}
+
+	if (visibilityStatuteMiles > 5.0 && (ceilingFeet > 3000)) {
+		flightCategory = "VFR";
+	}
+	else if (visibilityStatuteMiles >= 3.0 && (ceilingFeet >= 1000)) {
+		flightCategory = "MVFR";
+	}
+	else if (visibilityStatuteMiles >= 1.0 && (ceilingFeet >= 500)) {
+		flightCategory = "IFR";
+	}
+
+	SetStatusText("Flight rules: " + flightCategory, 1);
 }
 
 void Frame::markAsClean()
@@ -614,6 +642,7 @@ void Frame::actionOpenWorldClockLink(wxCommandEvent& WXUNUSED(event))
 
 void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
 {
+	this->updateFlightCategory();
 	this->markAsDirty();
 }
 
