@@ -50,8 +50,8 @@ void showMetar(MetarParserSimple metar) {
 	);
 	for (int i = 0; i < 3; ++i) {
 		printf(
-			"Cloud 0      Min %d, max %d at %dft\n",
-			metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum, metar.clouds[i].baseFeetAgl
+			"Cloud %d      Min %d, max %d at %dft\n",
+			i, metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum, metar.clouds[i].baseFeetAgl
 		);
 	}
 	if (metar.ceiling) {
