@@ -30,6 +30,12 @@ std::string FetchUrl::parseJson(std::string rawJson)
 	return "";
 }
 
+
+std::string FetchUrl::getErrorMessage(long response_code, std::string message, std::string url)
+{
+	return "HTTP status code " + std::to_string(response_code) + ":\n" + message + " while calling\n" + url;
+}
+
 FetchUrl::FetchUrl()
 {
 }
@@ -80,19 +86,19 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
 
 			if (response_code == 400) {
-				throw std::invalid_argument("Wrong request (e.g. unrecognized airport) encountered while calling " + url);
+				throw std::invalid_argument(this->getErrorMessage(response_code, "Wrong request (e.g. unrecognized airport) encountered ", url));
 			}
 			else if (response_code == 401 || response_code == 402 || response_code == 403) {
-				throw std::invalid_argument("Missing or invalid API key supplied for " + url);
+				throw std::invalid_argument(this->getErrorMessage(response_code, "Missing or invalid API key supplied ", url));
 			}
 			else if (response_code == 404) {
-				throw std::invalid_argument("API is missing for " + url);
+				throw std::invalid_argument(this->getErrorMessage(response_code, "API is missing", url));
 			}
 			else if (response_code >= 500) {
-				throw std::invalid_argument("Server error encountered while calling " + url);
+				throw std::invalid_argument(this->getErrorMessage(response_code, "Server error encountered", url));
 			}
 			else {
-				throw std::invalid_argument("Invalid HTTP status code " + std::to_string(response_code) + " returned for " + url);
+				throw std::invalid_argument(this->getErrorMessage(response_code, "General problem", url));
 			}
 
 		}
@@ -132,3 +138,4 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned shor
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);
 	return this->fetch(url, fetchMode, apiKey);
 }
+
