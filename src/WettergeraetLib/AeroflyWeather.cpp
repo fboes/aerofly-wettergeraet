@@ -133,6 +133,11 @@ void AeroflyWeather::setCloud(unsigned short index, double baseFeetAgl, unsigned
 	this->setCloudPercent(index, baseFeetAgl, density);
 }
 
+void AeroflyWeather::unsetCloud(unsigned short index)
+{
+	this->setCloudPercent(index, 0, 0);
+}
+
 void AeroflyWeather::setCloudPercent(unsigned short index, double baseFeetAgl, double percent)
 {
 	this->clouds[index].density = percent;
@@ -164,8 +169,23 @@ void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 	this->setTurbulence(metar.wind.speedKts, metar.wind.gustKts, metar.wind.degreesFrom, metar.wind.degreesTo, metar.conditions);
 	this->setThermalActivity(metar.temperatureCelsius);
 	this->setVisibility((int)metar.visibilityMeters);
-	for (int i = 0; i < 3; ++i) {
-		this->setCloud(i, metar.clouds[i].baseFeetAgl, metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum);
+
+	// If not all cloud layers are sets, try to set cirrus cloud at a height above 10,000 ft
+	if (metar.numberOfClouds == 1) {
+		bool chooseLowerCloud = (metar.clouds[0].baseFeetAgl < 10000);
+		this->setCloud(chooseLowerCloud ? 0 : 2, metar.clouds[0].baseFeetAgl, metar.clouds[0].densityMinimum, metar.clouds[0].densityMaximum);
+		this->unsetCloud(1);
+		this->unsetCloud(chooseLowerCloud ? 2 : 0);
+	}
+	else if (metar.numberOfClouds == 2) {
+		bool chooseLowerCloud = (metar.clouds[1].baseFeetAgl < 10000);
+		this->setCloud(0, metar.clouds[0].baseFeetAgl, metar.clouds[0].densityMinimum, metar.clouds[0].densityMaximum);
+		this->setCloud(chooseLowerCloud ? 1 : 2, metar.clouds[1].baseFeetAgl, metar.clouds[1].densityMinimum, metar.clouds[1].densityMaximum);
+		this->unsetCloud(chooseLowerCloud ? 2 : 1);
+	} else {
+		for (int i = 0; i < 3; ++i) {
+			this->setCloud(i, metar.clouds[i].baseFeetAgl, metar.clouds[i].densityMinimum, metar.clouds[i].densityMaximum);
+		}
 	}
 }
 

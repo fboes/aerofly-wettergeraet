@@ -131,10 +131,10 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		for (int i = 0; i < 3; ++i) {
 			std::string cloudName = "";
 			switch (i) {
-			case 1:
+			case 0:
 				cloudName = "Cumulus";
 				break;
-			case 2:
+			case 1:
 				cloudName = "Cumulus med";
 				break;
 			default:

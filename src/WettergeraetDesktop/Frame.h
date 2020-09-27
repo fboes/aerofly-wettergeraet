@@ -35,7 +35,7 @@ private:
 	wxSlider *windTurbulenceInput;
 	wxSlider *thermalActivityInput;
 	wxSlider *visbilityInput;
-	cloudsInputs clouds[3]; // "cirrus", "cumulus", "cumulus_mediocris"
+	cloudsInputs clouds[3]; // "cumulus", "cumulus_mediocris", "cirrus"
 	wxButton *saveButton;
 
 	static const char* EL_BUTTON_SAVE_LABEL;

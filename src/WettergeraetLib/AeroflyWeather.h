@@ -32,7 +32,7 @@ public:
 	};
 
 
-	AeroflyCloud clouds[3];   // "cirrus", "cumulus", "cumulus_mediocris"
+	AeroflyCloud clouds[3];   // "cumulus", "cumulus_mediocris", "cirrus"
 	double visibility = 1.0;  // 0.0..1.0
 	unsigned int year = 2018; // Four-digit-year
 	unsigned int month = 5;   // 1..12
@@ -59,6 +59,8 @@ public:
 
 	// Set cloud with index 0..2. Density is between 0..8.
 	void setCloud(unsigned short index, double baseFeetAgl, unsigned short densityMinimum, unsigned short densityMaximum);
+
+	void unsetCloud(unsigned short index);
 
 	// Set cloud with index 0..2. Density is between 0.0..1.0.
 	void setCloudPercent(unsigned short index, double baseFeetAgl, double percent);

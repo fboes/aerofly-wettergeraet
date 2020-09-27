@@ -4,6 +4,7 @@ Change log
 1.5.2
 -----
 
+* 💊 Improve position of cloud layers
 * 🎁 Show flight rules (VFR, MVFR, IFR, LIFR)
 
 1.5.1

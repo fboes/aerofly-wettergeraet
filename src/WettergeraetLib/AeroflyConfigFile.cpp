@@ -178,10 +178,10 @@ void AeroflyConfigFile::setCloud(unsigned short index, double heightPercent, dou
 {
 	std::string cloudName = "";
 	switch (index) {
-	case 1:
+	case 0:
 		cloudName = "cumulus";
 		break;
-	case 2:
+	case 1:
 		cloudName = "cumulus_mediocris";
 		break;
 	default:
@@ -196,10 +196,10 @@ std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
 {
 	std::string cloudName = "";
 	switch (index) {
-	case 1:
+	case 0:
 		cloudName = "cumulus";
 		break;
-	case 2:
+	case 1:
 		cloudName = "cumulus_mediocris";
 		break;
 	default:

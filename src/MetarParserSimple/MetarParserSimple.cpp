@@ -117,7 +117,7 @@ bool MetarParserSimple::convert(std::string metarString)
 	unsigned short parsingMode = 0;
 	unsigned short currentCondition = 0;
 	unsigned short sizeofConditions = sizeof(this->conditions) / sizeof(this->conditions[0]);
-	unsigned short currentCloud = 0;
+	this->numberOfClouds = 0;
 	unsigned short sizeofClouds = sizeof(this->clouds) / sizeof(this->clouds[0]);
 	std::string metarPart = "";
 	std::stringstream metarParts(metarString);
@@ -237,31 +237,31 @@ bool MetarParserSimple::convert(std::string metarString)
 			break;
 		case 5:
 			// Clouds
-			if (currentCloud < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
-				strcpy_s(this->clouds[currentCloud].code, 4, match[1].str().c_str());
-				this->clouds[currentCloud].baseFeetAgl = (std::stoi(match[2].str()) * 100);
-				if (strcmp(this->clouds[currentCloud].code, "FEW") == 0) {
-					this->clouds[currentCloud].densityMinimum = 1;
-					this->clouds[currentCloud].densityMaximum = 2;
+			if (this->numberOfClouds < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
+				strcpy_s(this->clouds[this->numberOfClouds].code, 4, match[1].str().c_str());
+				this->clouds[this->numberOfClouds].baseFeetAgl = (std::stoi(match[2].str()) * 100);
+				if (strcmp(this->clouds[this->numberOfClouds].code, "FEW") == 0) {
+					this->clouds[this->numberOfClouds].densityMinimum = 1;
+					this->clouds[this->numberOfClouds].densityMaximum = 2;
 				}
-				else if (strcmp(this->clouds[currentCloud].code, "SCT") == 0) {
-					this->clouds[currentCloud].densityMinimum = 3;
-					this->clouds[currentCloud].densityMaximum = 4;
+				else if (strcmp(this->clouds[this->numberOfClouds].code, "SCT") == 0) {
+					this->clouds[this->numberOfClouds].densityMinimum = 3;
+					this->clouds[this->numberOfClouds].densityMaximum = 4;
 				}
-				else if (strcmp(this->clouds[currentCloud].code, "BKN") == 0) {
-					this->clouds[currentCloud].densityMinimum = 5;
-					this->clouds[currentCloud].densityMaximum = 7;
+				else if (strcmp(this->clouds[this->numberOfClouds].code, "BKN") == 0) {
+					this->clouds[this->numberOfClouds].densityMinimum = 5;
+					this->clouds[this->numberOfClouds].densityMaximum = 7;
 				}
-				else if (strcmp(this->clouds[currentCloud].code, "OVC") == 0) {
-					this->clouds[currentCloud].densityMinimum = 8;
-					this->clouds[currentCloud].densityMaximum = 8;
+				else if (strcmp(this->clouds[this->numberOfClouds].code, "OVC") == 0) {
+					this->clouds[this->numberOfClouds].densityMinimum = 8;
+					this->clouds[this->numberOfClouds].densityMaximum = 8;
 				}
 				else {
-					this->clouds[currentCloud].densityMinimum = 0;
-					this->clouds[currentCloud].densityMaximum = 0;
+					this->clouds[this->numberOfClouds].densityMinimum = 0;
+					this->clouds[this->numberOfClouds].densityMaximum = 0;
 				}
-				this->ceiling = &this->clouds[currentCloud];
-				currentCloud++;
+				this->ceiling = &this->clouds[this->numberOfClouds];
+				this->numberOfClouds++;
 			}
 			break;
 		case 6:

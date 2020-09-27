@@ -91,6 +91,9 @@ public:
 	// 0..2 cloud layers:
 	MetarCloudSimple clouds[3];
 
+	// 0..3
+	unsigned short numberOfClouds = 0;
+
 	// Uppermost cloud layer
 	MetarCloudSimple * ceiling = NULL;
 
