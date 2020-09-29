@@ -27,10 +27,10 @@ Installation
 
 1. Download the latest release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
 2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet-x64\`.
-3. You will also need an API key for the [AVWX REST API](https://avwx.rest/), which can be acquired at https://account.avwx.rest
 3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".  
    You might want to re-label the shortcut to "Aerofly Wettergerät".
-3. Supply your API key, see [the configuration guide](docs/configuration.md)
+3. You will also need an API key (also called API password or API token) to use the [AVWX REST API](https://avwx.rest/) (an internet service for METAR information), which can be acquired at https://account.avwx.rest
+3. Supply your API key to enable fetching METAR data from the internet, see [the configuration guide](docs/configuration.md)
 3. Start the desktop application by clicking on the desktop link.
 
 In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
