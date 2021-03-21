@@ -93,6 +93,13 @@ void AeroflyWeather::setThermalActivity(double celsius)
 	);
 }
 
+void AeroflyWeather::setPressureHpa(double hpa)
+{
+	this->pressure = BoShed::percent(
+		(hpa - this->minPressure) / (this->maxPressure - this->minPressure), true
+	);
+}
+
 void AeroflyWeather::setVisibility(unsigned long meters)
 {
 	const unsigned long maxMiles = (long)(10 * 1609.344);
@@ -160,6 +167,11 @@ double AeroflyWeather::getVisbilityMeters()
 	return this->visibility * this->maxVisibility;
 }
 
+double AeroflyWeather::getPressureHpa()
+{
+	return this->minPressure + ((this->maxPressure - this->minPressure) *  this->pressure);
+}
+
 void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 {
 	this->setNearestAirport(metar.icao);
@@ -168,6 +180,7 @@ void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 	this->setWind(metar.wind.speedKts, metar.wind.degrees);
 	this->setTurbulence(metar.wind.speedKts, metar.wind.gustKts, metar.wind.degreesFrom, metar.wind.degreesTo, metar.conditions);
 	this->setThermalActivity(metar.temperatureCelsius);
+	this->setPressureHpa(metar.barometerKpa * 10.0);
 	this->setVisibility((int)metar.visibilityMeters);
 
 	// If not all cloud layers are sets, try to set cirrus cloud at a height above 10,000 ft

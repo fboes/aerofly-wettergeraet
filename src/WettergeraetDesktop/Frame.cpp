@@ -29,7 +29,7 @@ void Frame::addIcaoChoice(char const icaoCode[8])
 	}
 }
 
-Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 520))
+Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 580))
 {
 	this->utcDateValue.SetToCurrent();
 	this->SetIcon(wxICON(APPICON));
@@ -210,7 +210,21 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		// build hbox7
 		wxBoxSizer *hbox7 = new wxBoxSizer(wxHORIZONTAL);
 		{
-			wxStaticText *visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (m)"));
+			wxStaticText* pressureLabel = new wxStaticText(panel, wxID_ANY, wxT("Pressure (hPa)"));
+			hbox7->Add(pressureLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
+
+			this->pressureInput = new wxSlider(
+				panel, Frame::EL_CTRL_SLIDER,
+				1013,
+				this->aerofly.minPressure, this->aerofly.maxPressure,
+				wxDefaultPosition, wxDefaultSize,
+				wxSL_HORIZONTAL | wxSL_VALUE_LABEL
+			);
+			hbox7->Add(this->pressureInput, 1, wxALIGN_CENTER_VERTICAL);
+
+			hbox7->Add(10, -1);
+
+			wxStaticText* visbilityLabel = new wxStaticText(panel, wxID_ANY, wxT("Visibility (m)"));
 			hbox7->Add(visbilityLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			this->visbilityInput = new wxSlider(
@@ -221,16 +235,20 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 				wxSL_HORIZONTAL | wxSL_VALUE_LABEL
 			);
 			hbox7->Add(this->visbilityInput, 1, wxALIGN_CENTER_VERTICAL);
-
-			hbox7->Add(10, -1);
-
-			wxStaticText *noLabel = new wxStaticText(panel, wxID_ANY, wxT(""));
-			hbox7->Add(noLabel, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
-
-			this->saveButton = new wxButton(panel, wxID_SAVE, this->EL_BUTTON_SAVE_LABEL_DIRTY, wxPoint(5, 5));
-			hbox7->Add(this->saveButton, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox7, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+		vbox->Add(-1, 10);
+
+		// build hbox8
+		wxBoxSizer* hbox8 = new wxBoxSizer(wxHORIZONTAL);
+		{
+			wxStaticText *noLabel = new wxStaticText(panel, wxID_ANY, wxT(""));
+			hbox8->Add(noLabel, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
+
+			this->saveButton = new wxButton(panel, wxID_SAVE, this->EL_BUTTON_SAVE_LABEL_DIRTY, wxPoint(5, 5));
+			hbox8->Add(this->saveButton, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
+		}
+		vbox->Add(hbox8, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
 		vbox->Add(-1, 10);
 	}
 	panel->SetSizer(vbox);
@@ -285,6 +303,7 @@ void Frame::fromObjectToInput()
 	this->windTurbulenceInput->SetValue(ceil(this->aerofly.windTurbulence * 100));
 	this->thermalActivityInput->SetValue(ceil(this->aerofly.thermalActivity * 100));
 
+	this->pressureInput->SetValue(floor(this->aerofly.getPressureHpa()));
 	this->visbilityInput->SetValue(floor(this->aerofly.getVisbilityMeters()));
 
 	for (int i = 0; i < 3; ++i) {
@@ -310,6 +329,7 @@ void Frame::fromInputToObject()
 	this->aerofly.windTurbulence = this->windTurbulenceInput->GetValue() / 100.0;
 	this->aerofly.thermalActivity = this->thermalActivityInput->GetValue() / 100.0;
 
+	this->aerofly.setPressureHpa(this->pressureInput->GetValue());
 	this->aerofly.setVisibility(this->visbilityInput->GetValue());
 
 	for (int i = 0; i < 3; ++i) {

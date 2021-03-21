@@ -164,6 +164,16 @@ double AeroflyConfigFile::getThermalActivity()
 	return atof(this->getValue(this->fileBuffer, "thermal_activity", "tmsettings_wind").c_str());
 }
 
+void AeroflyConfigFile::setPressure(double percent)
+{
+	// TODO, missing in Aerofly FS2
+}
+
+double AeroflyConfigFile::getPressure()
+{
+	return 0.5;
+}
+
 void AeroflyConfigFile::setVisibility(double percent)
 {
 	this->setValue(this->fileBuffer, "visibility", percent);
@@ -251,6 +261,7 @@ void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
 	this->setWind(aerofly.windStrength, aerofly.windDirection);
 	this->setTurbulence(aerofly.windTurbulence);
 	this->setThermalActivity(aerofly.thermalActivity);
+	this->setPressure(aerofly.pressure);
 	this->setVisibility(aerofly.visibility);
 
 	for (int i = 0; i < 3; ++i) {
@@ -265,6 +276,7 @@ void AeroflyConfigFile::getToAeroflyObject(AeroflyWeather& aerofly)
 	std::tie(aerofly.windStrength, aerofly.windDirection) = this->getWind();
 	aerofly.windTurbulence = this->getTurbulence();
 	aerofly.thermalActivity = this->getThermalActivity();
+	aerofly.pressure = this->getPressure();
 	aerofly.visibility = this->getVisibility();
 
 	for (int i = 0; i < 3; ++i) {
