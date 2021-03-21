@@ -657,7 +657,12 @@ void Frame::actionGetAirportPlates(wxCommandEvent& WXUNUSED(event))
 
 void Frame::actionOpenWorldClockLink(wxCommandEvent& WXUNUSED(event))
 {
-	wxLaunchDefaultBrowser("https://www.timeanddate.com/worldclock/");
+	wxString url = "https://www.timeanddate.com/worldclock/";
+	auto icaoCode = this->getIcaoFromInput();
+	if (icaoCode != "") {
+		url += "?query=" + icaoCode;
+	}
+	wxLaunchDefaultBrowser(url);
 }
 
 void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
