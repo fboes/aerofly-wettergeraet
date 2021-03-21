@@ -22,6 +22,8 @@ public:
 	double maxTurbulence = 20;  // kt as delta to current wind
 	double minTemperature = 5;  // °C => 0% Aerofly
 	double maxTemperature = 30; // °C => 100% Aerofly
+	double minPressure = 1013 - 50; // hpa => 0% Aerofly
+	double maxPressure = 1013 + 50; // hpa => 100% Aerofly
 	double hourOffset = 0.0;
 	bool noRandom = false;
 
@@ -42,6 +44,7 @@ public:
 	double windStrength = 0.0;    // 0.0..1.0
 	double windTurbulence = 0.0;  // 0.0..1.0
 	double thermalActivity = 0.0; // 0.0..1.0
+	double pressure = 0.0;        // 0.0..1.0
 	char nearestAirport[8] = "";  // ICAO airport code of METAR report
 
 	AeroflyWeather();
@@ -54,6 +57,7 @@ public:
 	void setWind(double kts, unsigned int degrees);
 	void setTurbulence(double windSpeed, double gustSpeed, unsigned int degreesFrom, unsigned int degreesTo, char const conditions[4][6]);
 	void setThermalActivity(double celsius);
+	void setPressureHpa(double hpa);
 	void setVisibility(unsigned long meters);
 	void setNearestAirport(char const nearestAirport[8]);
 
@@ -71,6 +75,7 @@ public:
 	// Get cloud height in ft
 	double getCloudHeightFt(unsigned short index);
 
+	double getPressureHpa();
 	double getVisbilityMeters();
 
 	// Populate all values from a MetarParser object

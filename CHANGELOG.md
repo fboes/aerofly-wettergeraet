@@ -1,6 +1,11 @@
 Change log
 ==========
 
+1.6.0
+-----
+
+* 🎁 Added pressure settings (not yet supported in "Aerofly FS 2")
+
 1.5.2
 -----
 

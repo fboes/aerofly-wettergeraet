@@ -59,6 +59,10 @@ public:
 
 	double getThermalActivity();
 
+	void setPressure(double percent);
+
+	double getPressure();
+
 	void setVisibility(double percent);
 
 	double getVisibility();
