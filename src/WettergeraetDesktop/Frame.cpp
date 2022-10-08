@@ -497,7 +497,7 @@ void Frame::actionAbout(wxCommandEvent& WXUNUSED(event))
 	aboutInfo.SetName("Aerofly Wetterger\u00E4t");
 	aboutInfo.SetVersion(this->argumentor.APP_VERSION + std::string(" (") + this->argumentor.APP_TARGET + std::string(")"));
 	aboutInfo.SetDescription(
-		_("Copy METAR weather information into IPCAS' Aerofly FS 2.\n")
+		_("Copy METAR weather information into IPCAS' Aerofly FS 2 and Aerofly FS 4.\n")
 		+ _("\nCurrent MCF file:\n") + this->currentMcfFilename
 		+ _("\nCurrent API URL:\n") + this->argumentor.url
 		+ _("\nCurrent API Key:\n") + this->argumentor.apikey

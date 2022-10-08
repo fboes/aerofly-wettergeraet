@@ -36,7 +36,7 @@ Structure of this project
 * `FetchUrl` fetches METAR strings from remote services
 * `MetarParser` converts METAR strings into a structured object. Lots of `Metar*` objects assist in doing so.
 * `AeroflyWeather` converts METAR objects into values usable in Aerofly FS 2. `AeroflyBlender` can gradually change the current weather from current to target weather.
-* `AeroflyConfigFile` save Aerofly FS 2 values into the Aerofly FS 2 main config file `main.mcf`.
+* `AeroflyConfigFile` save Aerofly FS 2/4 values into the Aerofly FS 2/4 main config file `main.mcf`.
 
 Making changes
 --------------

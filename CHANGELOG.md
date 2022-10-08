@@ -5,7 +5,7 @@ Change log
 -----
 
 * 🎁 World clock shows time at airport
-* 🎁 Added pressure settings (not yet supported in "Aerofly FS 2")
+* 🎁 Added pressure settings (not yet supported in "Aerofly FS 2" and "Aerofly FS 4")
 
 1.5.2
 -----

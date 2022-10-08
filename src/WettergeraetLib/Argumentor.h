@@ -40,7 +40,7 @@ public:
 	unsigned short verbosity = 1;
 
 	// Location of main.mcf
-	char filename[512] = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf";
+	char filename[512] = "%USERPROFILE%\\Documents\\Aerofly FS 4\\main.mcf";
 
 	// Show help output for CLI parameters
 	std::string showHelp(std::string cmd);

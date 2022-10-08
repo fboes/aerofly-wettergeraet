@@ -3,8 +3,8 @@
 #include "FetchUrl.h"
 
 /**
- * This class represents weather values in Aerofly FS 2. There are multiple methods
- * supplied for changing value in Aerofly FS 2, the most prominent being "setFromMetarString".
+ * This class represents weather values in Aerofly FS 2/4. There are multiple methods
+ * supplied for changing value in Aerofly FS 2/4, the most prominent being "setFromMetarString".
  *
  * This class also comes with a setter by fetching value from an URL, and a setter
  * which interprets a MetarParser object.

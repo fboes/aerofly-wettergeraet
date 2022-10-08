@@ -166,7 +166,7 @@ double AeroflyConfigFile::getThermalActivity()
 
 void AeroflyConfigFile::setPressure(double percent)
 {
-	// TODO, missing in Aerofly FS2
+	// TODO, missing in Aerofly FS 2 / Aerofly FS 4
 }
 
 double AeroflyConfigFile::getPressure()

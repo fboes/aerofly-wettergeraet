@@ -65,14 +65,14 @@ std::string Argumentor::wordwrap(std::string candidate, const int maxLineLength,
 std::string Argumentor::showHelp(std::string cmd)
 {
 	return "Usage: " + cmd + " [options...] [FILE]\n"
-		+ "Copy METAR information from URL into your Aerofly FS2 configuration file.\n"
+		+ "Copy METAR information from URL into your Aerofly FS 2 / Aerofly FS 4 configuration file.\n"
 		+ "If no options are supplied, the required information will be asked for.\n"
 		+ "Arguments:\n"
 		+ this->showHelpOption("[FILE]", "Absolute file location of your `main.mcf`. Defaults to your standard Aerofly document path.")
 		+ "Options:\n"
 		+ this->showHelpOption("--file <FILE>", "Like `[FILE]`, see above.")
 		+ this->showHelpOption("--url <URL>", "Fetch response via HTTP from <URL>. If URL contains `XXXX` this will be replaced by <ICAO>. Defaults to URL of AvWX.")
-		+ this->showHelpOption("--icao <ICAO>", "ICAO code of airport the METAR will be fetched for. If this is set to `?` the value will be asked for. If this contains `DEP`, ICAO airport code will be fetched from Aerofly FS 2 flightplan departure airport. If this contains `ARR`, ICAO airport code will be fetched from Aerofly FS 2 flightplan arrival airport.")
+		+ this->showHelpOption("--icao <ICAO>", "ICAO code of airport the METAR will be fetched for. If this is set to `?` the value will be asked for. If this contains `DEP`, ICAO airport code will be fetched from Aerofly FS 2/4 flightplan departure airport. If this contains `ARR`, ICAO airport code will be fetched from Aerofly FS 2/4 flightplan arrival airport.")
 		+ this->showHelpOption("--apikey <APIKEY>", "Sent HTTP header `X-API-Key` set to <APIKEY> for all HTTP API calls.")
 		+ this->showHelpOption("--response <TYPE>", "How to interpret HTTP response. `json` is default. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.")
 		+ this->showHelpOption("--metar <METAR>", "Supply a valid METAR code enclosed in `\"`. This will disable HTTP fetching. If this is set to `?` the value will be asked for.")

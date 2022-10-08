@@ -4,7 +4,7 @@
 #include <fstream>
 
 /**
- * This represents the values of the Aerofly FS2 main configuration file.
+ * This represents the values of the Aerofly FS2 / Aerofly FS 4 main configuration file.
  * Values can be read and changed.
  */
 class AeroflyConfigFile
@@ -19,7 +19,7 @@ private:
 	std::string getValue(std::string &subject, std::string key, std::string keyGroup = "");
 
 public:
-	AeroflyConfigFile(std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 2\\main.mcf");
+	AeroflyConfigFile(std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 4\\main.mcf");
 	~AeroflyConfigFile();
 
 	// Load this->filename into this->fileBuffer.

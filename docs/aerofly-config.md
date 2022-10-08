@@ -30,12 +30,12 @@ This tool modifies the following settings in Aerofly's `main.mcf`:
 Visibility
 ----------
 
-Visibility tests with METAR data, webcams and comparison with Aerofly FS2 visbility show this pattern:
+Visibility tests with METAR data, webcams and comparison with Aerofly FS 2/4 visbility show this pattern:
 
-| Visibility Real Life | Visibility Aerofly FS 2 | 
-| -------------------- | ----------------------- |
-| 6,000 meters         | ~40%                    |
-| 7,500 meters         | ~50%                    |
+| Visibility Real Life | Visibility Aerofly FS 2/4 | 
+| -------------------- | ------------------------- |
+| 6,000 meters         | ~40%                      |
+| 7,500 meters         | ~50%                      |
 
 This in turn sets 100% visibility in Aerolfy FS 2 to a real life visibility of 15,000 meters.
 
@@ -44,7 +44,7 @@ Wind
 
 Setting the **wind strength** to `1` yields a wind speed of ~16 knots; setting it to `2` yields ~48 knots, and `4` yields ~160 knots. This implies an exponential function, which can be approximated by `f(x) = 8 * (x + x^2)`, with `x` being the value set and `f(x)` returning the resulting wind speed in knots.
 
-**Turbulence** causes the wind to change its direction of attack in Aerofly FS2, as well as change its speed. The direct impact has not been measured yet.
+**Turbulence** causes the wind to change its direction of attack in Aerofly FS 2/4, as well as change its speed. The direct impact has not been measured yet.
 
 The effect of **thermal activity** has not been measured yet.
 
