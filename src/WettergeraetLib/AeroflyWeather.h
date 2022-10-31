@@ -16,7 +16,7 @@ private:
 
 public:
 	unsigned short maxCloudsDensity = 8; // as given in METAR cloud density
-	unsigned long maxCloudsHeight = 40000; // ft = 100% Aerofly
+	unsigned long maxCloudsHeight = 10000; // ft = 100% Aerofly
 	double maxWindSpeed = 16;   // kt = 100% Aerofly
 	unsigned long maxVisibility = 15000; // m = 100% Aerofly
 	double maxTurbulence = 20;  // kt as delta to current wind

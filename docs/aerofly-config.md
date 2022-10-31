@@ -51,7 +51,7 @@ The effect of **thermal activity** has not been measured yet.
 Cloud height
 ------------
 
-Setting the cloud height to `1` yields a cloud height of 40.000 feet AGL.
+Setting the cloud height to `1` yields a cloud height of 10.000 feet AGL as of Aerofly FS 4.
 
 ---
 
