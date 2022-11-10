@@ -345,7 +345,8 @@ void Frame::updateFlightCategory()
 
 	for (int i = 0; i < 3; ++i) {
 		auto cloudHeightFeet = this->clouds[i].heightInput->GetValue();
-		if (cloudHeightFeet > 0 && cloudHeightFeet < ceilingFeet) {
+		auto cloudDensityPercent = this->clouds[i].densityInput->GetValue();
+		if (cloudDensityPercent > 50 && cloudHeightFeet > 0 && cloudHeightFeet < ceilingFeet) {
 			ceilingFeet = cloudHeightFeet;
 		}
 	}

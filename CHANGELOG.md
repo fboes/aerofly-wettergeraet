@@ -1,9 +1,15 @@
 Change log
 ==========
 
+1.6.1
+-----
+
+* 💊 Fix VFR / IFR conditions, ignoring thin clouds
+
 1.6.0
 -----
 
+* 💊 Fix cloud layer height for Aerofly FS 4
 * 🎁 World clock shows time at airport
 * 🎁 Added pressure settings (not yet supported in "Aerofly FS 2" and "Aerofly FS 4")
 
