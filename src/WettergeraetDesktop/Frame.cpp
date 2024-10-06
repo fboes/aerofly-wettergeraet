@@ -287,7 +287,7 @@ void Frame::fromObjectToInput()
 	this->icaoInput->SetValue(wxString(this->aerofly.nearestAirport));
 
 	/*
-	Keep date / time at current date / time to enebale fetching of current weather
+	Keep date / time at current date / time to enable fetching of current weather
 
 	this->utcDateValue.SetYear(this->aerofly.year);
 	this->utcDateValue.SetMonth((wxDateTime::Month)(this->aerofly.month - 1));
