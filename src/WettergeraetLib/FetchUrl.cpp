@@ -129,11 +129,6 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, std::string d
 		std::regex("[^a-zA-z0-9]"),
 		""
 	);
-	date = std::regex_replace(
-		date,
-		std::regex("[:]"),
-		"%3A"
-	);
 	if (lowercase) {
 		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::tolower);
 	}

@@ -112,7 +112,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *utcTimeLabel = new wxStaticText(panel, wxID_ANY, wxT("Time (UTC)"));
 			hbox3->Add(utcTimeLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			wxDateTime utcDateValue = wxDateTime::Now();
+			wxDateTime utcDateValue = wxDateTime::Now().MakeUTC();
 			this->utcTimeInput = new wxTimePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
 			hbox3->Add(this->utcTimeInput, 1, wxALIGN_CENTER_VERTICAL);
 
@@ -442,11 +442,11 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 	auto time = this->utcTimeInput->GetValue();
 	auto hour = time.GetHour();
 	auto minute = time.GetMinute();
-	auto second = time.GetSecond();
 
-	// 2024-10-06T15%3A00%3A01Z
+	// yyyymmdd_hhmmZ
+	// yyyy-mm-ddThh:mm:ssZ
 	char searchDate[25];
-	sprintf(searchDate, "%04d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, minute, second);
+	sprintf(searchDate, "%04d%02d%02d_%02d%02dZ", year, month, day, hour, minute);
 
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;

@@ -1,5 +1,9 @@
 # Change log
 
+## 1.7.1
+
+-   💊 Fixed time zone issues
+
 ## 1.7.0
 
 -   🎁 Added support for [Aviation Weather Center](https://aviationweather.gov/) and date property
