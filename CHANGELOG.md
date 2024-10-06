@@ -3,6 +3,7 @@
 ## 1.7.0
 
 -   🎁 Added support for [Aviation Weather Center](https://aviationweather.gov/) and date property
+-   💊 Keep date / time at current date / time to enable fetching of current weather
 
 ## 1.6.1
 
