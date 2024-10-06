@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 			std::cout << "URL          " << argumentor.url << endl;
 		}
 		try {
-			strcpy_s(argumentor.metarString, 512, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.response, argumentor.apikey).c_str());
+			strcpy_s(argumentor.metarString, 512, urlFetcher.fetch(argumentor.url, argumentor.icaoCode, argumentor.date, argumentor.response, argumentor.apikey).c_str());
 		}
 		catch (std::invalid_argument& e) {
 			return dieWithError(e);

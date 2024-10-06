@@ -19,7 +19,9 @@ public:
 
 	char icaoCode[8] = "";
 
-	char url[512] = "https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache";
+	char date[8] = "";
+
+	char url[512] = "https://aviationweather.gov/api/data/metar?ids=XXXX&date=DATE";
 
 	unsigned short response = FetchUrl::MODE_JSON;
 

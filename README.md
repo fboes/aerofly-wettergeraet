@@ -1,42 +1,36 @@
-![](docs/favicon-64x64.png) Aerofly Wettergerät
-================================================
+# ![](docs/favicon-64x64.png) Aerofly Wettergerät
 
-Copy METAR weather information into [IPCAS' Aerofly FS 2 and  Aerofly FS 4](https://www.aerofly.com/).
+Copy METAR weather information into [IPCAS' Aerofly FS 2 and Aerofly FS 4](https://www.aerofly.com/).
 
 The <i>Aerofly Wettergerät</i> will copy the following METAR weather information from remote sources to your configuration file while Aerofly FS 2/4 is _not_ running:
 
-* Time and day (will set the year and month to current year and month because they are not present in METAR information)
-* Wind & turbulences
-* Thermal activity
-* Clouds (height & density)
+-   Time and day (will set the year and month to current year and month because they are not present in METAR information)
+-   Wind & turbulences
+-   Thermal activity
+-   Clouds (height & density)
 
 The <i>Aerofly Wettergerät</i> is capable of setting weather values which you cannot access in Aerofly FS 2/4. This is tested and is done deliberately.
 
 > The <i>Aerofly Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
 
-Requirements
-------------
+## Requirements
 
-* Microsoft Windows 7 / 8 / 10 (64 bit) has to be installed. See below for other operating systems.
-* IPACS Aerofly FS 2 has to be installed.
-* A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS 2\main.mcf`. If this is not the case (e.g. you are using Aerofly FS 4 where the config file is located at  `%USERPROFILE%\Documents\Aerofly FS 4\main.mcf`) point the tool to the file location by setting the `--file <FILE>` parameter.
-* An internet connection to the [AVWX REST API](https://avwx.rest/) is required. If there is an internet connection but AVWX is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+-   Microsoft Windows 7 / 8 / 10 (64 bit) has to be installed. See below for other operating systems.
+-   IPACS Aerofly FS 2 has to be installed.
+-   A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS 2\main.mcf`. If this is not the case (e.g. you are using Aerofly FS 4 where the config file is located at `%USERPROFILE%\Documents\Aerofly FS 4\main.mcf`) point the tool to the file location by setting the `--file <FILE>` parameter.
+-   An internet connection to the [Aviation Weather Center REST API](https://aviationweather.gov/) is required. If there is an internet connection but the Aviation Weather Center is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
 
-Installation
-------------
+## Installation
 
 1. Download the latest release ZIP from https://github.com/fboes/aerofly-wettergeraet/releases/latest.
 2. Unpack the ZIP file to some sensible location, e.g. `C:\Program Files\aerofly-wettergeraet-x64\`.
 3. Create a shortcut on your desktop by right-clicking `aerofly-wettergeraet-desktop.exe` > "Send to" > "Desktop (Create shortcut)".  
    You might want to re-label the shortcut to "Aerofly Wettergerät".
-3. You will also need an API key (also called API password or API token) to use the [AVWX REST API](https://avwx.rest/) (an internet service for METAR information), which can be acquired at https://account.avwx.rest/manage
-3. Supply your API key to enable fetching METAR data from the internet, see [the configuration guide](docs/configuration.md)
-3. Start the desktop application by clicking on the desktop link.
+4. Start the desktop application by clicking on the desktop link.
 
 In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
 
-Usage
------
+## Usage
 
 This tool comes in two variants: The desktop application <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
 
@@ -62,29 +56,26 @@ _Note:_ The desktop application requires you to actually hit the "Fetch" button 
 
 For troubleshooting look into the [Frequently Asked Questions](docs/faq.md).
 
-HTTP services
--------------
+## HTTP services
 
 This tool is compatible with the following METAR services:
 
-* [AVWX](https://avwx.rest/): This is the default HTTP service. You will need to get an API key to use this service.
-* [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
+-   [Aviation Weather Center](https://aviationweather.gov/): This is the default HTTP service. Does not need an API key, but may be rate limited.
+-   [AVWX](https://avwx.rest/): You will need to get an API key to use this service.
+-   [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
 
 You may also try any other HTTP service which offers METAR information as raw text or JSON. See the [configuration guide on how to set different METAR services](docs/configuration.md).
 
-Update
-------
+## Update
 
 Just repeat all steps for a regular installation.
 
-Status
--------
+## Status
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/fboes/aerofly-wettergeraet.svg)
 ![GitHub](https://img.shields.io/github/license/fboes/aerofly-wettergeraet.svg)
 
-Legal stuff
------------
+## Legal stuff
 
 Author: [Frank Boës](https://3960.org)
 

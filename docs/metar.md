@@ -1,21 +1,18 @@
-![](./favicon-64x64.png) More information on METAR
-==================================================
+# ![](./favicon-64x64.png) More information on METAR
 
 Wikipedia has an [article on METAR information](https://en.wikipedia.org/wiki/METAR) explaining the very basics.
 
-Sources for METAR information
------------------------------
+## Sources for METAR information
 
 These sites make METAR information publicly available:
 
-* https://en.allmetsat.com/metar-taf/
-* https://aviationweather.gov/metar
-* https://metars.com/
+-   https://en.allmetsat.com/metar-taf/
+-   https://aviationweather.gov/metar
+-   https://metars.com/
 
 Copy METAR strings found on these pages to `aerowx-metar`.
 
-Some METAR examples
--------------------
+## Some METAR examples
 
 Some clouds over San Francisco (USA):
 
@@ -41,8 +38,7 @@ No wind in Geneva (Switzerland):
 LSGG 050820Z VRB01KT 9999 FEW070 BKN110 M03/M04 Q1033 NOSIG
 ```
 
-Use CheckWX API
----------------
+## Use CheckWX API
 
 If your want to use <i>Aerofly Wettergerät</i> with CheckWx you will need to apply for a CheckWX API key. See https://api.checkwx.com/ on how to get an API key.
 

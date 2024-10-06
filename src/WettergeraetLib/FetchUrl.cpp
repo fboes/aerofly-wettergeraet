@@ -113,7 +113,7 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			buffer = this->parseJson(buffer);
 		}
 		if (buffer == "") {
-			throw std::invalid_argument("Empty or invalid response returned for " + url + " - possibily unkonw ICAO code");
+			throw std::invalid_argument("Empty or invalid response returned for " + url + " - possibily unknown ICAO code, or invalid date/time");
 		}
 
 		return buffer;
@@ -122,12 +122,17 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 	throw std::invalid_argument("Could no initiate CURL");
 }
 
-std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned short fetchMode, std::string apiKey, bool lowercase)
+std::string FetchUrl::fetch(std::string url, std::string icaoCode, std::string date, unsigned short fetchMode, std::string apiKey, bool lowercase)
 {
 	icaoCode = std::regex_replace(
 		icaoCode,
 		std::regex("[^a-zA-z0-9]"),
 		""
+	);
+	date = std::regex_replace(
+		date,
+		std::regex("[:]"),
+		"%3A"
 	);
 	if (lowercase) {
 		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::tolower);
@@ -136,6 +141,7 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, unsigned shor
 		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::toupper);
 	}
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);
+	url = std::regex_replace(url, std::regex("DATE"), date);
 	return this->fetch(url, fetchMode, apiKey);
 }
 

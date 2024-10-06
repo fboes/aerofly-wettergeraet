@@ -1,5 +1,4 @@
-![](./favicon-64x64.png) Documentation
-======================================
+# ![](./favicon-64x64.png) Documentation
 
 1. [Frequently Asked Questions](faq.md)
 1. [Advanced configuration](configuration.md)

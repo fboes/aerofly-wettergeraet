@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-const char* Argumentor::APP_VERSION = "1.6.1";
+const char* Argumentor::APP_VERSION = "1.7.0";
 #if _WIN64
 const char* Argumentor::APP_TARGET = "64-bit";
 #else
@@ -71,7 +71,7 @@ std::string Argumentor::showHelp(std::string cmd)
 		+ this->showHelpOption("[FILE]", "Absolute file location of your `main.mcf`. Defaults to your standard Aerofly document path.")
 		+ "Options:\n"
 		+ this->showHelpOption("--file <FILE>", "Like `[FILE]`, see above.")
-		+ this->showHelpOption("--url <URL>", "Fetch response via HTTP from <URL>. If URL contains `XXXX` this will be replaced by <ICAO>. Defaults to URL of AvWX.")
+		+ this->showHelpOption("--url <URL>", "Fetch response via HTTP from <URL>. If URL contains `XXXX` this will be replaced by <ICAO>, and `DATE` with an ISO date. Defaults to URL of Aviation Weather Center.")
 		+ this->showHelpOption("--icao <ICAO>", "ICAO code of airport the METAR will be fetched for. If this is set to `?` the value will be asked for. If this contains `DEP`, ICAO airport code will be fetched from Aerofly FS 2/4 flightplan departure airport. If this contains `ARR`, ICAO airport code will be fetched from Aerofly FS 2/4 flightplan arrival airport.")
 		+ this->showHelpOption("--apikey <APIKEY>", "Sent HTTP header `X-API-Key` set to <APIKEY> for all HTTP API calls.")
 		+ this->showHelpOption("--response <TYPE>", "How to interpret HTTP response. `json` is default. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.")

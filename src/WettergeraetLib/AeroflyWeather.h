@@ -88,5 +88,5 @@ public:
 	bool setFromMetarUrl(std::string url, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
 
 	// Fetch METAR from URL and convert it into Aerofly values
-	bool setFromMetarUrl(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "");
+	bool setFromMetarUrl(std::string url, std::string icaoCode, std::string date, short fetchMode, std::string apiKey);
 };

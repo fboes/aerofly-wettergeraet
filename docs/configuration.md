@@ -1,12 +1,10 @@
-![](./favicon-64x64.png) Configuration of the <i>Aerofly Wettergerät</i>
-=======================================================================
+# ![](./favicon-64x64.png) Configuration of the <i>Aerofly Wettergerät</i>
 
-For more information about command line options, call the command line variant of this tool with `--help` appended to it. 
+For more information about command line options, call the command line variant of this tool with `--help` appended to it.
 
 There is also a [source code documentation on command-line parameters](https://github.com/fboes/aerofly-wettergeraet/blob/master/src/WettergeraetLib/Argumentor.cpp#L65) applicable for the command-line as well as the desktop variant of this tool.
 
-Supplying parameters to the desktop application
------------------------------------------------
+## Supplying parameters to the desktop application
 
 To supply parameters to the desktop application, you will have to modify the desktop link:
 
@@ -19,29 +17,27 @@ To supply parameters to the desktop application, you will have to modify the des
 
 These parameters are available:
 
-| Parameter    | Example value             | Description                                |
-| ------------ | ------------------------- | ------------------------------------------ |
-| `--file`     | `"C:\Users\...\main.mcf"` | Absolute file location of your `main.mcf`. |
-| `--url`      | `"https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache"` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
-| `--apikey`   | `"12345abcd"`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
-| `--response` | `"raw"`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
-| `--hours`    | `"-8"`                    | Offset time read from METAR code by this value, given in hours. |
+| Parameter    | Example value                                                     | Description                                                                                                                                |
+| ------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--file`     | `"C:\Users\...\main.mcf"`                                         | Absolute file location of your `main.mcf`.                                                                                                 |
+| `--url`      | `"https://aviationweather.gov/api/data/metar?ids=XXXX&date=DATE"` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code, and `DATE` with an ISO date. |
+| `--apikey`   | `"12345abcd"`                                                     | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls.                                                   |
+| `--response` | `"raw"`                                                           | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.        |
+| `--hours`    | `"-8"`                                                            | Offset time read from METAR code by this value, given in hours.                                                                            |
 
-
-Change default values
----------------------
+## Change default values
 
 You may set the default values for `aerofly-wettergeraet.exe` / `aerofly-wettergeraet-desktop.exe` by setting environment variables. After settings these, every startup of the <i>Wettergerät</i> will use these values if not overriden by command line parameters.
 
 These variables are available:
 
-| Variable             | Example value           | Description                                |
-| -------------------- | ----------------------- | ------------------------------------------ |
-| `AEROFLYWX_FILE`     | `C:\Users\...\main.mcf` | Absolute file location of your `main.mcf`. |
-| `AEROFLYWX_URL`      | `https://avwx.rest/api/metar/XXXX?options=&format=json&onfail=cache` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code. |
-| `AEROFLYWX_APIKEY`   | `12345abcd`             | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls. |
-| `AEROFLYWX_RESPONSE` | `raw`                   | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object. |
-| `AEROFLYWX_HOURS`    | `-8`                    | Offset time read from METAR code by this value, given in hours. |
+| Variable             | Example value                                                   | Description                                                                                                                                |
+| -------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AEROFLYWX_FILE`     | `C:\Users\...\main.mcf`                                         | Absolute file location of your `main.mcf`.                                                                                                 |
+| `AEROFLYWX_URL`      | `https://aviationweather.gov/api/data/metar?ids=XXXX&date=DATE` | Fetch response via HTTP from this URL. If URL contains `XXXX` this will be replaced by the ICAO airport code, and `DATE` with an ISO date. |
+| `AEROFLYWX_APIKEY`   | `12345abcd`                                                     | Sent HTTP header `X-API-Key` / `Authorization` set to this value for all HTTP API calls.                                                   |
+| `AEROFLYWX_RESPONSE` | `raw`                                                           | How to interpret HTTP response. Set this to `raw` if the response is plain text. Set this to `json` if the response is JSON object.        |
+| `AEROFLYWX_HOURS`    | `-8`                                                            | Offset time read from METAR code by this value, given in hours.                                                                            |
 
 In Windows 10 set environment variables by following these steps:
 
@@ -64,8 +60,7 @@ For Mac OSX / Linux open up a terminal and enter the following lines:
 VARIABLE="VALUE"
 ```
 
-Register file associations
---------------------------
+## Register file associations
 
 You may register `.mcf` and `.rwx` file types with the desktop version of the <i>Aerofly Wettergerät</i> by double-clicking these files. This will open up the application with the corresponding file loaded.
 

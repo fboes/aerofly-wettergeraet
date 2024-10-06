@@ -28,6 +28,6 @@ public:
 
 	// Like other fetch, but substitutes XXXX with ICAO code.
 	// The icaoCode will be converted to uppercase, or lowercase if `lowercase` is set.
-	std::string fetch(std::string url, std::string icaoCode, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "", bool lowercase = false);
+	std::string fetch(std::string url, std::string icaoCode, std::string date, unsigned short fetchMode = FetchUrl::MODE_RAW, std::string apiKey = "", bool lowercase = false);
 
 };

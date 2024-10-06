@@ -429,10 +429,25 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		wxLogError(_("No ICAO airport code given"));
 		return;
 	}
+
+	auto date = this->utcDateInput->GetValue();
+	auto year = date.GetYear();
+	auto month = date.GetMonth() + 1;
+	auto day = date.GetDay();
+
+	auto time = this->utcTimeInput->GetValue();
+	auto hour = time.GetHour();
+	auto minute = time.GetMinute();
+	auto second = time.GetSecond();
+
+	// 2024-10-06T15%3A00%3A01Z
+	char searchDate[25];
+	sprintf(searchDate, "%04d-%02d-%02dT%02d:%02d:%02dZ", year, month, day, hour, minute, second);
+
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;
 	try {
-		auto metarString = urlFetcher.fetch(this->argumentor.url, icaoCode, this->argumentor.response, this->argumentor.apikey);
+		auto metarString = urlFetcher.fetch(this->argumentor.url, icaoCode, searchDate, this->argumentor.response, this->argumentor.apikey);
 		this->metarInput->SetValue(metarString);
 		this->saveButton->SetFocus();
 		this->markAsDirty();

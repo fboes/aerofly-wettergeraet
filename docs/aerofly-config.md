@@ -1,5 +1,4 @@
-![](./favicon-64x64.png) Settings in Aerofly's `main.mcf`
-=========================================================
+# ![](./favicon-64x64.png) Settings in Aerofly's `main.mcf`
 
 This tool modifies the following settings in Aerofly's `main.mcf`:
 
@@ -27,20 +26,18 @@ This tool modifies the following settings in Aerofly's `main.mcf`:
 >
 ```
 
-Visibility
-----------
+## Visibility
 
 Visibility tests with METAR data, webcams and comparison with Aerofly FS 2/4 visbility show this pattern:
 
-| Visibility Real Life | Visibility Aerofly FS 2/4 | 
+| Visibility Real Life | Visibility Aerofly FS 2/4 |
 | -------------------- | ------------------------- |
 | 6,000 meters         | ~40%                      |
 | 7,500 meters         | ~50%                      |
 
 This in turn sets 100% visibility in Aerolfy FS 2 to a real life visibility of 15,000 meters.
 
-Wind
-----
+## Wind
 
 Setting the **wind strength** to `1` yields a wind speed of ~16 knots; setting it to `2` yields ~48 knots, and `4` yields ~160 knots. This implies an exponential function, which can be approximated by `f(x) = 8 * (x + x^2)`, with `x` being the value set and `f(x)` returning the resulting wind speed in knots.
 
@@ -48,8 +45,7 @@ Setting the **wind strength** to `1` yields a wind speed of ~16 knots; setting i
 
 The effect of **thermal activity** has not been measured yet.
 
-Cloud height
-------------
+## Cloud height
 
 Setting the cloud height to `1` yields a cloud height of 10.000 feet AGL as of Aerofly FS 4.
 

@@ -1,23 +1,19 @@
-What is the problem?
---------------------
+## What is the problem?
 
 …
 
-What did I do before encountering the problem?
-----------------------------------------------
+## What did I do before encountering the problem?
 
 1. …
 2. …
 
-What does the error message look like?
---------------------------------------
+## What does the error message look like?
 
 ```
 …
 ```
 
-Additional information
-----------------------
+## Additional information
 
-* OS version: …
-* Application version: …
+-   OS version: …
+-   Application version: …
