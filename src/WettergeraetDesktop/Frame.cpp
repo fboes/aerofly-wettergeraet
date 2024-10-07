@@ -343,9 +343,15 @@ void Frame::fromInputToObject()
 	}
 }
 
+/**
+ * @see https://www.thinkaviation.net/levels-of-vfr-ifr-explained/
+ * @see https://en.wikipedia.org/wiki/Ceiling_(cloud)
+ */
 void Frame::updateFlightCategory()
 {
 	std::string flightCategory = "LIFR";
+	std::string icaoFlightCategory = "IFR";
+
 	double visibilityStatuteMiles = this->visbilityInput->GetValue() / 1609.344;
 	double ceilingFeet = 9999.99;
 
@@ -367,7 +373,11 @@ void Frame::updateFlightCategory()
 		flightCategory = "IFR";
 	}
 
-	SetStatusText("Flight rules: " + flightCategory, 1);
+	if (this->visbilityInput->GetValue() >= 5000 && (ceilingFeet > 1500)) {
+		icaoFlightCategory = "VFR";
+	}
+
+	SetStatusText("Flight rules: " + flightCategory + " (ICAO: " + icaoFlightCategory + ")", 1);
 }
 
 void Frame::markAsClean()

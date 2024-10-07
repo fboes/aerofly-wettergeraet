@@ -3,6 +3,7 @@
 ## 1.7.2
 
 -   🎁 Keeping time intact while importing from `main.mcf` or METAR info
+-   🎁 Added ICAO flight settings
 
 
 ## 1.7.1
