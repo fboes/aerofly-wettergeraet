@@ -70,7 +70,7 @@ public:
 	virtual wxString getIcaoFromInput();
 
 	// Copy state of objects to form
-	virtual void fromObjectToInput();
+	virtual void fromObjectToInput(bool ignoreDate);
 
 	// Copy state of form to objects
 	virtual void fromInputToObject();

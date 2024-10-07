@@ -4,7 +4,7 @@
 
 -   🎁 Keeping time intact while importing from `main.mcf` or METAR info
 -   🎁 Added ICAO flight settings
-
+-   🎁 Improved date parameter in URL
 
 ## 1.7.1
 

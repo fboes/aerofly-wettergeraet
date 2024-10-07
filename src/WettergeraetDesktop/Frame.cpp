@@ -282,26 +282,29 @@ wxString Frame::getIcaoFromInput()
 
 // --------------------------------------------------------------------------------------
 
-void Frame::fromObjectToInput()
+void Frame::fromObjectToInput(bool ignoreDate = false)
 {
 	this->icaoInput->SetValue(wxString(this->aerofly.nearestAirport));
 
-	// Discard date from Aerofly date, instead set it to today...
-	this->utcDateValue = wxDateTime::Now().MakeUTC();
+	if (!ignoreDate) {
+		// Discard date from Aerofly date, instead set it to today...
+		this->utcDateValue = wxDateTime::Now().MakeUTC();
 
-	// ...but keep the time
-	auto hour = floor(this->aerofly.hours);
-	this->utcDateValue.SetHour(hour);
-	this->utcDateValue.SetMinute(round((this->aerofly.hours - hour) * 60));
-	this->utcDateValue.SetSecond(0);
+		// ...but keep the time
+		auto hour = floor(this->aerofly.hours);
+		this->utcDateValue.SetHour(hour);
+		this->utcDateValue.SetMinute(round((this->aerofly.hours - hour) * 60));
+		this->utcDateValue.SetSecond(0);
 
-	if (this->utcDateValue.IsLaterThan(wxDateTime::Now().MakeUTC())) {
-		// Substract one day if current datetime is in future
-		this->utcDateValue = this->utcDateValue.Subtract(wxDateSpan::Day());
+		if (this->utcDateValue.IsLaterThan(wxDateTime::Now().MakeUTC())) {
+			// Substract one day if current datetime is in future
+			this->utcDateValue = this->utcDateValue.Subtract(wxDateSpan::Day());
+		}
+
+		this->utcTimeInput->SetValue(this->utcDateValue);
+		this->utcDateInput->SetValue(this->utcDateValue);
 	}
 
-	this->utcTimeInput->SetValue(this->utcDateValue);
-	this->utcDateInput->SetValue(this->utcDateValue);
 
 	this->windDirectionInput->SetValue(this->aerofly.windDirection);
 	this->windStrengthInput->SetValue(ceil(this->aerofly.getWindKts()));
@@ -446,19 +449,17 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
 
-	auto date = this->utcDateInput->GetValue();
-	auto year = date.GetYear();
-	auto month = date.GetMonth() + 1;
-	auto day = date.GetDay();
+	auto date = this->utcDateInput->GetValue().FormatISODate().mb_str().data();
+	auto time = this->utcTimeInput->GetValue().FormatISOTime().mb_str().data();
 
-	auto time = this->utcTimeInput->GetValue();
-	auto hour = time.GetHour();
-	auto minute = time.GetMinute();
-
-	// yyyymmdd_hhmmZ
 	// yyyy-mm-ddThh:mm:ssZ
 	char searchDate[25];
-	sprintf(searchDate, "%04d%02d%02d_%02d%02dZ", year, month, day, hour, minute);
+	sprintf(
+		searchDate,
+		"%sT%sZ",
+		date,
+		time
+	);
 
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;
@@ -482,7 +483,7 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 	}
 	try {
 		this->aerofly.setFromMetarString(metarInput);
-		this->fromObjectToInput();
+		this->fromObjectToInput(true);
 	}
 	catch (std::invalid_argument& e) {
 		wxLogError(e.what());
