@@ -286,20 +286,22 @@ void Frame::fromObjectToInput()
 {
 	this->icaoInput->SetValue(wxString(this->aerofly.nearestAirport));
 
-	/*
-	Keep date / time at current date / time to enable fetching of current weather
+	// Discard date from Aerofly date, instead set it to today...
+	this->utcDateValue = wxDateTime::Now().MakeUTC();
 
-	this->utcDateValue.SetYear(this->aerofly.year);
-	this->utcDateValue.SetMonth((wxDateTime::Month)(this->aerofly.month - 1));
-	this->utcDateValue.SetDay(this->aerofly.day);
+	// ...but keep the time
 	auto hour = floor(this->aerofly.hours);
 	this->utcDateValue.SetHour(hour);
 	this->utcDateValue.SetMinute(round((this->aerofly.hours - hour) * 60));
 	this->utcDateValue.SetSecond(0);
 
+	if (this->utcDateValue.IsLaterThan(wxDateTime::Now().MakeUTC())) {
+		// Substract one day if current datetime is in future
+		this->utcDateValue = this->utcDateValue.Subtract(wxDateSpan::Day());
+	}
+
 	this->utcTimeInput->SetValue(this->utcDateValue);
 	this->utcDateInput->SetValue(this->utcDateValue);
-	*/
 
 	this->windDirectionInput->SetValue(this->aerofly.windDirection);
 	this->windStrengthInput->SetValue(ceil(this->aerofly.getWindKts()));

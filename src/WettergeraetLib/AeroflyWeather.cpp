@@ -175,8 +175,8 @@ double AeroflyWeather::getPressureHpa()
 void AeroflyWeather::setFromMetar(const MetarParserSimple& metar)
 {
 	this->setNearestAirport(metar.icao);
-	this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
-	this->setTime(metar.observed.hours, metar.observed.minutes);
+	//this->setDate(metar.observed.year, metar.observed.month, metar.observed.day);
+	//this->setTime(metar.observed.hours, metar.observed.minutes);
 	this->setWind(metar.wind.speedKts, metar.wind.degrees);
 	this->setTurbulence(metar.wind.speedKts, metar.wind.gustKts, metar.wind.degreesFrom, metar.wind.degreesTo, metar.conditions);
 	this->setThermalActivity(metar.temperatureCelsius);
