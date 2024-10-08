@@ -3,6 +3,7 @@
 ## 1.7.3
 
 -   🎁 Improve menu structure, adding "Reset time & date"
+-   💊 Limit date to current and past dates
 
 ## 1.7.2
 

@@ -123,6 +123,12 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			hbox3->Add(utcDateLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			this->utcDateInput = new wxDatePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
+			this->utcDateInput->SetRange(
+				wxDateTime::Now().MakeUTC().Subtract(
+					wxDateSpan::Year()
+				),
+				utcDateValue
+			);
 			hbox3->Add(this->utcDateInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 		}
 		vbox->Add(hbox3, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
