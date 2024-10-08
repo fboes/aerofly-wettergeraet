@@ -4,6 +4,7 @@
 
 -   🎁 Improve menu structure, adding "Reset time & date"
 -   💊 Limit date to current and past dates
+-   💊 Updating dependencies
 
 ## 1.7.2
 
