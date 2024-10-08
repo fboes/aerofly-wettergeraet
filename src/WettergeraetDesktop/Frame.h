@@ -56,7 +56,7 @@ public:
 	static const unsigned short EL_CTRL_DATETIME = 5;
 	static const unsigned short EL_CTRL_SLIDER = 6;
 	static const unsigned short EL_MENU_UPDATE = 7;
-	static const unsigned short EL_MENU_FIND_ICAO = 8;
+	static const unsigned short EL_MENU_RESET_DATE_TIME = 8;
 	static const unsigned short EL_MENU_RELOAD = 9;
 	static const unsigned short EL_MENU_LOAD = 10;
 	static const unsigned short EL_MENU_GET_PLATES = 11;
@@ -120,7 +120,7 @@ public:
 
 	virtual void actionHelp(wxCommandEvent&);
 
-	virtual void actionFindIcao(wxCommandEvent&);
+	virtual void setDateTimeToCurrent(wxCommandEvent&);
 
 	virtual void actionGetAirportPlates(wxCommandEvent&);
 

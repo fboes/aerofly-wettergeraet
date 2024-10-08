@@ -1,5 +1,9 @@
 # Change log
 
+## 1.7.3
+
+-   🎁 Improve menu structure, adding "Reset time & date"
+
 ## 1.7.2
 
 -   🎁 Keeping time intact while importing from `main.mcf` or METAR info

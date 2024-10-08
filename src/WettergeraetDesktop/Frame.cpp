@@ -49,11 +49,12 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 		file->Append(wxID_EXIT, wxT("E&xit"));
 		menubar->Append(file, wxT("&File"));
 
-		wxMenu* airports = new wxMenu;
-		airports->Append(EL_MENU_FIND_ICAO, wxT("&Find Airport\tCTRL+F"));
-		airports->Append(EL_MENU_GET_PLATES, wxT("Get Airport &Procedures\tCTRL+P"));
-		airports->Append(EL_MENU_OPEN_WORLDCLOCK, wxT("Show World &Clock"));
-		menubar->Append(airports, wxT("&Airports"));
+		wxMenu* tools = new wxMenu;
+		tools->Append(EL_MENU_GET_PLATES, wxT("Get &Airport Information\tCTRL+F"));
+		tools->AppendSeparator();
+		tools->Append(EL_MENU_RESET_DATE_TIME, wxT("&Reset Date and Time"));
+		tools->Append(EL_MENU_OPEN_WORLDCLOCK, wxT("Show &World Clock"));
+		menubar->Append(tools, wxT("&Tools"));
 
 		wxMenu* help = new wxMenu;
 		help->Append(wxID_HELP, wxT("View &Help\tF1"));
@@ -668,33 +669,29 @@ void Frame::actionHelp(wxCommandEvent& WXUNUSED(event))
 	wxLaunchDefaultBrowser("https://github.com/fboes/aerofly-wettergeraet/blob/master/README.md");
 }
 
-void Frame::actionFindIcao(wxCommandEvent& WXUNUSED(event))
-{
-	wxString url = "https://opennav.com/";
-	auto icaoCode = this->getIcaoFromInput();
-	if (icaoCode != "") {
-		url += "airport/" + icaoCode;
-	}
-	wxLaunchDefaultBrowser(url);
+void Frame::setDateTimeToCurrent(wxCommandEvent& WXUNUSED(event)) {
+	this->utcDateValue.SetToCurrent().MakeUTC();
+	this->utcTimeInput->SetValue(this->utcDateValue);
+	this->utcDateInput->SetValue(this->utcDateValue);
+	this->markAsDirty();
 }
 
 void Frame::actionGetAirportPlates(wxCommandEvent& WXUNUSED(event))
 {
-	wxString url = "https://flightaware.com/";
+	wxString url = "https://skyvector.com/airport";
 	auto icaoCode = this->getIcaoFromInput();
 	if (icaoCode != "") {
-		url += "resources/airport/" + icaoCode + "/procedures";
+		url += "/" + icaoCode;
+	}
+	else {
+		url += "s";
 	}
 	wxLaunchDefaultBrowser(url);
 }
 
 void Frame::actionOpenWorldClockLink(wxCommandEvent& WXUNUSED(event))
 {
-	wxString url = "https://www.timeanddate.com/worldclock/";
-	auto icaoCode = this->getIcaoFromInput();
-	if (icaoCode != "") {
-		url += "?query=" + icaoCode;
-	}
+	wxString url = "https://www.worldtimebuddy.com/";
 	wxLaunchDefaultBrowser(url);
 }
 
@@ -707,9 +704,9 @@ void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
-EVT_MENU(Frame::EL_MENU_FIND_ICAO, Frame::actionFindIcao)
 EVT_MENU(Frame::EL_MENU_GET_PLATES, Frame::actionGetAirportPlates)
 EVT_MENU(Frame::EL_MENU_OPEN_WORLDCLOCK, Frame::actionOpenWorldClockLink)
+EVT_MENU(Frame::EL_MENU_RESET_DATE_TIME, Frame::setDateTimeToCurrent)
 EVT_MENU(wxID_HELP, Frame::actionHelp)
 EVT_MENU(Frame::EL_MENU_UPDATE, Frame::actionUpdate)
 EVT_MENU(wxID_ABOUT, Frame::actionAbout)
