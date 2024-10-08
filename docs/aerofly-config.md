@@ -28,14 +28,14 @@ This tool modifies the following settings in Aerofly's `main.mcf`:
 
 ## Visibility
 
-Visibility tests with METAR data, webcams and comparison with Aerofly FS 2/4 visbility show this pattern:
+Visibility tests with METAR data, webcams and comparison with Aerofly FS 2/4 visibility show this pattern:
 
 | Visibility Real Life | Visibility Aerofly FS 2/4 |
 | -------------------- | ------------------------- |
 | 6,000 meters         | ~40%                      |
 | 7,500 meters         | ~50%                      |
 
-This in turn sets 100% visibility in Aerolfy FS 2 to a real life visibility of 15,000 meters.
+This in turn sets 100% visibility in Aerofly FS 2/4 to a real life visibility of 15,000 meters.
 
 ## Wind
 

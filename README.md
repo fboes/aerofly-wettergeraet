@@ -15,8 +15,8 @@ The <i>Aerofly Wettergerät</i> is capable of setting weather values which you c
 
 ## Requirements
 
--   Microsoft Windows 7 / 8 / 10 (64 bit) has to be installed. See below for other operating systems.
--   IPACS Aerofly FS 2 has to be installed.
+-   Microsoft Windows 7 / 8 / 10 / 11 (64 bit) has to be installed. See below for other operating systems.
+-   IPACS Aerofly FS 2/4 has to be installed.
 -   A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS 2\main.mcf`. If this is not the case (e.g. you are using Aerofly FS 4 where the config file is located at `%USERPROFILE%\Documents\Aerofly FS 4\main.mcf`) point the tool to the file location by setting the `--file <FILE>` parameter.
 -   An internet connection to the [Aviation Weather Center REST API](https://aviationweather.gov/) is required. If there is an internet connection but the Aviation Weather Center is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
 
@@ -42,7 +42,7 @@ This tool comes in two variants: The desktop application <i>Aerofly Wettergerät
 
 Both variants have more or less the same capabilities.
 
-You will need a copy of IPACS' Aerofly FS 2 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2/4. This file will be modified by the application.
+You will need a copy of IPACS' Aerofly FS 2/4 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2/4. This file will be modified by the application.
 
 Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2/4 is _not_ running. On start-up the application will load the current settings from your `main.mcf`.
 
