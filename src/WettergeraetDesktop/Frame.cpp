@@ -417,7 +417,7 @@ void Frame::markAsDirty()
 void Frame::loadMainMcf()
 {
 	try {
-		this->mainConfig.setFilename(this->currentMcfFilename);
+		this->mainConfig.setFilename(this->currentMcfFilename.ToStdString());
 		this->mainConfig.load();
 		this->mainConfig.getToAeroflyObject(this->aerofly);
 		this->utcDateValue.SetToCurrent();
@@ -471,7 +471,13 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;
 	try {
-		auto metarString = urlFetcher.fetch(this->argumentor.url, icaoCode, searchDate, this->argumentor.response, this->argumentor.apikey);
+		auto metarString = urlFetcher.fetch(
+			this->argumentor.url,
+			icaoCode.ToStdString(),
+			searchDate,
+			this->argumentor.response,
+			this->argumentor.apikey
+		);
 		this->metarInput->SetValue(metarString);
 		this->saveButton->SetFocus();
 		this->markAsDirty();
@@ -489,7 +495,7 @@ void Frame::actionParse(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
 	try {
-		this->aerofly.setFromMetarString(metarInput);
+		this->aerofly.setFromMetarString(metarInput.ToStdString());
 		this->fromObjectToInput(true);
 	}
 	catch (std::invalid_argument& e) {
