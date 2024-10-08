@@ -1,5 +1,9 @@
 # Change log
 
+## 1.7.4
+
+-   💊 Fixing URL encoding issues
+
 ## 1.7.3
 
 -   🎁 Improve menu structure, adding "Reset time & date"

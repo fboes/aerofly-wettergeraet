@@ -456,17 +456,12 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
 
-	auto date = this->utcDateInput->GetValue().FormatISODate().mb_str().data();
-	auto time = this->utcTimeInput->GetValue().FormatISOTime().mb_str().data();
-
-	// yyyy-mm-ddThh:mm:ssZ
-	char searchDate[25];
-	sprintf(
-		searchDate,
-		"%sT%sZ",
-		date,
-		time
-	);
+	auto searchDate = this->utcDateInput->GetValue().FormatISODate().ToStdString()
+		.append("T")
+		.append(
+			this->utcTimeInput->GetValue().FormatISOTime().ToStdString()
+		)
+		.append("Z");
 
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;
