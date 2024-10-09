@@ -303,6 +303,14 @@ void Frame::fromObjectToInput(bool ignoreDate = false)
 		this->utcDateValue.SetMinute(round((this->aerofly.hours - hour) * 60));
 		this->utcDateValue.SetSecond(0);
 
+		this->utcDateValue.SetHour(floor(this->aerofly.hours));
+		this->utcDateValue.SetMinute(floor(
+			fmod(this->aerofly.hours, 1) * 60
+		));
+		this->utcDateValue.SetSecond(floor(
+			fmod(fmod(this->aerofly.hours, 1) * 60, 1) * 60
+		));
+
 		if (this->utcDateValue.IsLaterThan(wxDateTime::Now().MakeUTC())) {
 			// Substract one day if current datetime is in future
 			this->utcDateValue = this->utcDateValue.Subtract(wxDateSpan::Day());

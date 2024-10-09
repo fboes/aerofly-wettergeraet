@@ -2,8 +2,8 @@
 
 ## 1.7.5
 
-- Fixed parsing of cloud levels if there are more than 3 cloud levels
-
+-   Fixed parsing of cloud levels if there are more than 3 cloud levels
+-   Improved time handling
 
 ## 1.7.4
 
