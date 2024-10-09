@@ -237,7 +237,7 @@ bool MetarParserSimple::convert(std::string metarString)
 			break;
 		case 5:
 			// Clouds
-			if (this->numberOfClouds < sizeofConditions && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
+			if (this->numberOfClouds < sizeofClouds && std::regex_match(metarPart, match, std::regex("(FEW|SCT|BKN|OVC)(\\d+).*"))) {
 				strcpy_s(this->clouds[this->numberOfClouds].code, 4, match[1].str().c_str());
 				this->clouds[this->numberOfClouds].baseFeetAgl = (std::stoi(match[2].str()) * 100);
 				if (strcmp(this->clouds[this->numberOfClouds].code, "FEW") == 0) {

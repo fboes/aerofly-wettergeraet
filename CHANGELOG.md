@@ -1,5 +1,10 @@
 # Change log
 
+## 1.7.5
+
+- Fixed parsing of cloud levels if there are more than 3 cloud levels
+
+
 ## 1.7.4
 
 -   💊 Fixing URL encoding issues
