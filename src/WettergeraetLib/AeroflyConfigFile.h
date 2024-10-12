@@ -15,10 +15,18 @@ private:
 	std::fstream fileStream;
 
 	void setValue(std::string &subject, std::string key, std::string value, std::string keyGroup = "");
+
 	void setValue(std::string &subject, std::string key, double value, std::string keyGroup = "");
+
 	std::string getValue(std::string &subject, std::string key, std::string keyGroup = "");
 
+	std::vector<std::string> getValueVector(std::string& subject, std::string key, std::string keyGroup);
+
 public:
+	struct GeoCoordinates {
+		double longitude, latitude;
+	};
+
 	AeroflyConfigFile(std::string filename = "%USERPROFILE%\\Documents\\Aerofly FS 4\\main.mcf");
 	~AeroflyConfigFile();
 
@@ -69,11 +77,17 @@ public:
 
 	void setCloud(unsigned short index, double heightPercent, double densityPercent);
 
+	GeoCoordinates getPosition();
+
 	// Returns height, density
 	std::tuple <double, double> getCloud(unsigned short index);
 
 	// Returns Origin, Destination
 	std::tuple <std::string, std::string> getFlightplan();
+
+	GeoCoordinates LonLatFromGlobal(const double& x, const double& y, const double& z);
+
+	double VectorToAngle(const double& x, const double& y);
 
 	// Set values from Aerofly object to this->fileBuffer
 	void setFromAeroflyObject(const AeroflyWeather& aerofly);

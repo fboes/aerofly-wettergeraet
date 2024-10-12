@@ -4,6 +4,7 @@
 
 -   Fixed parsing of cloud levels if there are more than 3 cloud levels
 -   Improved time handling
+-   Added nautical time calculation
 
 ## 1.7.4
 

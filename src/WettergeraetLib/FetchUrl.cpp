@@ -133,7 +133,7 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, std::string d
 	date = std::regex_replace(
 		date,
 		std::regex(":"),
-		std::string("%%3A")
+		std::string("%3A")
 	);
 	if (lowercase) {
 		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::tolower);
@@ -143,6 +143,7 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, std::string d
 	}
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);
 	url = std::regex_replace(url, std::regex("DATE"), date);
+
 	return this->fetch(url, fetchMode, apiKey);
 }
 

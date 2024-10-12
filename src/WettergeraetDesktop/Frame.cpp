@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/datectrl.h>
+#include "wx/dateevt.h"
 #include <wx/timectrl.h>
 #include <wx/aboutdlg.h>
 #include <wx/icon.h>
@@ -32,6 +33,7 @@ void Frame::addIcaoChoice(char const icaoCode[8])
 Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, wxID_ANY, title, wxPoint(-1, -1), wxSize(640, 580))
 {
 	this->utcDateValue.SetToCurrent();
+	this->position = { 0, 0 };
 	this->SetIcon(wxICON(APPICON));
 	this->argumentor.getArgs(argc, argv);
 
@@ -114,7 +116,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			hbox3->Add(utcTimeLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
 
 			wxDateTime utcDateValue = wxDateTime::Now().MakeUTC();
-			this->utcTimeInput = new wxTimePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
+			this->utcTimeInput = new wxTimePickerCtrl(panel, Frame::EL_CTRL_TIME, utcDateValue);
 			hbox3->Add(this->utcTimeInput, 1, wxALIGN_CENTER_VERTICAL);
 
 			hbox3->Add(10, -1);
@@ -122,7 +124,7 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 			wxStaticText *utcDateLabel = new wxStaticText(panel, wxID_ANY, wxT("Date (UTC)"));
 			hbox3->Add(utcDateLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
 
-			this->utcDateInput = new wxDatePickerCtrl(panel, Frame::EL_CTRL_DATETIME, utcDateValue);
+			this->utcDateInput = new wxDatePickerCtrl(panel, Frame::EL_CTRL_DATE, utcDateValue);
 			this->utcDateInput->SetRange(
 				wxDateTime::Now().MakeUTC().Subtract(
 					wxDateSpan::Year()
@@ -148,26 +150,30 @@ Frame::Frame(const wxString& title, int argc, char * argv[]) : wxFrame(nullptr, 
 				cloudName = "Cirrus";
 				break;
 			}
+
+			this->clouds[i].heightInput = new wxSlider(
+				panel, Frame::EL_CTRL_SLIDER,
+				0, 0, this->aerofly.maxCloudsHeight,
+				wxDefaultPosition, wxDefaultSize,
+				wxSL_HORIZONTAL | wxSL_VALUE_LABEL
+			),
+			this->clouds[i].densityInput = new wxSlider(
+				panel, Frame::EL_CTRL_SLIDER,
+				50, 0, 100,
+				wxDefaultPosition, wxDefaultSize,
+				wxSL_HORIZONTAL | wxSL_VALUE_LABEL
+			);
+
 			wxBoxSizer *hbox8 = new wxBoxSizer(wxHORIZONTAL);
 			{
 				wxStaticText *cloudsHeightLabel = new wxStaticText(panel, wxID_ANY, cloudName + " height (ft)");
 				hbox8->Add(cloudsHeightLabel, 1, wxRIGHT | wxALIGN_CENTER_VERTICAL, labelBorder);
-
-				this->clouds[i].heightInput = new wxSlider(
-					panel, Frame::EL_CTRL_SLIDER,
-					this->aerofly.maxCloudsHeight / 4.0 * (i + 1),
-					0, this->aerofly.maxCloudsHeight,
-					wxDefaultPosition, wxDefaultSize,
-					wxSL_HORIZONTAL | wxSL_VALUE_LABEL
-				);
 				hbox8->Add(this->clouds[i].heightInput, 1, wxALIGN_CENTER_VERTICAL);
 
 				hbox8->Add(10, -1);
 
 				wxStaticText *cloudsDensityLabel = new wxStaticText(panel, wxID_ANY, cloudName + " density (%)");
 				hbox8->Add(cloudsDensityLabel, 1, wxALIGN_CENTER_VERTICAL, labelBorder);
-
-				this->clouds[i].densityInput = new wxSlider(panel, Frame::EL_CTRL_SLIDER, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_VALUE_LABEL);
 				hbox8->Add(this->clouds[i].densityInput, 1, wxLEFT | wxALIGN_CENTER_VERTICAL);
 			}
 			vbox->Add(hbox8, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
@@ -318,6 +324,7 @@ void Frame::fromObjectToInput(bool ignoreDate = false)
 
 		this->utcTimeInput->SetValue(this->utcDateValue);
 		this->utcDateInput->SetValue(this->utcDateValue);
+		this->actionSyncTime();
 	}
 
 
@@ -445,6 +452,9 @@ void Frame::loadMainMcf()
 			strcpy(this->aerofly.nearestAirport, destination.c_str());
 			this->addIcaoChoice(destination.c_str());
 		}
+		auto position = this->mainConfig.getPosition();
+		this->position.longitude = position.longitude;
+		this->position.latitude = position.latitude;
 		this->fromObjectToInput();
 		this->markAsClean();
 	}
@@ -464,12 +474,21 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
 
+	// yyyy-mm-ddThh:mm:ssZ
 	auto searchDate = this->utcDateInput->GetValue().FormatISODate().ToStdString()
 		.append("T")
 		.append(
 			this->utcTimeInput->GetValue().FormatISOTime().ToStdString()
 		)
 		.append("Z");
+
+	// 20241011_133002Z
+	//auto searchDate = this->utcDateInput->GetValue().Format("%Y%m%d").ToStdString()
+	//	.append("_")
+	//	.append(
+	//		this->utcTimeInput->GetValue().Format("%H%M").ToStdString()
+	//	)
+	//	.append("Z");
 
 	this->metarInput->SetValue("Loading...");
 	FetchUrl urlFetcher;
@@ -688,6 +707,7 @@ void Frame::setDateTimeToCurrent(wxCommandEvent& WXUNUSED(event)) {
 	this->utcDateValue.SetToCurrent().MakeUTC();
 	this->utcTimeInput->SetValue(this->utcDateValue);
 	this->utcDateInput->SetValue(this->utcDateValue);
+	this->actionSyncTime();
 	this->markAsDirty();
 }
 
@@ -716,6 +736,23 @@ void Frame::actionMarkAsDirty(wxCommandEvent& WXUNUSED(event))
 	this->markAsDirty();
 }
 
+// @see https://forums.wxwidgets.org/viewtopic.php?t=44584
+void Frame::actionSyncTime()
+{
+	wxDateTime dtUTC = wxDateTime::Now();
+	wxTimeSpan ts = dtUTC.Subtract(dtUTC.ToUTC());
+
+	auto currentTime = this->utcTimeInput->GetValue();
+	auto timeZone = round(this->position.longitude / 15);
+	SetStatusText("Local nautical time: " + currentTime.Add(ts).Format("%H:%M", wxDateTime::TimeZone(timeZone * 3600)).ToStdString(), 0);
+}
+
+void Frame::actionSyncTime(wxDateEvent& WXUNUSED(event))
+{
+	this->actionSyncTime();
+	this->markAsDirty();
+}
+
 wxBEGIN_EVENT_TABLE(Frame, wxFrame)
 EVT_BUTTON(Frame::EL_BUTTON_FETCH, Frame::actionFetch)
 EVT_BUTTON(wxID_SAVE, Frame::actionSave)
@@ -734,5 +771,6 @@ EVT_MENU(Frame::EL_MENU_RELOAD, Frame::actionReloadMainMcf)
 EVT_MENU(wxID_SAVE, Frame::actionSave)
 EVT_TEXT(Frame::EL_CTRL_METAR, Frame::actionParse)
 EVT_SLIDER(Frame::EL_CTRL_SLIDER, Frame::actionMarkAsDirty)
-//EVT_DATE_CHANGED(Frame::EL_CTRL_DATETIME, Frame::actionMarkAsDirty)
+EVT_DATE_CHANGED(Frame::EL_CTRL_DATE, Frame::actionSyncTime)
+EVT_TIME_CHANGED(Frame::EL_CTRL_TIME, Frame::actionSyncTime)
 wxEND_EVENT_TABLE()

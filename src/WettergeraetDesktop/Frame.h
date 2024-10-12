@@ -4,6 +4,7 @@
 
 #include <wx/wx.h>
 #include <wx/datectrl.h>
+#include "wx/dateevt.h"
 #include <wx/timectrl.h>
 #include "WettergeraetDesktop.h"
 #include "Argumentor.h"
@@ -21,12 +22,15 @@ private:
 
 	// Represents a cloud layer
 	struct cloudsInputs {
+		wxSlider* heightInput;
 		wxSlider *densityInput;
-		wxSlider *heightInput;
+	};
+
+	struct GeoCoordinates {
+		double longitude, latitude;
 	};
 
 	wxComboBox *icaoInput;
-	wxButton *fetchButton;
 	wxTextCtrl *metarInput;
 	wxTimePickerCtrl *utcTimeInput;
 	wxDatePickerCtrl *utcDateInput;
@@ -38,6 +42,7 @@ private:
 	wxSlider *visbilityInput;
 	cloudsInputs clouds[3]; // "cumulus", "cumulus_mediocris", "cirrus"
 	wxButton *saveButton;
+	GeoCoordinates position;
 
 	static const char* EL_BUTTON_SAVE_LABEL;
 	static const char* EL_BUTTON_SAVE_LABEL_DIRTY;
@@ -53,7 +58,8 @@ public:
 	static const unsigned short EL_BUTTON_FETCH = 1;
 	static const unsigned short EL_BUTTON_PARSE = 2;
 	static const unsigned short EL_CTRL_METAR = 4;
-	static const unsigned short EL_CTRL_DATETIME = 5;
+	static const unsigned short EL_CTRL_TIME = 3;
+	static const unsigned short EL_CTRL_DATE = 5;
 	static const unsigned short EL_CTRL_SLIDER = 6;
 	static const unsigned short EL_MENU_UPDATE = 7;
 	static const unsigned short EL_MENU_RESET_DATE_TIME = 8;
@@ -128,4 +134,7 @@ public:
 
 	virtual void actionMarkAsDirty(wxCommandEvent&);
 
+	virtual void actionSyncTime();
+
+	virtual void actionSyncTime(wxDateEvent&);
 };

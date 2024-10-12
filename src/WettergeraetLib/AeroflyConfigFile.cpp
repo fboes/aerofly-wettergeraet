@@ -4,6 +4,11 @@
 #include <iostream>
 #include <sstream>
 
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846
+#endif
+
+
 void AeroflyConfigFile::setValue(std::string &subject, std::string key, std::string value, std::string keyGroup)
 {
 	std::string regSearch = "(";
@@ -38,6 +43,19 @@ std::string AeroflyConfigFile::getValue(std::string &subject, std::string key, s
 		return match[1].str();
 	}
 	return "";
+}
+
+std::vector<std::string> AeroflyConfigFile::getValueVector(std::string& subject, std::string key, std::string keyGroup)
+{
+	std::string value = this->getValue(subject, key, keyGroup).c_str();
+
+	std::vector<std::string> tokens;
+	std::istringstream iss(value);
+	copy(
+		std::istream_iterator<std::string>(iss),
+		std::istream_iterator<std::string>(),
+		back_inserter(tokens));
+	return tokens;
 }
 
 AeroflyConfigFile::AeroflyConfigFile(std::string filename)
@@ -222,6 +240,25 @@ std::tuple<double, double> AeroflyConfigFile::getCloud(unsigned short index)
 	};
 }
 
+AeroflyConfigFile::GeoCoordinates AeroflyConfigFile::getPosition()
+{
+	std::vector<std::string> value = this->getValueVector(this->fileBuffer, "position", "tmsettings_flight");
+
+	if (value.size() != 3)
+	{
+		GeoCoordinates position;
+		position.longitude = 0.0;
+		position.latitude = 0.0;
+		return position;
+	}
+
+	return this->LonLatFromGlobal(
+		std::stod(value.at(0)),
+		std::stod(value.at(1)),
+		std::stod(value.at(2))
+	);
+}
+
 /**
  * Old way:
  * <[tmnav_route_airport][Origin][]
@@ -252,6 +289,58 @@ std::tuple<std::string, std::string> AeroflyConfigFile::getFlightplan()
 		origin,
 		destination
 	};
+}
+
+/**
+ * @see https://www.aerofly.com/community/forum/index.php?thread/19105-custom-missions-converting-coordinates/
+ */
+
+AeroflyConfigFile::GeoCoordinates AeroflyConfigFile::LonLatFromGlobal(const double& x, const double& y, const double& z)
+{
+	const double f = 1.0 / 298.257223563; // WGS84
+	const double e2 = 2 * f - f * f;
+
+	const double lambda = this->VectorToAngle(x, y);
+	const double rho = sqrt(x * x + y * y);
+
+	double phi = atan(z / ((1.0 - e2) * rho));
+
+	GeoCoordinates position;
+	position.longitude = std::fmod(lambda * 180 / M_PI, 360.0);
+	if (position.longitude > 180) {
+		position.longitude -= 360;
+	}
+	position.latitude = phi * 180 / M_PI;
+
+	return position;
+}
+
+// normal angle computation between two 3D-vectors
+double AeroflyConfigFile::VectorToAngle(const double& x, const double& y)
+{
+	if (x > 0)
+	{
+		if (y < 0)
+		{
+			return 2 * M_PI + atan(y / x);
+		}
+		else
+		{
+			return atan(y / x);
+		}
+	}
+
+	if (x < 0)
+	{
+		return M_PI + atan(y / x);
+	}
+
+	if (y > 0)
+	{
+		return 0.5 * M_PI;
+	}
+
+	return 1.5 * M_PI;
 }
 
 void AeroflyConfigFile::setFromAeroflyObject(const AeroflyWeather& aerofly)
