@@ -1,24 +1,26 @@
 # ![](docs/favicon-64x64.png) Aerofly Wettergerät
 
-Copy METAR weather information into [IPCAS' Aerofly FS 2 and Aerofly FS 4](https://www.aerofly.com/).
+The missing settings and convenience functions for [IPCAS' Aerofly FS 2 and Aerofly FS 4](https://www.aerofly.com/).
 
-The <i>Aerofly Wettergerät</i> will copy the following METAR weather information from remote sources to your configuration file while Aerofly FS 2/4 is _not_ running:
+![Aerofly Wettergerät Desktop Application](docs/aerofly-wx-desktop.png)
 
--   Time and day (will set the year and month to current year and month because they are not present in METAR information)
--   Wind & turbulences
--   Thermal activity
--   Clouds (height & density)
+The <i>Aerofly Wettergerät</i> can do the following for your local Aerofly FS 2/4 installation while it is _not_ running:
 
-The <i>Aerofly Wettergerät</i> is capable of setting weather values which you cannot access in Aerofly FS 2/4. This is tested and is done deliberately.
-
-> The <i>Aerofly Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
+-   Set weather values from METAR codes
+-   Fetch live or historical weather from internet data sources
+-   Change time and date, as well as show you the local [Nautical time](https://en.wikipedia.org/wiki/Nautical_time) for your aircraft
+-   Set cloud layers in feet AGL instead of percent
+-   Make third cloud level accessible
+-   Set wind strength in knots instead of percent, allowing for higher wind speeds
+-   Set visibility in meters
 
 ## Requirements
 
 -   Microsoft Windows 7 / 8 / 10 / 11 (64 bit) has to be installed. See below for other operating systems.
 -   IPACS Aerofly FS 2/4 has to be installed.
--   A `main.mcf` has to be located at `%USERPROFILE%\Documents\Aerofly FS 2\main.mcf`. If this is not the case (e.g. you are using Aerofly FS 4 where the config file is located at `%USERPROFILE%\Documents\Aerofly FS 4\main.mcf`) point the tool to the file location by setting the `--file <FILE>` parameter.
 -   An internet connection to the [Aviation Weather Center REST API](https://aviationweather.gov/) is required. If there is an internet connection but the Aviation Weather Center is not reachable, start the tool with the `--url <URL>` parameter set to a different METAR REST API.
+
+In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
 
 ## Installation
 
@@ -28,43 +30,20 @@ The <i>Aerofly Wettergerät</i> is capable of setting weather values which you c
    You might want to re-label the shortcut to "Aerofly Wettergerät".
 4. Start the desktop application by clicking on the desktop link.
 
-In case you want to use this application on a different operation system, consider [building your own executable from this project](CONTRIBUTING.md).
+You may need to do some [additional configuration if your `main.mcf` is not found automatically](docs/configuration.md).
 
 ## Usage
 
-This tool comes in two variants: The desktop application <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet-desktop.exe`),…
-
-![Aerofly Wettergerät Desktop Application](docs/aerofly-wx-desktop.png)
-
-…and the command-line <i>Aerofly Wettergerät</i> (`aerofly-wettergeraet.exe`).
-
-![Aerofly Wettergerät Command Line Application](docs/aerofly-wx-cli.png)
-
-Both variants have more or less the same capabilities.
-
 You will need a copy of IPACS' Aerofly FS 2/4 which has run at least once. This creates a file called `main.mcf`, which contains all settings and the weather data in Aerofly FS 2/4. This file will be modified by the application.
 
-Before starting the <i>Aerofly Wettergerät</i> be sure that Aerofly FS 2/4 is _not_ running. On start-up the application will load the current settings from your `main.mcf`.
-
-By starting the application METAR data will be fetched from a remote internet service for the given ICAO airport code. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2/4 values. It also allows for changing values which are not accessible from inside Aerofly FS 2/4.
-
-Optionally you can enter a METAR code manually.
-
-_Note:_ The desktop application requires you to actually hit the "Fetch" button to fetch METAR information from the internet, and to hit the "Save" button to copy the data to your `main.mcf`.
+1. On start-up the application will load the current settings from your `main.mcf`. You can also reload the file from the "File" menu.
+2. By using the "Fetch" button, METAR information will be fetched from the internet. If it is successful, it will paste the METAR code and convert it into the corresponding Aerofly FS 2/4 values. Optionally you can enter a METAR code manually.
+3. It also allows for changing values which are not accessible from inside Aerofly FS 2/4.
+4. Hitting the "Save" button copies the data to your `main.mcf`.
 
 **Important:** Be sure to quit the application before starting Aerofly FS 2/4 to not accidentally change values while AFS2 is running and to free up memory. Also you may want to backup your `main.mcf` in case something goes wrong.
 
 For troubleshooting look into the [Frequently Asked Questions](docs/faq.md).
-
-## HTTP services
-
-This tool is compatible with the following METAR services:
-
--   [Aviation Weather Center](https://aviationweather.gov/): This is the default HTTP service. Does not need an API key, but may be rate limited.
--   [AVWX](https://avwx.rest/): You will need to get an API key to use this service.
--   [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
-
-You may also try any other HTTP service which offers METAR information as raw text or JSON. See the [configuration guide on how to set different METAR services](docs/configuration.md).
 
 ## Update
 
@@ -74,6 +53,8 @@ Just repeat all steps for a regular installation.
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/fboes/aerofly-wettergeraet.svg)
 ![GitHub](https://img.shields.io/github/license/fboes/aerofly-wettergeraet.svg)
+
+> The <i>Aerofly Wettergerät</i> is the successor to ["Aerofly Weather" (AeroWX)](https://github.com/fboes/aerofly-weather/).
 
 ## Legal stuff
 

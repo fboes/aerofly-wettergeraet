@@ -64,6 +64,14 @@ VARIABLE="VALUE"
 
 You may register `.mcf` and `.rwx` file types with the desktop version of the <i>Aerofly Wettergerät</i> by double-clicking these files. This will open up the application with the corresponding file loaded.
 
+## HTTP services
+
+This tool is compatible with the following METAR services:
+
+-   [Aviation Weather Center](https://aviationweather.gov/): This is the default HTTP service. Does not need an API key, but may be rate limited.
+-   [AVWX](https://avwx.rest/): You will need to get an API key to use this service.
+-   [CheckWX](https://www.checkwx.com/): You will need to get an API key to use this service.
+
 ---
 
 Return to [table of contents](README.md).
