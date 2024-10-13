@@ -17,7 +17,7 @@ Sure you can. In the desktop application you will find "File > Save METAR file..
 
 The RWX file format not only saves the METAR data, but also the exact date the METAR was requested - METAR data does not contain date information regarding year or month.
 
-The CLI application is also able to read RWX files, but cannot write them. You are still free to save your favourite METAR string into a TXT file, as the <i>Aerofly Wettergerät</i> also reads TXT files.
+The CLI application is also able to read RWX files, but cannot write them. You are still free to save your favorite METAR string into a TXT file, as the <i>Aerofly Wettergerät</i> also reads TXT files.
 
 ## What does "Wettergerät" even mean?
 

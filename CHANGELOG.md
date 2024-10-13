@@ -78,7 +78,7 @@
 
 ## 1.3.0
 
--   🎁 Switch GUI to feet and kts values
+-   🎁 Switch GUI to feet and knots values
 
 ## 1.2.10
 
@@ -120,13 +120,13 @@
 
 ## 1.2.3
 
--   🎁 Add sample ICAO airport codes to combobox
+-   🎁 Add sample ICAO airport codes to combo box
 -   🎁 Interpret date `YYYY/MM/DD` prepended to METAR string
 -   🎁 Read METAR information from file
 
 ## 1.2.2
 
--   🎁 Add ICAO airport code combobox with codes from current flightplan
+-   🎁 Add ICAO airport code combo box with codes from current flightplan
 
 ## 1.2.1
 
@@ -152,7 +152,7 @@
 ## 1.0.1
 
 -   💊 Improve handling of ICAO airport codes
--   💊 Fix behaviour of seconds in UTC time
+-   💊 Fix behavior of seconds in UTC time
 
 ## 1.0.0
 
