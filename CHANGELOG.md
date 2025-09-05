@@ -1,5 +1,7 @@
 # Change log
 
+## 1.7.6
+-   Fixed API calls
 -   Improved documentation
 
 ## 1.7.5
