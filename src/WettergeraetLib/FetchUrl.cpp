@@ -69,10 +69,10 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		}
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, httpHeaders);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, this->writeBuffer);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, httpHeaders);
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L); //s
 
@@ -81,10 +81,10 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 		curl_slist_free_all(httpHeaders);
 		curl_easy_cleanup(curl);
 
-		if (res == CURLE_HTTP_RETURNED_ERROR) {
-			long response_code;
-			curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+		long response_code;
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
 
+		if (res == CURLE_HTTP_RETURNED_ERROR) {
 			if (response_code == 400) {
 				throw std::invalid_argument(this->getErrorMessage(response_code, "Wrong request (e.g. unrecognized airport) encountered ", url));
 			}
@@ -100,7 +100,6 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			else {
 				throw std::invalid_argument(this->getErrorMessage(response_code, "General problem", url));
 			}
-
 		}
 		else if (res == CURLE_OPERATION_TIMEDOUT) {
 			throw std::invalid_argument("Timeout for " + url);
@@ -113,7 +112,7 @@ std::string FetchUrl::fetch(std::string url, unsigned short fetchMode, std::stri
 			buffer = this->parseJson(buffer);
 		}
 		if (buffer == "") {
-			throw std::invalid_argument("Empty or invalid response returned for " + url + " - possibily unknown ICAO code, or invalid date/time");
+			throw std::invalid_argument(this->getErrorMessage(response_code, "Empty or invalid response returned - possibily unknown ICAO code, or invalid date/time", url));
 		}
 
 		return buffer;
@@ -135,12 +134,13 @@ std::string FetchUrl::fetch(std::string url, std::string icaoCode, std::string d
 		std::regex(":"),
 		std::string("%3A")
 	);
-	if (lowercase) {
-		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::tolower);
-	}
-	else {
-		transform(icaoCode.begin(), icaoCode.end(), icaoCode.begin(), ::toupper);
-	}
+
+	transform(
+		icaoCode.begin(),
+		icaoCode.end(),
+		icaoCode.begin(),
+		lowercase ? ::tolower : ::toupper
+	);
 	url = std::regex_replace(url, std::regex("XXXX"), icaoCode);
 	url = std::regex_replace(url, std::regex("DATE"), date);
 

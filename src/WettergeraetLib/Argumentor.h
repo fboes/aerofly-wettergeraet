@@ -23,7 +23,7 @@ public:
 
 	char url[512] = "https://aviationweather.gov/api/data/metar?ids=XXXX&date=DATE";
 
-	unsigned short response = FetchUrl::MODE_JSON;
+	unsigned short response = FetchUrl::MODE_RAW;
 
 	char apikey[64] = "";
 
