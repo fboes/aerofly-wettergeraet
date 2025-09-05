@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <algorithm>
+#include <cmath> // Include cmath for std::sqrt
 #include <time.h>
 #include "AeroflyWeather.h"
 #include "BoShed.h"

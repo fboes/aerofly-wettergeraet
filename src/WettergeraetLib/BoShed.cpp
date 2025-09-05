@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "BoShed.h"
 #include <algorithm>
+#include <stdexcept> // Include this header for std::invalid_argument
+#include <cmath>     // Include this header for std::round and std::floor
 
 namespace BoShed {
 	int rotatingValue(int input, const int max, const int min) {
@@ -30,7 +32,6 @@ namespace BoShed {
 		}
 		return input;
 	}
-
 
 	double percent(double value, bool notMoreThan1)
 	{

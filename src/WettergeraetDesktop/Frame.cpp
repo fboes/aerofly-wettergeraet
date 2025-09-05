@@ -505,7 +505,7 @@ void Frame::actionFetch(wxCommandEvent& WXUNUSED(event))
 		this->markAsDirty();
 	}
 	catch (std::invalid_argument& e) {
-		wxLogError(e.what());
+		wxLogError("%s", e.what());
 		this->metarInput->SetValue("");
 	}
 }
