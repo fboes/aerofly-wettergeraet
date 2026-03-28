@@ -14,6 +14,9 @@ The <i>Aerofly Wettergerät</i> can do the following for your local Aerofly FS 2
 -   Set wind strength in knots instead of percent, allowing for higher wind speeds
 -   Set visibility in meters
 
+> [!NOTE]
+> You might want to try the [Aerofly Startgerät](https://github.com/fboes/aerofly-startgeraet): It has even more capabilities than the Aerofly Wettergerät and runs on more operating systems.
+
 ## Requirements
 
 -   Microsoft Windows 7 / 8 / 10 / 11 (64 bit) has to be installed. See below for other operating systems.
